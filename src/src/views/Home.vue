@@ -97,10 +97,10 @@
               </div>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
-                  placeholder="咕咕咕的团队"
+                  defaultValue="咕咕咕的团队"
                   enter-button="确定"
                   size="large"
-                  @search="onSearch"
+                  @search="change_name"
                   style="margin-left:24px"
                 />
               </div>
@@ -108,7 +108,7 @@
 
           </a-row>
           <a-row>
-            <a-col :span="22" style="text-align:left">
+            <a-col :span="21" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:18px;margin-left:24px">
                   <span>这是一个绝对不鸽，永远准时的团队。</span>
                   <a-button
@@ -121,10 +121,10 @@
               </div>
               <div v-if="isedit_info">
                 <a-input-search
-                  placeholder="这是一个绝对不鸽，永远准时的团队"
+                  defaultValue="这是一个绝对不鸽，永远准时的团队"
                   enter-button="确定"
                   size="large"
-                  @search="onSearch" 
+                  @search="change_info" 
                   style="margin-left:24px;width:50%"
                 /><!--这个@search本质上就是click-->
               </div>
@@ -302,6 +302,14 @@ export default {
     },
     editinfo(){
       this.isedit_info=true;
+    },
+    change_name(value) {
+      console.log(value);
+      this.isedit_name = false;
+    },
+    change_info(value) {
+      console.log(value);
+      this.isedit_info = false;
     },
     handleRightMenuClick(vm, event){
       console.log(vm, event)
