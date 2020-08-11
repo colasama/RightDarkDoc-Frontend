@@ -81,23 +81,36 @@
           </a-tabs>
         </div>
         <div v-if="sider_status==2">
-        <!--团队页面部分-->
+          <!--团队页面部分-->
           <a-row style="height:50px"></a-row>
           <a-row type="flex">
+            <a-col :span="2"></a-col>
             <a-col style="text-align:left">
-              <div style="font-size:40px;margin-left:24px"><b>咕咕咕的团队</b></div>
+              <div v-if="!isedit_name" style="font-size:40px">咕咕咕的团队</div>
+              <div v-if="isedit_name" style="font-size:40px">
+                <a-input size="large" defaultValue="咕咕咕的团队" />
+              </div>
             </a-col>
             <a-col style="text-align:left">
               <div v-if="ismanage" style="margin-top:30px;margin-left:5px">
-                <a-icon type="edit" style="font-size:28px;color:#ec583a;margin-left:5px" />
+                <a-icon type="edit" style="font-size:25px;color:#ec583a" @click="editname" />
               </div>
             </a-col>
           </a-row>
           <a-row>
+            <a-col :span="2"></a-col>
             <a-col :span="15" style="text-align:left">
-              <div style="font-size:18px;margin-left:24px">这是一个绝对不鸽，永远准时的团队。</div>
+              <div v-if="!isedit_info" style="font-size:20px">
+                这是一个绝对不鸽，永远准时的团队
+                <span v-if="ismanage" style="margin-top:10px;margin-left:5px" > 
+                    <a-icon type="edit" style="font-size:15px;color:#ec583a" @click="editinfo" />
+                </span>
+              </div>
+              <div v-if="isedit_info" style="font-size:20px">
+                <a-input size="large" defaultValue="这是一个绝对不鸽，永远准时的团队" />
+              </div>
             </a-col>
-            <a-col style="text-align:right;margin:0 48px 10px 0">
+            <a-col>
               <div>
                 <a-button v-if="!ismanage" type="primary" @click="startmanage">
                   <a-icon type="setting" />管理
@@ -109,13 +122,15 @@
             </a-col>
           </a-row>
           <a-row style="margin-top:5px">
-            <a-col style="background:#c2c2c2;height:1px;margin:10px 24px 0 24px"></a-col>
+            <a-col :span="1"></a-col>
+            <a-col :span="21" style="background:grey;height:1px"></a-col>
           </a-row>
           <a-row style="margin-top:20px">
-            <a-col :span="21" style="text-align:left">
-              <div style="font-size:20px;margin-left:24px">团队文档</div>
+            <a-col :span="1"></a-col>
+            <a-col :span="18" style="text-align:left">
+              <div style="font-size:30px">团队文档</div>
             </a-col>
-            <a-col :span="2" style="text-align:left;margin-right:24px">
+            <a-col :span="3">
               <div style="font-size:20px">团队成员</div>
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
@@ -127,7 +142,7 @@
                     <a slot="title">创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
-                    <div style="text-align:left">
+                    <div style="margin:auto">
                       <a-avatar
                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                       />
@@ -135,8 +150,8 @@
                     </div>
                     <a-icon v-if="ismanage" type="delete" />
                   </a-list-item>
-                  <div slot="footer" style="text-align:right">
-                    <a-button v-if="ismanage" type="danger" style="margin-top:12px">
+                  <div slot="footer">
+                    <a-button v-if="ismanage" type="danger">
                       <a-icon type="close" />解散团队
                     </a-button>
                   </div>
@@ -206,6 +221,8 @@ export default {
       team_members,
       ismanage: false,
       sider_status:1,
+      isedit_name:false,
+      isedit_info:false,
       data,
     };
   },
@@ -232,6 +249,14 @@ export default {
     },
     stopmanage() {
       this.ismanage = false;
+      this.isedit_name=false;
+      this.isedit_info=false;
+    },
+    editname(){
+      this.isedit_name=true;
+    },
+    editinfo(){
+      this.isedit_info=true;
     },
     handleRightMenuClick(vm, event){
       console.log(vm, event)
