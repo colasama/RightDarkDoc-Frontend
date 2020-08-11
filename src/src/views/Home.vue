@@ -42,43 +42,60 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <div v-if="sider_status==1" >
-        <!--我的文档页面部分-->
+        <div v-if="sider_status==1">
+          <!--我的文档页面部分-->
           <div class="card-container">
-            <a-tabs style="text-align:left;margin:24px" type="line" >
-              <a-tab-pane key="1" tab="我的文档" >
-                <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }" :data-source="data" style="text-align:center;margin:15px auto">
-                  <a-list-item slot="renderItem" slot-scope="item" style="text-align:center;margin:15px auto">
+            <a-tabs style="text-align:left;margin:24px" type="line">
+                <a-list
+                  :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+                  :data-source="data"
+                  style="text-align:center;margin:15px auto"
+                >
+                  <a-list-item
+                    slot="renderItem"
+                    slot-scope="item"
+                    style="text-align:center;margin:15px auto"
+                  >
                     <a-card
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      @contextmenu.prevent=""
-                      v-contextmenu:contextmenu>
-                      <div><a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon></div>
+                      @contextmenu.prevent
+                      v-contextmenu:contextmenu
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">{{item.lastedittime}} <!--a-icon key="ellipsis" type="ellipsis" /--></div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastedittime}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
                     </a-card>
 
                     <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
-                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="folder-open"/> 打开</v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 重命名</v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="control"/> 权限设置</v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="delete"/> 删除</v-contextmenu-item>
-                    <v-contextmenu-item divider/>
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="share-alt"/> 分享</v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="folder-open" />打开
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="edit" />重命名
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="control" />权限设置
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="delete" />删除
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />分享
+                      </v-contextmenu-item>
                     </v-contextmenu>
-
                   </a-list-item>
                 </a-list>
-                
               </a-tab-pane>
-              <a-tab-pane key="2" tab="最近浏览">
-
-              </a-tab-pane>
-              <a-tab-pane key="3" tab="我的收藏">
-
-              </a-tab-pane>
+              <a-tab-pane key="2" tab="最近浏览"></a-tab-pane>
+              <a-tab-pane key="3" tab="我的收藏"></a-tab-pane>
             </a-tabs>
           </div>
         </div>
@@ -90,12 +107,12 @@
               <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>咕咕咕的团队</b>
                 <a-button
-                    v-if="ismanage"
-                    type="link"
-                    @click="editname"
-                    icon="edit"
-                    style="margin-left:5px;font-size:24px;"
-                  />
+                  v-if="ismanage"
+                  type="link"
+                  @click="editname"
+                  icon="edit"
+                  style="margin-left:5px;font-size:24px;"
+                />
               </div>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
@@ -107,37 +124,42 @@
                 />
               </div>
             </a-col>
-
           </a-row>
           <a-row>
             <a-col :span="21" style="text-align:left">
-              <div v-if="!isedit_info" style="font-size:18px;margin-left:24px">
-                  <span>这是一个绝对不鸽，永远准时的团队。</span>
-                  <a-button
-                    v-if="ismanage"
-                    type="link"
-                    @click="editinfo"
-                    icon="edit"
-                    style="margin-left:0px;font-size:15px;"
-                  />
+              <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
+                <span style="">这是一个绝对不鸽，永远准时的团队。</span>
+                <a-button
+                  v-if="ismanage"
+                  type="link"
+                  @click="editinfo"
+                  icon="edit"
+                  style="font-size:15px;"
+                />
               </div>
               <div v-if="isedit_info">
                 <a-input-search
                   defaultValue="这是一个绝对不鸽，永远准时的团队"
                   enter-button="确定"
                   size="large"
-                  @search="change_info" 
+                  @search="change_info"
                   style="margin-left:24px;width:50%"
-                /><!--这个@search本质上就是click-->
+                />
+                <!--这个@search本质上就是click-->
               </div>
             </a-col>
             <a-col :span="1" style="text-align:right;margin:0 48px 10px 0">
-              <div>
+              <div v-if="isleader">
                 <a-button v-if="!ismanage" type="primary" @click="startmanage">
                   <a-icon type="setting" />管理
                 </a-button>
                 <a-button v-if="ismanage" type="default" @click="stopmanage">
                   <a-icon type="check" />完成
+                </a-button>
+              </div>
+              <div v-if="!isleader">
+                <a-button v-if="!ismanage" type="primary">
+                  <a-icon type="logout" />退出团队
                 </a-button>
               </div>
             </a-col>
@@ -148,6 +170,53 @@
           <a-row style="margin-top:20px">
             <a-col :span="21" style="text-align:left">
               <div style="font-size:20px;margin-left:24px">团队文档</div>
+              <a-list
+                :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+                :data-source="data"
+                style="text-align:center;margin:15px auto"
+              >
+                <a-list-item
+                  slot="renderItem"
+                  slot-scope="item"
+                  style="text-align:center;margin:15px auto"
+                >
+                  <a-card
+                    :bordered="false"
+                    :hoverable="true"
+                    style="min-width:240px;max-width:240px;text-align:center"
+                    @contextmenu.prevent
+                    v-contextmenu:contextmenu
+                  >
+                    <div>
+                      <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                    </div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                    <div style="font-size:12px;color:#9c9c9c">
+                      {{item.lastedittime}}
+                      <!--a-icon key="ellipsis" type="ellipsis" /-->
+                    </div>
+                  </a-card>
+
+                  <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="folder-open" />打开
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="edit" />重命名
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="control" />权限设置
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="delete" />删除
+                    </v-contextmenu-item>
+                    <v-contextmenu-item divider />
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="share-alt" />分享
+                    </v-contextmenu-item>
+                  </v-contextmenu>
+                </a-list-item>
+              </a-list>
             </a-col>
             <a-col :span="2" style="text-align:left;margin-right:24px">
               <div style="font-size:20px">团队成员</div>
@@ -180,7 +249,7 @@
           </a-row>
         </div>
         <div v-if="sider_status==3">
-        <!--回收站页面部分-->
+          <!--回收站页面部分-->
           回收站
         </div>
       </a-layout-content>
@@ -200,28 +269,32 @@
 <script>
 const data = [
   {
-    content: '一起来打雪仗吧',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "一起来打雪仗吧",
+    lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: '其实我也没上过学',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "其实我也没上过学",
+    lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: '今生再无悲喜',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "今生再无悲喜",
+    lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: '好耶',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "好耶",
+    lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: '说，藤本树',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "说，藤本树",
+    lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: '你哭什么啊',
-    lastedittime: '2020.08.11 14:30:11',
+    content: "你哭什么啊",
+    lastedittime: "2020.08.11 14:30:11",
+  },
+  {
+    content: "不知道",
+    lastedittime: "2020.08.11 14:30:11",
   },
 ];
 // @ is an alias to /src
@@ -247,10 +320,11 @@ export default {
       current: ["mail"],
       openKeys: ["sub1"],
       team_members,
+      isleader: true,
       ismanage: false,
-      sider_status:1,
-      isedit_name:false,
-      isedit_info:false,
+      sider_status: 1,
+      isedit_name: false,
+      isedit_info: false,
       data,
     };
   },
@@ -262,14 +336,14 @@ export default {
   methods: {
     handleClick(e) {
       console.log("click", e);
-      if (e.key=="doc") {
-        this.sider_status=1;
+      if (e.key == "doc") {
+        this.sider_status = 1;
       }
-      if (e.key[0]=='t') {
-        this.sider_status=2;
+      if (e.key[0] == "t") {
+        this.sider_status = 2;
       }
-      if (e.key=="trash") {
-        this.sider_status=3;
+      if (e.key == "trash") {
+        this.sider_status = 3;
       }
     },
     startmanage() {
@@ -277,14 +351,14 @@ export default {
     },
     stopmanage() {
       this.ismanage = false;
-      this.isedit_name=false;
-      this.isedit_info=false;
+      this.isedit_name = false;
+      this.isedit_info = false;
     },
-    editname(){
-      this.isedit_name=true;
+    editname() {
+      this.isedit_name = true;
     },
-    editinfo(){
-      this.isedit_info=true;
+    editinfo() {
+      this.isedit_info = true;
     },
     change_name(value) {
       console.log(value);
@@ -294,9 +368,9 @@ export default {
       console.log(value);
       this.isedit_info = false;
     },
-    handleRightMenuClick(vm, event){
-      console.log(vm, event)
-    }
+    handleRightMenuClick(vm, event) {
+      console.log(vm, event);
+    },
   },
 };
 </script>
