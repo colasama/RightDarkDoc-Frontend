@@ -107,6 +107,7 @@
             <a-col style="text-align:left">
               <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>咕咕咕的团队</b>
+                <transition name="slide-fade">
                 <a-button
                   v-if="ismanage"
                   type="link"
@@ -114,6 +115,7 @@
                   icon="edit"
                   style="margin-left:5px;font-size:24px;"
                 />
+                </transition>
               </div>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
@@ -130,6 +132,7 @@
             <a-col :span="21" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
                 <span style="">这是一个绝对不鸽，永远准时的团队。</span>
+                <transition name="slide-fade">
                 <a-button
                   v-if="ismanage"
                   type="link"
@@ -137,6 +140,7 @@
                   icon="edit"
                   style="font-size:15px;"
                 />
+                </transition>
               </div>
               <div v-if="isedit_info">
                 <a-input-search
@@ -237,12 +241,16 @@
                       />
                       {{item.username}}
                     </div>
+                    <transition name="slide-fade">
                     <a-icon v-if="ismanage" type="delete" />
+                    </transition>
                   </a-list-item>
                   <div slot="footer" style="text-align:right">
+                    <transition name="slide-fade">
                     <a-button v-if="ismanage" type="danger" style="margin-top:12px">
                       <a-icon type="close" />解散团队
                     </a-button>
+                    </transition>
                   </div>
                 </a-list>
               </div>
@@ -375,3 +383,16 @@ export default {
   },
 };
 </script>
+<style>
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>
