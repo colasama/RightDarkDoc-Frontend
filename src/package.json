@@ -10,8 +10,10 @@
   "dependencies": {
     "ant-design-vue": "^1.6.4",
     "core-js": "^3.6.5",
+    "v-contextmenu": "^2.9.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-runtime-helpers": "^1.1.2",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

@@ -29,10 +29,16 @@ Vue.use(VueRouter)
     component: () => import('../views/Login.vue')
   },
   {
-    path: 'doc/:id',
+    path: '/doc/:id',
     name:'Document',
     meta: {tittle:'文档',},
     component: () => import('../views/Doc.vue')
+  },
+  {
+    path: '/test',
+    name:'Test',
+    meta: {tittle:'Test',},
+    component: () => import('../views/Test.vue')
   }
 ]
 

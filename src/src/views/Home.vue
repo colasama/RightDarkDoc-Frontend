@@ -44,7 +44,40 @@
       <a-layout-content style="background:#fff">
         <div v-if="sider_status==1">
         <!--我的文档页面部分-->
-          我的文档
+          <a-tabs style="text-align:left;margin:24px" type="line">
+            <a-tab-pane key="1" tab="我的文档">
+              <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }" :data-source="data" style="text-align:center;margin:15px auto">
+                <a-list-item slot="renderItem" slot-scope="item" style="text-align:center;margin:15px auto">
+                  <a-card
+                    :bordered="false"
+                    :hoverable="true"
+                    style="min-width:240px;max-width:240px;text-align:center"
+                    @contextmenu.prevent=""
+                    v-contextmenu:contextmenu>
+                    <div><a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon></div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                    <div style="font-size:12px;color:#9c9c9c">{{item.lastedittime}} <!--a-icon key="ellipsis" type="ellipsis" /--></div>
+                  </a-card>
+
+                  <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 打开</v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="control"/> 权限设置</v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="delete"/> 删除</v-contextmenu-item>
+                  <v-contextmenu-item divider/>
+                  <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="share-alt"/> 分享</v-contextmenu-item>
+                  </v-contextmenu>
+
+                </a-list-item>
+              </a-list>
+              
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="最近浏览">
+
+            </a-tab-pane>
+            <a-tab-pane key="3" tab="我的收藏">
+
+            </a-tab-pane>
+          </a-tabs>
         </div>
         <div v-if="sider_status==2">
         <!--团队页面部分-->
@@ -125,6 +158,32 @@
 </template>
 
 <script>
+const data = [
+  {
+    content: '一起来打雪仗吧',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+  {
+    content: '其实我也没上过学',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+  {
+    content: '今生再无悲喜',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+  {
+    content: '好耶',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+  {
+    content: '说，藤本树',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+  {
+    content: '你哭什么啊',
+    lastedittime: '2020.08.11 14:30:11',
+  },
+];
 // @ is an alias to /src
 const team_members = [
   {
@@ -150,6 +209,7 @@ export default {
       team_members,
       ismanage: false,
       sider_status:1,
+      data,
     };
   },
   watch: {
@@ -176,6 +236,9 @@ export default {
     stopmanage() {
       this.ismanage = false;
     },
+    handleRightMenuClick(vm, event){
+      console.log(vm, event)
+    }
   },
 };
 </script>
