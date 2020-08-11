@@ -12,7 +12,7 @@
           <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px">
             <a-icon type="edit" />创建文档
           </a-button>
-          <a-menu-item key="1" style="margin-top:50px">
+          <a-menu-item key="doc" style="margin-top:50px">
             <div style="margin:0px 0 0 20px">
               <a-icon type="file" />
               <span>我的文档</span>
@@ -23,14 +23,14 @@
               <a-icon type="mail" />
               <span>我的团队</span>
             </span>
-            <a-menu-item-group key="g1">
-              <a-menu-item key="2">团队A</a-menu-item>
-              <a-menu-item key="3">团队B</a-menu-item>
-              <a-menu-item key="4">团队C</a-menu-item>
-              <a-menu-item key="5">团队D</a-menu-item>
+            <a-menu-item-group key="team">
+              <a-menu-item key="t1">团队A</a-menu-item>
+              <a-menu-item key="t2">团队B</a-menu-item>
+              <a-menu-item key="t3">团队C</a-menu-item>
+              <a-menu-item key="t4">团队D</a-menu-item>
             </a-menu-item-group>
           </a-sub-menu>
-          <a-menu-item key="6" style="margin-top:20px">
+          <a-menu-item key="trash" style="margin-top:20px">
             <div style="margin:0px 0 0 20px">
               <a-icon type="delete" />
               <span>回收站</span>
@@ -39,7 +39,12 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <div>
+        <div v-if="sider_status==1">
+        <!--我的文档页面部分-->
+          我的文档
+        </div>
+        <div v-if="sider_status==2">
+        <!--团队页面部分-->
           <a-row style="height:50px"></a-row>
           <a-row type="flex">
             <a-col :span="2"></a-col>
@@ -48,7 +53,7 @@
             </a-col>
             <a-col style="text-align:left">
               <div style="margin-top:30px;margin-left:5px">
-                <a-icon v-if="ismanage" type="edit" style="font-size:25px " />
+                <a-icon v-if="ismanage" type="edit" style="font-size:25px;color:#ec583a" />
               </div>
             </a-col>
           </a-row>
@@ -107,6 +112,10 @@
             </a-col>
           </a-row>
         </div>
+        <div v-if="sider_status==3">
+        <!--回收站页面部分-->
+          回收站
+        </div>
       </a-layout-content>
     </a-layout>
   </div>
@@ -137,6 +146,7 @@ export default {
       openKeys: ["sub1"],
       team_members,
       ismanage: false,
+      sider_status:1,
     };
   },
   watch: {
@@ -147,6 +157,15 @@ export default {
   methods: {
     handleClick(e) {
       console.log("click", e);
+      if (e.key=="doc") {
+        this.sider_status=1;
+      }
+      if (e.key[0]=='t') {
+        this.sider_status=2;
+      }
+      if (e.key=="trash") {
+        this.sider_status=3;
+      }
     },
     startmanage() {
       this.ismanage = true;
