@@ -10,7 +10,7 @@
           @click="handleClick"
         >
           <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px">
-            <a-icon type="edit" />创建文档
+            <a-icon type="form" />创建文档
           </a-button>
           <a-button size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
             <a-icon type="team" />创建团队
@@ -60,7 +60,8 @@
                   </a-card>
 
                   <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 打开</v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="folder-open"/> 打开</v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 重命名</v-contextmenu-item>
                     <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="control"/> 权限设置</v-contextmenu-item>
                     <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="delete"/> 删除</v-contextmenu-item>
                   <v-contextmenu-item divider/>
@@ -83,22 +84,20 @@
         <!--团队页面部分-->
           <a-row style="height:50px"></a-row>
           <a-row type="flex">
-            <a-col :span="2"></a-col>
             <a-col style="text-align:left">
-              <div style="font-size:40px">咕咕咕的团队</div>
+              <div style="font-size:40px;margin-left:24px"><b>咕咕咕的团队</b></div>
             </a-col>
             <a-col style="text-align:left">
               <div v-if="ismanage" style="margin-top:30px;margin-left:5px">
-                <a-icon type="edit" style="font-size:25px;color:#ec583a" />
+                <a-icon type="edit" style="font-size:28px;color:#ec583a;margin-left:5px" />
               </div>
             </a-col>
           </a-row>
           <a-row>
-            <a-col :span="2"></a-col>
             <a-col :span="15" style="text-align:left">
-              <div style="font-size:20px">这是一个绝对不鸽，永远准时的团队</div>
+              <div style="font-size:18px;margin-left:24px">这是一个绝对不鸽，永远准时的团队。</div>
             </a-col>
-            <a-col>
+            <a-col style="text-align:right;margin:0 48px 10px 0">
               <div>
                 <a-button v-if="!ismanage" type="primary" @click="startmanage">
                   <a-icon type="setting" />管理
@@ -110,15 +109,13 @@
             </a-col>
           </a-row>
           <a-row style="margin-top:5px">
-            <a-col :span="1"></a-col>
-            <a-col :span="21" style="background:grey;height:1px"></a-col>
+            <a-col style="background:#c2c2c2;height:1px;margin:10px 24px 0 24px"></a-col>
           </a-row>
           <a-row style="margin-top:20px">
-            <a-col :span="1"></a-col>
-            <a-col :span="18" style="text-align:left">
-              <div style="font-size:30px">团队文档</div>
+            <a-col :span="21" style="text-align:left">
+              <div style="font-size:20px;margin-left:24px">团队文档</div>
             </a-col>
-            <a-col :span="3">
+            <a-col :span="2" style="text-align:left;margin-right:24px">
               <div style="font-size:20px">团队成员</div>
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
@@ -130,7 +127,7 @@
                     <a slot="title">创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
-                    <div style="margin:auto">
+                    <div style="text-align:left">
                       <a-avatar
                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                       />
@@ -138,8 +135,8 @@
                     </div>
                     <a-icon v-if="ismanage" type="delete" />
                   </a-list-item>
-                  <div slot="footer">
-                    <a-button v-if="ismanage" type="danger">
+                  <div slot="footer" style="text-align:right">
+                    <a-button v-if="ismanage" type="danger" style="margin-top:12px">
                       <a-icon type="close" />解散团队
                     </a-button>
                   </div>
