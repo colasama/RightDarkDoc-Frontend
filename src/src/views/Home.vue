@@ -42,9 +42,9 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <div v-if="sider_status==1">
+        <div v-if="sider_status==1" class="card-container">
         <!--我的文档页面部分-->
-          <a-tabs style="text-align:left;margin:24px" type="line">
+          <a-tabs style="text-align:left;margin:24px" type="card" size="large">
             <a-tab-pane key="1" tab="我的文档">
               <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }" :data-source="data" style="text-align:center;margin:15px auto">
                 <a-list-item slot="renderItem" slot-scope="item" style="text-align:center;margin:15px auto">
@@ -185,7 +185,35 @@
     </a-layout>
   </div>
 </template>
+<style>
+.card-container {
+  background: #fff;
+  overflow: hidden;
+  padding: 24px;
+}
+.card-container > .ant-tabs-card > .ant-tabs-content {
+  margin-top: -16px;
+}
 
+.card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
+  background: #fff;
+  padding: 16px;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-bar {
+  border-color: #fff;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+  border-color: transparent;
+  background: transparent;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+  border-color: #fff;
+  background: #fff;
+}
+</style>
 <script>
 const data = [
   {
