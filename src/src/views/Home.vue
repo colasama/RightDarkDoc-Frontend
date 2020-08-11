@@ -42,43 +42,45 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <div v-if="sider_status==1" class="card-container">
+        <div v-if="sider_status==1" >
         <!--我的文档页面部分-->
-          <a-tabs style="text-align:left;margin:24px" type="card" size="large">
-            <a-tab-pane key="1" tab="我的文档">
-              <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }" :data-source="data" style="text-align:center;margin:15px auto">
-                <a-list-item slot="renderItem" slot-scope="item" style="text-align:center;margin:15px auto">
-                  <a-card
-                    :bordered="false"
-                    :hoverable="true"
-                    style="min-width:240px;max-width:240px;text-align:center"
-                    @contextmenu.prevent=""
-                    v-contextmenu:contextmenu>
-                    <div><a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon></div>
-                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
-                    <div style="font-size:12px;color:#9c9c9c">{{item.lastedittime}} <!--a-icon key="ellipsis" type="ellipsis" /--></div>
-                  </a-card>
+          <div class="card-container">
+            <a-tabs style="text-align:left;margin:24px" type="line" >
+              <a-tab-pane key="1" tab="我的文档" >
+                <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }" :data-source="data" style="text-align:center;margin:15px auto">
+                  <a-list-item slot="renderItem" slot-scope="item" style="text-align:center;margin:15px auto">
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      @contextmenu.prevent=""
+                      v-contextmenu:contextmenu>
+                      <div><a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon></div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">{{item.lastedittime}} <!--a-icon key="ellipsis" type="ellipsis" /--></div>
+                    </a-card>
 
-                  <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="folder-open"/> 打开</v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 重命名</v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="control"/> 权限设置</v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="delete"/> 删除</v-contextmenu-item>
-                  <v-contextmenu-item divider/>
-                  <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="share-alt"/> 分享</v-contextmenu-item>
-                  </v-contextmenu>
+                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="folder-open"/> 打开</v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="edit"/> 重命名</v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="control"/> 权限设置</v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="delete"/> 删除</v-contextmenu-item>
+                    <v-contextmenu-item divider/>
+                    <v-contextmenu-item @click="handleRightMenuClick"><a-icon type="share-alt"/> 分享</v-contextmenu-item>
+                    </v-contextmenu>
 
-                </a-list-item>
-              </a-list>
-              
-            </a-tab-pane>
-            <a-tab-pane key="2" tab="最近浏览">
+                  </a-list-item>
+                </a-list>
+                
+              </a-tab-pane>
+              <a-tab-pane key="2" tab="最近浏览">
 
-            </a-tab-pane>
-            <a-tab-pane key="3" tab="我的收藏">
+              </a-tab-pane>
+              <a-tab-pane key="3" tab="我的收藏">
 
-            </a-tab-pane>
-          </a-tabs>
+              </a-tab-pane>
+            </a-tabs>
+          </div>
         </div>
         <div v-if="sider_status==2">
           <!--团队页面部分-->
@@ -189,29 +191,10 @@
 .card-container {
   background: #fff;
   overflow: hidden;
-  padding: 24px;
-}
-.card-container > .ant-tabs-card > .ant-tabs-content {
-  margin-top: -16px;
 }
 
-.card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
-  background: #fff;
-  padding: 16px;
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar {
+.card-container > .ant-tabs-line > .ant-tabs-bar {
   border-color: #fff;
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
-  border-color: transparent;
-  background: transparent;
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
-  border-color: #fff;
-  background: #fff;
 }
 </style>
 <script>
