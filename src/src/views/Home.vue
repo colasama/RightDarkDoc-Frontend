@@ -87,12 +87,13 @@
             <a-col style="text-align:left">
               <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>咕咕咕的团队</b>
-                <a-icon 
-                  v-if="ismanage" 
-                  type="edit" 
-                  style="font-size:28px;color:#ec583a;margin-left:5px" 
-                  @click="editname"
-                />
+                <a-button
+                    v-if="ismanage"
+                    type="link"
+                    @click="editname"
+                    icon="edit"
+                    style="margin-left:5px;font-size:24px;"
+                  />
               </div>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
@@ -109,12 +110,13 @@
           <a-row>
             <a-col :span="22" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:18px;margin-left:24px">
-                这是一个绝对不鸽，永远准时的团队
-                <a-icon
-                  v-if="ismanage"
-                  type="edit"
-                  @click="editinfo"
-                  style="margin-left:5px;font-size:15px;color:#ec583a;cursor:pointer;"
+                  <span>这是一个绝对不鸽，永远准时的团队。</span>
+                  <a-button
+                    v-if="ismanage"
+                    type="link"
+                    @click="editinfo"
+                    icon="edit"
+                    style="margin-left:0px;font-size:15px;"
                   />
               </div>
               <div v-if="isedit_info">
