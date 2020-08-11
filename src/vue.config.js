@@ -5,9 +5,11 @@ module.exports = {
         less: {
           lessOptions: {
             modifyVars: {
-              'primary-color': '#313131',
-              'link-color': '#313131',
+              'primary-color': '#E85A4F',
+              'link-color': '#ec583a',
               'btn-border-radius-sm': '0px',
+              'btn-border-radius-base': '0px',
+              'card-radius': '10px',
             },
             javascriptEnabled: true,
           },

@@ -7,7 +7,7 @@
       mode="inline"
       @click="handleClick"
     >
-      <a-button size="large" style="margin:50px 0 0 65px"><a-icon type="edit"/>创建文档</a-button>
+      <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px"><a-icon type="edit"/>创建文档</a-button>
       <a-menu-item key="1" style="margin-top:50px" >
         <div style="margin:0px 0 0 20px">
           <a-icon type="file" />
