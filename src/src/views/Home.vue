@@ -84,33 +84,50 @@
           <!--团队页面部分-->
           <a-row style="height:50px"></a-row>
           <a-row type="flex">
-            <a-col :span="2"></a-col>
             <a-col style="text-align:left">
-              <div v-if="!isedit_name" style="font-size:40px">咕咕咕的团队</div>
+              <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
+                <b>咕咕咕的团队</b>
+                <a-icon 
+                  v-if="ismanage" 
+                  type="edit" 
+                  style="font-size:28px;color:#ec583a;margin-left:5px" 
+                  @click="editname"
+                />
+              </div>
               <div v-if="isedit_name" style="font-size:40px">
-                <a-input size="large" defaultValue="咕咕咕的团队" />
+                <a-input-search
+                  placeholder="咕咕咕的团队"
+                  enter-button="确定"
+                  size="large"
+                  @search="onSearch"
+                  style="margin-left:24px"
+                />
               </div>
             </a-col>
-            <a-col style="text-align:left">
-              <div v-if="ismanage" style="margin-top:30px;margin-left:5px">
-                <a-icon type="edit" style="font-size:25px;color:#ec583a" @click="editname" />
-              </div>
-            </a-col>
+
           </a-row>
           <a-row>
-            <a-col :span="2"></a-col>
-            <a-col :span="15" style="text-align:left">
-              <div v-if="!isedit_info" style="font-size:20px">
+            <a-col :span="22" style="text-align:left">
+              <div v-if="!isedit_info" style="font-size:18px;margin-left:24px">
                 这是一个绝对不鸽，永远准时的团队
-                <span v-if="ismanage" style="margin-top:10px;margin-left:5px" > 
-                    <a-icon type="edit" style="font-size:15px;color:#ec583a" @click="editinfo" />
-                </span>
+                <a-icon
+                  v-if="ismanage"
+                  type="edit"
+                  @click="editinfo"
+                  style="margin-left:5px;font-size:15px;color:#ec583a;cursor:pointer;"
+                  />
               </div>
-              <div v-if="isedit_info" style="font-size:20px">
-                <a-input size="large" defaultValue="这是一个绝对不鸽，永远准时的团队" />
+              <div v-if="isedit_info">
+                <a-input-search
+                  placeholder="这是一个绝对不鸽，永远准时的团队"
+                  enter-button="确定"
+                  size="large"
+                  @search="onSearch" 
+                  style="margin-left:24px;width:50%"
+                /><!--这个@search本质上就是click-->
               </div>
             </a-col>
-            <a-col>
+            <a-col :span="1" style="text-align:right;margin:0 48px 10px 0">
               <div>
                 <a-button v-if="!ismanage" type="primary" @click="startmanage">
                   <a-icon type="setting" />管理
@@ -122,15 +139,13 @@
             </a-col>
           </a-row>
           <a-row style="margin-top:5px">
-            <a-col :span="1"></a-col>
-            <a-col :span="21" style="background:grey;height:1px"></a-col>
+            <a-col style="background:#c2c2c2;height:1px;margin:10px 24px 0 24px"></a-col>
           </a-row>
           <a-row style="margin-top:20px">
-            <a-col :span="1"></a-col>
-            <a-col :span="18" style="text-align:left">
-              <div style="font-size:30px">团队文档</div>
+            <a-col :span="21" style="text-align:left">
+              <div style="font-size:20px;margin-left:24px">团队文档</div>
             </a-col>
-            <a-col :span="3">
+            <a-col :span="2" style="text-align:left;margin-right:24px">
               <div style="font-size:20px">团队成员</div>
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
@@ -142,7 +157,7 @@
                     <a slot="title">创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
-                    <div style="margin:auto">
+                    <div style="text-align:left">
                       <a-avatar
                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
                       />
@@ -150,8 +165,8 @@
                     </div>
                     <a-icon v-if="ismanage" type="delete" />
                   </a-list-item>
-                  <div slot="footer">
-                    <a-button v-if="ismanage" type="danger">
+                  <div slot="footer" style="text-align:right">
+                    <a-button v-if="ismanage" type="danger" style="margin-top:12px">
                       <a-icon type="close" />解散团队
                     </a-button>
                   </div>
