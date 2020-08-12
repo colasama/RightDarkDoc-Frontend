@@ -1,5 +1,5 @@
 <template>
-  <div class="example">
+  <!--div class="example">
     <v-contextmenu ref="contextmenu" :theme="theme">
       <v-contextmenu-item @click="handleClick">删除</v-contextmenu-item>
       <v-contextmenu-item @click="handleClick">权限设置</v-contextmenu-item>
@@ -25,10 +25,37 @@
     <div :class="['box', theme]" @contextmenu.prevent="" v-contextmenu:contextmenu>
       右键点击此区域
     </div>
+  </div-->
+  <div>
+    <a-popconfirm
+      title="Are you sure delete this task?"
+      ok-text="Yes"
+      cancel-text="No"
+      @confirm="confirm"
+      @cancel="cancel"
+    >
+      <a href="#">Delete</a>
+    </a-popconfirm>
+    <div>
+      <router-link to="/">上一页</router-link>
+    </div>
   </div>
 </template>
 
 <script>
+export default {
+  methods: {
+    confirm(e) {
+      console.log(e);
+      this.$message.success('Click on Yes');
+    },
+    cancel(e) {
+      console.log(e);
+      this.$message.error('Click on No');
+    },
+  },
+}; 
+/*
   export default {
     name: 'Submenu',
     props: {
@@ -42,7 +69,7 @@
         console.log(vm, placement)
       },
     },
-  }
+  }*/
 </script>
 
 <style scoped>

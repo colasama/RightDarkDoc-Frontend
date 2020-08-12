@@ -4,8 +4,8 @@
         <a-col :span="12">
             <a-row style="margin-top:35%;margin-bottom:20px"><b style="font-size:50px">右墨文档</b></a-row>
             <a-row>
-                <a-button size="large" style="width:100px;margin-right:20px">注册</a-button>
-                <a-button size="large" style="width:100px">登陆</a-button>
+                <a-button size="large" @click="toRegister" style="width:100px;margin-right:20px">注册</a-button>
+                <a-button size="large" @click="toLogin" style="width:100px">登陆</a-button>
             </a-row>
             
         </a-col>
@@ -34,6 +34,16 @@ export default {
     },
     destroyed(){
         this.$store.state.showNav = true
-    }
+    },
+    methods: {
+    toRegister() {
+      this.current = "register";
+      this.$router.push({ path: "/register" });
+    },
+    toLogin(){
+      this.current='login';
+      this.$router.push({path:"/login"});
+    },
+  },
 }
 </script>

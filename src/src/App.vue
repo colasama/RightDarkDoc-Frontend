@@ -1,7 +1,9 @@
 <template>
   <div id="app" style="display:flex;flex-direction:column;">
     <AppHeader v-if="$store.state.showNav"></AppHeader>
-    <router-view style="text-align: center;margin-top:4px;flex:1;"/>
+    <!--transition name="fade" mode="out-in"-->
+      <keep-alive><router-view style="text-align: center;margin-top:4px;flex:1;" :key="$route.path"/></keep-alive>
+    <!--/transition-->
   </div>
 </template>
 
@@ -11,6 +13,13 @@ html,body,#app{
   min-height: 100%;
   width: 100%;
   margin: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
 
