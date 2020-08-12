@@ -15,8 +15,8 @@
             </a-button>
             <a-icon type="down" />
             <a-menu slot="overlay" @click="onClick" style="text-align:center">
-              <a-menu-item key="1">创建空白文档</a-menu-item>
-              <a-menu-item key="2">从模板创建</a-menu-item>
+              <a-menu-item v-if="sider_status!=2" key="1">创建空白文档</a-menu-item>
+              <a-menu-item v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="3">创建空白团队文档</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
             </a-menu>
@@ -397,7 +397,7 @@ export default {
   transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
