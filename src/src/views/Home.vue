@@ -36,10 +36,7 @@
               <span>我的团队</span>
             </span>
             <a-menu-item-group key="team">
-              <a-menu-item key="t1">团队A</a-menu-item>
-              <a-menu-item key="t2">团队B</a-menu-item>
-              <a-menu-item key="t3">团队C</a-menu-item>
-              <a-menu-item key="t4">团队D</a-menu-item>
+              <a-menu-item v-for="item in teams" v-bind:key="'t'+item.teamid">{{item.teamname}}</a-menu-item>
             </a-menu-item-group>
           </a-sub-menu>
           <a-menu-item key="trash" style="margin-top:20px">
@@ -115,7 +112,7 @@
           <a-row type="flex">
             <a-col style="text-align:left">
               <span v-if="!isedit_name" style="font-size:40px;margin-left:24px">
-                <b>咕咕咕的团队</b>
+                <b>{{current_team.teamname}}</b>
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -128,7 +125,7 @@
               </span>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
-                  defaultValue="咕咕咕的团队"
+                  v-bind:defaultValue="current_team.teamname"
                   enter-button="确定"
                   size="large"
                   @search="change_name"
@@ -140,7 +137,7 @@
           <a-row>
             <a-col :span="21" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
-                <span style>这是一个绝对不鸽，永远准时的团队。</span>
+                <span style>{{current_team.info}}</span>
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -153,7 +150,7 @@
               </div>
               <div v-if="isedit_info">
                 <a-input-search
-                  defaultValue="这是一个绝对不鸽，永远准时的团队"
+                  v-bind:defaultValue="current_team.info"
                   enter-button="确定"
                   size="large"
                   @search="change_info"
@@ -246,7 +243,7 @@
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
-                      <a-icon v-if="ismanage" type="delete" />
+                      <a-icon v-if="ismanage" type="delete" @click="delete_member" />
                     </transition>
                   </a-list-item>
                   <div slot="footer" style="text-align:right">
@@ -297,7 +294,6 @@
                   <!--a-icon key="ellipsis" type="ellipsis" /-->
                 </div>
               </a-card>
-
               <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
                 <v-contextmenu-item @click="handleRightMenuClick">
                   <a-icon type="redo" />恢复
@@ -355,20 +351,6 @@ const data = [
   },
 ];
 // @ is an alias to /src
-const team_members = [
-  {
-    username: "成员1",
-  },
-  {
-    username: "成员2",
-  },
-  {
-    username: "成员3",
-  },
-  {
-    username: "成员4",
-  },
-];
 export default {
   name: "Home",
   components: {},
@@ -376,7 +358,43 @@ export default {
     return {
       current: ["mail"],
       openKeys: ["sub1"],
-      team_members,
+      teams: [
+        {
+          teamid: 1,
+          teamname: "咕咕咕的团队",
+          info: "这是一个绝对不鸽，永远准时的团队。",
+        },
+        {
+          teamid: 2,
+          teamname: "鸽鸽鸽的团队",
+          info: "这是一个绝对不鸽，永远准时的团队。",
+        },
+        {
+          teamid: 3,
+          teamname: "团队A",
+          info: "团队A",
+        },
+        {
+          teamid: 4,
+          teamname: "团队B",
+          info: "团队B",
+        },
+      ],
+      current_team:{},
+      team_members:[
+        {
+          username: "成员1",
+        },
+        {
+          username: "成员2",
+        },
+        {
+          username: "成员3",
+        },
+        {
+          username: "成员4",
+        },
+      ],
       isleader: true,
       ismanage: false,
       sider_status: 1,
@@ -393,11 +411,19 @@ export default {
   methods: {
     handleClick(e) {
       console.log("click", e);
+      this.stopmanage();
       if (e.key == "doc") {
         this.sider_status = 1;
       }
       if (e.key[0] == "t") {
         this.sider_status = 2;
+        var current_teamid=e.key.substring(1);
+        for (let index = 0; index < this.teams.length; index++) {
+          const element = this.teams[index];
+          if (element.teamid==current_teamid) {
+            this.current_team=this.teams[index];
+          }
+        }
       }
       if (e.key == "trash") {
         this.sider_status = 3;
@@ -425,6 +451,7 @@ export default {
       console.log(value);
       this.isedit_info = false;
     },
+    delete_member() {},
     handleRightMenuClick(vm, event) {
       console.log(vm, event);
     },
