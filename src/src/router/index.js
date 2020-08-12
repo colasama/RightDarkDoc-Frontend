@@ -39,6 +39,12 @@ Vue.use(VueRouter)
     name:'Test',
     meta: {tittle:'Test',},
     component: () => import('../views/Test.vue')
+  },
+  {
+    path: '/docno',
+    name:'No',
+    meta: {tittle:'Test',},
+    component: () => import('../views/DocNoAuth.vue')
   }
 ]
 
