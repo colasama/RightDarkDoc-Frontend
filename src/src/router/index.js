@@ -8,30 +8,31 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Home',
+    meta:{title:'工作台 - 右墨文档'},
     component: Home
   },
   {
     path: '/welcome',
     name: 'Welcome',
-    meta: {tittle:'欢迎页',},
+    meta: {title:'右墨文档 - 可能是第二好的文档协作平台',},
     component: () => import('../views/Welcome.vue')
   },
   {
     path: '/register',
     name: 'Register',
-    meta: {title: '注册',},
+    meta: {title: '注册账户 - 右墨文档',},
     component: () => import('../views/Register.vue')
   },
   {
     path: '/login',
     name: 'Login',
-    meta: {title: '登录',},
+    meta: {title: '登录 - 右墨文档',},
     component: () => import('../views/Login.vue')
   },
   {
     path: '/doc/:id',
     name:'Document',
-    meta: {tittle:'文档',},
+    meta: {tittle:'文档 - 右墨文档',},
     component: () => import('../views/Doc.vue')
   },
   {
@@ -43,7 +44,7 @@ Vue.use(VueRouter)
   {
     path: '/docno',
     name:'No',
-    meta: {tittle:'Test',},
+    meta: {tittle:'文档 - 右墨文档',},
     component: () => import('../views/DocNoAuth.vue')
   }
 ]
