@@ -114,7 +114,7 @@
           <a-row style="height:50px"></a-row>
           <a-row type="flex">
             <a-col style="text-align:left">
-              <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
+              <span v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>咕咕咕的团队</b>
                 <transition name="slide-fade">
                   <a-button
@@ -125,7 +125,7 @@
                     style="margin-left:5px;font-size:24px;"
                   />
                 </transition>
-              </div>
+              </span>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
                   defaultValue="咕咕咕的团队"
@@ -263,7 +263,51 @@
         </div>
         <div v-if="sider_status==3">
           <!--回收站页面部分-->
-          回收站
+          <a-row>
+            <a-col :span="20"></a-col>
+            <a-col :span="2" style="text-align:left">
+              <a-button size="default" type="default" style="margin-top:50px">
+                <a-icon type="delete" />清空回收站
+              </a-button>
+            </a-col>
+          </a-row>
+          <a-list
+            :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+            :data-source="data"
+            style="text-align:center;margin:15px auto"
+          >
+            <a-list-item
+              slot="renderItem"
+              slot-scope="item"
+              style="text-align:center;margin:15px auto"
+            >
+              <a-card
+                :bordered="false"
+                :hoverable="true"
+                style="min-width:240px;max-width:240px;text-align:center"
+                @contextmenu.prevent
+                v-contextmenu:contextmenu
+              >
+                <div>
+                  <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                </div>
+                <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                <div style="font-size:12px;color:#9c9c9c">
+                  {{item.lastedittime}}
+                  <!--a-icon key="ellipsis" type="ellipsis" /-->
+                </div>
+              </a-card>
+
+              <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                <v-contextmenu-item @click="handleRightMenuClick">
+                  <a-icon type="redo" />恢复
+                </v-contextmenu-item>
+                <v-contextmenu-item @click="handleRightMenuClick">
+                  <a-icon type="delete" />彻底删除
+                </v-contextmenu-item>
+              </v-contextmenu>
+            </a-list-item>
+          </a-list>
         </div>
       </a-layout-content>
     </a-layout>
