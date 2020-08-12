@@ -237,17 +237,12 @@
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
                   <div slot="header">
-                    <a-avatar
-                      slot="avatar"
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                    />
+                    <a-avatar icon="user" />
                     <a slot="title">创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
-                      <a-avatar
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      />
+                      <a-avatar icon="user" />
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
