@@ -9,9 +9,18 @@
           mode="inline"
           @click="handleClick"
         >
-          <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px">
-            <a-icon type="form" />创建文档
-          </a-button>
+          <a-dropdown placement="bottomCenter" trigger="['click']">
+            <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px">
+              <a-icon type="form" />创建文档
+            </a-button>
+            <a-icon type="down" />
+            <a-menu slot="overlay" @click="onClick" style="text-align:center">
+              <a-menu-item key="1">创建空白文档</a-menu-item>
+              <a-menu-item key="2">从模板创建</a-menu-item>
+              <a-menu-item v-if="sider_status==2" key="3">创建空白团队文档</a-menu-item>
+              <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
+            </a-menu>
+          </a-dropdown>
           <a-button size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
             <a-icon type="team" />创建团队
           </a-button>
@@ -108,13 +117,13 @@
               <div v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>咕咕咕的团队</b>
                 <transition name="slide-fade">
-                <a-button
-                  v-if="ismanage"
-                  type="link"
-                  @click="editname"
-                  icon="edit"
-                  style="margin-left:5px;font-size:24px;"
-                />
+                  <a-button
+                    v-if="ismanage"
+                    type="link"
+                    @click="editname"
+                    icon="edit"
+                    style="margin-left:5px;font-size:24px;"
+                  />
                 </transition>
               </div>
               <div v-if="isedit_name" style="font-size:40px">
@@ -131,15 +140,15 @@
           <a-row>
             <a-col :span="21" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
-                <span style="">这是一个绝对不鸽，永远准时的团队。</span>
+                <span style>这是一个绝对不鸽，永远准时的团队。</span>
                 <transition name="slide-fade">
-                <a-button
-                  v-if="ismanage"
-                  type="link"
-                  @click="editinfo"
-                  icon="edit"
-                  style="font-size:15px;"
-                />
+                  <a-button
+                    v-if="ismanage"
+                    type="link"
+                    @click="editinfo"
+                    icon="edit"
+                    style="font-size:15px;"
+                  />
                 </transition>
               </div>
               <div v-if="isedit_info">
@@ -174,7 +183,7 @@
           </a-row>
           <a-row style="margin-top:20px">
             <a-col :span="21" style="text-align:left">
-              <div style="font-size:20px;margin-left:24px">团队文档</div>
+              <div style="font-size:30px;margin-left:24px">团队文档</div>
               <a-list
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                 :data-source="data"
@@ -242,14 +251,14 @@
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
-                    <a-icon v-if="ismanage" type="delete" />
+                      <a-icon v-if="ismanage" type="delete" />
                     </transition>
                   </a-list-item>
                   <div slot="footer" style="text-align:right">
                     <transition name="slide-fade">
-                    <a-button v-if="ismanage" type="danger" style="margin-top:12px">
-                      <a-icon type="close" />解散团队
-                    </a-button>
+                      <a-button v-if="ismanage" type="danger" style="margin-top:12px">
+                        <a-icon type="close" />解散团队
+                      </a-button>
                     </transition>
                   </div>
                 </a-list>
@@ -385,10 +394,10 @@ export default {
 </script>
 <style>
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
