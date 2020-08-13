@@ -296,15 +296,16 @@
             that.docid=response.data.contents.docid;
             that.creatorid=response.data.contents.creatorid;
             this.istrash=response.data.contents.istrash;
-            //console.log(response.data.contents.content)
-
-            /*if (response.data.success == true) {
-            that.$message.success("退出团队成功", 1.5);
-            } else {
-            that.$message.error("退出团队失败", 1.5);
-            }
-            that.
-            that.load_team();*/
+        });
+        Vue.axios({
+            method: "get",
+            url: "http://39.106.230.20:8090/document/fav/"+this.$route.params.id,
+            headers: {
+                token: this.$store.state.token,
+            },
+        }).then(function (response) {
+            console.log(response)
+            console.log("okay")
         });
     },
   }

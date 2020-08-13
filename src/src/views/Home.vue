@@ -880,6 +880,9 @@ export default {
         }
       });
     },
+    rightEvent(docid){
+      console.log(docid)
+    }
   },
 };
 </script>
