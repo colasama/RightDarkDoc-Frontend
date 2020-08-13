@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align:center">
+    <div style="text-align:center;background:#FAFAFA">
         <div style="margin:24px 48px 0 0;text-align:right">
             <a-popover placement="bottomLeft" trigger="click">
                 <template slot="content" style="text-align:right">
@@ -44,8 +44,8 @@
                 <a-button @click="openShare"><a-icon type="share-alt"/>分享</a-button>
             </a-popover>
         </div>
-        <div>
-            <div style="width:1200px;text-align:center">
+        <div style="text-align:center">
+            <div class="text-editor">
                 <InEditor :editor="s1" :value="s2"></InEditor>
             </div>
         </div>
@@ -53,7 +53,17 @@
         
     </div>
 </template>
-
+<style>
+    .text-editor{
+        width:1200px;
+        background:#FFFFFF;
+        margin: 24px auto;
+        height:1200px;
+        border: 1px hsl( 0,0%,82.7% ) solid;
+        border-radius: var(--ck-border-radius);
+        box-shadow: 0 0 5px hsla( 0,0%,0%,.1 );
+    }
+</style>
 <script>
   import InEditor from '@/components/InEditor'
 
