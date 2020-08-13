@@ -249,12 +249,12 @@
               <a-list
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                 :data-source="data"
-                style="text-align:center;margin:15px auto"
+                style="text-align:center;margin:15px"
               >
                 <a-list-item
                   slot="renderItem"
                   slot-scope="item"
-                  style="text-align:center;margin:15px auto"
+                  style="text-align:center;margin:15px"
                 >
                   <a-card
                     :bordered="false"
