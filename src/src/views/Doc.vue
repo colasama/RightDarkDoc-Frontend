@@ -6,6 +6,14 @@
                 <a-col :span="15">
                     <div style="margin:8px 0 0 128px;text-align:left">
                         <a-icon @click="toWorkshop" type="arrow-left" class="returnNarrow"/>
+                        <a-popover placement="bottom" >
+                            <template slot="content">
+                                点击即可收藏文档哦~
+                            </template>
+                            <a-rate @change="addFav" count="1" :value="isFav"
+                            style="margin:0px 0 5px 5px;font-size:24px;" />
+                            <!--↑说起来你可能不信，但是这个可以当按钮来用-->
+                        </a-popover>
                         <!--span style="font-size:24px;margin-right:5px">{{title}}</span-->
                         <span style="font-size:24px;margin-right:5px"><b>
                         <a-input v-model="title"
@@ -13,14 +21,6 @@
                             style="border:0;width:200px;background:#FAFAFA;font-size:18px"
                         /></b>
                         </span>
-                        <a-popover placement="bottom" >
-                            <template slot="content">
-                                点击即可收藏文档哦~
-                            </template>
-                            <a-rate :default-value="0" count="1" 
-                            style="margin:0px 0 5px 5px;font-size:24px;" />
-                            <!--↑说起来你可能不信，但是这个可以当按钮来用-->
-                        </a-popover>
                         <span style="margin-left:5px">
                             上次修改时间是{{edittime}}，共计修改了{{editcount}}次。
                             </span>
@@ -92,6 +92,8 @@
                 <mavon-editor 
                     v-model="content" 
                     ref="md"
+                    @imgAdd="$imgAdd"
+                    @imgDel="$imgDel"
                     @save="saveDoc"
                     @change="textChange" 
                     style="min-height:1600px;z-index:0"
@@ -155,9 +157,33 @@
         auth:0,
         docid:this.$route.params.id,
         istrash:0,
+        isFav:0,
       }
     },
     methods:{
+        $imgAdd(pos,$file){
+            // 第一步.将图片上传到服务器.
+           var formdata = new FormData();
+           formdata.append('image', $file);
+           Vue.axios({
+               url: 'http://182.92.57.178:5000/pictures/add',
+               method: 'post',
+               data: formdata,
+               //headers: { 'Content-Type': 'multipart/form-data' },
+           }).then((url) => {
+               // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+               /**
+               * $vm 指为mavonEditor实例，可以通过如下两种方式获取
+               * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
+               * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
+               */
+               this.$refs.md.$img2Url(pos, url.data.url);
+               console.log(url.data.url)
+           })
+        },
+        $imgDel(pos){
+            delete this.img_file[pos];
+        },
         textChange(value,render){
             this.html = render;
         },
@@ -192,11 +218,37 @@
             }).then(function (response) {
                 console.log(response.data);
                 if (response.data.success == true) {
-                that.$message.success("上传成功", 1.5);
+                that.$message.success("保存成功！", 1.5);
                 } else {
-                that.$message.error("上传失败", 1.5);
+                that.$message.error("保存失败！", 1.5);
                 }
             });
+        },
+        addFav(){
+            console.log("Faving...Now:"+this.isFav)
+            var that = this;
+            Vue.axios({
+                method: "post",
+                url: "http://39.106.230.20:8090/document/fav",
+                headers: {
+                    token: this.$store.state.token,
+                },
+                data: {
+                    docid: this.docid,
+                },
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data.success == true) {
+                that.$message.success("收藏成功", 1.5);
+                that.isFav=1;
+                } else {
+                that.$message.warning("你已经收藏了哦~", 1.5);
+                that.isFav=1;
+                }
+            });
+        },
+        delFav(){
+
         }
     },
     created: function(){
