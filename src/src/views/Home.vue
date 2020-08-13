@@ -371,9 +371,17 @@
                 </a-button>
               </div>
               <div v-if="!isleader">
-                <a-button v-if="!ismanage" type="primary">
-                  <a-icon type="logout" />退出团队
-                </a-button>
+                <a-popconfirm
+                  placement="bottomRight"
+                  title="确定要退出团队吗?"
+                  ok-text="确认"
+                  cancel-text="算了"
+                  @confirm="exitTeam"
+                >
+                  <a-button v-if="!ismanage" type="primary">
+                    <a-icon type="logout" />退出团队
+                  </a-button>
+                </a-popconfirm>
               </div>
             </a-col>
           </a-row>
@@ -452,7 +460,7 @@
                   <div slot="footer" style="text-align:right">
                     <div style="text-align:right;margin-top:7px">
                       <transition name="slide-fade">
-                        <a-button v-if="!ismanage" type="link">
+                        <a-button v-if="!ismanage&&isleader" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
                         <a-button v-if="ismanage" type="danger">
@@ -580,7 +588,7 @@ export default {
           username: "成员1",
         },
       ],
-      isleader: true,
+      isleader: false,
       ismanage: false,
       sider_status: 1,
       isedit_name: false,
@@ -654,6 +662,12 @@ export default {
           console.log(response.data);
           that.team_creator = response.data.teamCreator;
           that.team_members = response.data.teamMembers;
+          if (that.team_creator.userid == that.$store.state.userid) {
+            that.isleader = true;
+          } else {
+            that.isleader = false;
+          }
+          console.log(that.isleader);
         });
         Vue.axios({
           method: "get",
@@ -712,6 +726,24 @@ export default {
     change_info(value) {
       console.log(value);
       this.isedit_info = false;
+    },
+    exitTeam() {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/exit",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("退出团队成功", 1.5);
+        } else {
+          that.$message.error("退出团队失败", 1.5);
+        }
+        that.
+        that.load_team();
+      });
     },
     delete_member() {},
     handleRightMenuClick(vm, event) {
