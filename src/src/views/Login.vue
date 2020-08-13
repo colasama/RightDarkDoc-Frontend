@@ -57,6 +57,7 @@
 
 <script>
 // @ is an alias to /src
+import Vue from "vue";
 
 export default {
   name: "Login",
@@ -75,6 +76,41 @@ export default {
       this.$router.push({ path: "/register" });
     },
     checklogin() {
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/login",
+        data: {
+          username: this.username,
+          password: this.password,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        if (response.data.success == true) {
+          that.$store.state.token = response.data.token;
+          Vue.axios({
+            method: "get",
+            url: "http://39.106.230.20:8090/user/info",
+            headers: {
+              token: that.$store.state.token,
+            },
+          })
+            .then((response) => {
+              console.log(response.data);
+              that.$store.state.username = response.data.username;
+              that.$store.state.userid = response.data.userid;
+            })
+            .catch(function (response) {
+              console.log(response);
+            });
+          that.$message.success("登录成功，即将跳转工作台", 1.5).then(() => {
+            that.$router.push({ path: "/" });
+            that.$store.state.showNav = true;
+          });
+        } else {
+          that.$message.error(response.data.message);
+        }
+      });
     },
   },
   created() {

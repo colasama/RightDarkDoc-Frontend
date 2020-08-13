@@ -39,11 +39,25 @@
     <div>
       <router-link to="/">上一页</router-link>
     </div>
+    <div id="app">
+      {{ info }}
+    </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
+  data () {
+    return {
+      info: null
+    }
+  },
+  mounted () {
+    Vue.axios
+      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      .then(response => (this.info = response))
+  },
   methods: {
     confirm(e) {
       console.log(e);
@@ -53,6 +67,7 @@ export default {
       console.log(e);
       this.$message.error('Click on No');
     },
+    
   },
 }; 
 /*
