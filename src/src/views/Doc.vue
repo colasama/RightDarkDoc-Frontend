@@ -1,11 +1,18 @@
 <template>
     <div style="text-align:center;background:#FAFAFA">
+        
         <div class="subNavi">
             <a-row>
                 <a-col :span="15">
                     <div style="margin:8px 0 0 128px;text-align:left">
-                        <a-icon type="arrow-left" class="returnNarrow"/>
-                        <span style="font-size:24px;margin-right:5px"><b>{{title}}</b></span>
+                        <a-icon @click="toWorkshop" type="arrow-left" class="returnNarrow"/>
+                        <!--span style="font-size:24px;margin-right:5px">{{title}}</span-->
+                        <span style="font-size:24px;margin-right:5px"><b>
+                        <a-input v-model="title"
+                            size="large"
+                            style="border:0;width:200px;background:#FAFAFA;font-size:18px"
+                        /></b>
+                        </span>
                         <a-popover placement="bottom" >
                             <template slot="content">
                                 点击即可收藏文档哦~
@@ -71,7 +78,7 @@
                                 </div>
                                 
                             </template>
-                            <a-button @click="openShare"><a-icon type="share-alt"/>分享</a-button>
+                            <a-button><a-icon type="share-alt"/>分享</a-button>
                         </a-popover>
                         <!--a-button @click="test" ><a-icon type="save"/>TEST_测试</a-button-->
                     </div>
@@ -85,11 +92,10 @@
                 <mavon-editor 
                     v-model="content" 
                     ref="md"
+                    @save="saveDoc"
                     @change="textChange" 
                     style="min-height:1600px;z-index:0"
-
                 />
-
             </div>
         </div>
         
@@ -141,10 +147,12 @@
         content:'',//输入的Markdown
         html:'',//渲染的html文件
         title:'Untitled',
-        edittime:"2020.08.13 20:15",
+        edittime:'',
+        createtime:'',
         editcount:5,
         teamauth:0,
         auth:0,
+        docid:this.$route.params.id
       }
     },
     methods:{
@@ -155,7 +163,38 @@
             console.log(this.html)
         },
         toWorkshop(){
-            
+            this.$router.push({path:"/"});
+        },
+        saveDoc(){
+            console.log("Saving...")
+            var that = this;
+            Vue.axios({
+                method: "put",
+                url: "http://39.106.230.20:8090/document/",
+                headers: {
+                    token: this.$store.state.token,
+                },
+                data: {
+                    docid:this.docid,
+                    title: this.title,
+                    content: this.content,
+                    creattime:'2020-08-12T14:53:55.800+00:00',
+                    lastedittime:'2020-08-12T14:53:55.800+00:00',
+                    editcount:2,
+                    lastedituserid:25,
+                    auth:1,
+                    teamauth:7,
+                    creatorid:25,
+                    istrash:0,
+                },
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data.success == true) {
+                that.$message.success("上传成功", 1.5);
+                } else {
+                that.$message.error("上传失败", 1.5);
+                }
+            });
         }
     },
     created: function(){
@@ -174,6 +213,8 @@
             that.editcount=response.data.contents.editcount;
             that.auth=response.data.contents.auth;
             that.teamauth=response.data.contents.teamauth;
+            that.createtime=response.data.contents.createtime;
+            that.docid=response.data.contents.docid;
             console.log(response.data.contents.content)
 
             /*if (response.data.success == true) {
