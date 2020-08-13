@@ -304,7 +304,13 @@
                 token: this.$store.state.token,
             },
         }).then(function (response) {
-            console.log(response)
+            console.log(response.data.isFav)
+            if(response.data.isFav==true){
+                that.isFav=1;
+            }
+            else{
+                that.isFav=0;
+            }
             console.log("okay")
         });
     },
