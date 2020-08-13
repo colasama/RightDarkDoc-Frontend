@@ -5,6 +5,7 @@
 <script>
   // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
   import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+  import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn'
   import CKEditor from '@ckeditor/ckeditor5-vue'
 
   export default {
@@ -26,6 +27,8 @@
         editorData: '',
         editorConfig: {
           placeholder: this.placeholder,
+          language: 'zh-cn',
+          removePlugins: ['MediaEmbed'],
         }
       }
     },

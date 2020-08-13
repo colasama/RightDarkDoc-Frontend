@@ -44,9 +44,12 @@
                 <a-button @click="openShare"><a-icon type="share-alt"/>分享</a-button>
             </a-popover>
         </div>
-        <div style="width:1200px;text-align:center">
-            <InEditor :editor="s1" :value="s2"></InEditor>
+        <div>
+            <div style="width:1200px;text-align:center">
+                <InEditor :editor="s1" :value="s2"></InEditor>
+            </div>
         </div>
+        
         
     </div>
 </template>
