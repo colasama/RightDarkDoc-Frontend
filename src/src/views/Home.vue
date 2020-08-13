@@ -145,6 +145,7 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -169,7 +170,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
+                      <v-contextmenu-item @click="delete_doc">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -204,6 +205,7 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -228,7 +230,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
+                      <v-contextmenu-item @click="delete_doc">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -263,6 +265,7 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -273,7 +276,6 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-
                     <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
                       <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="folder-open" />
@@ -287,7 +289,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
+                      <v-contextmenu-item @click="delete_doc">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -407,6 +409,7 @@
                     style="min-width:240px;max-width:240px;text-align:center"
                     @contextmenu.prevent
                     v-contextmenu:contextmenu
+                    @click="open_doc(item.docid)"
                   >
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -428,7 +431,7 @@
                     <v-contextmenu-item @click="handleRightMenuClick">
                       <a-icon type="control" />权限设置
                     </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick">
+                    <v-contextmenu-item @click="delete_doc">
                       <a-icon type="delete" />删除
                     </v-contextmenu-item>
                     <v-contextmenu-item divider />
@@ -751,14 +754,16 @@ export default {
         that.load_team();
       });
     },
+    handleRightMenuClick() {},
     delete_member(username) {
-      var that=this;
+      var that = this;
       Vue.axios({
         method: "get",
         url:
           "http://39.106.230.20:8090/team/" +
           this.current_team.teamid +
-          "/deleteMember?deletedname="+username,
+          "/deleteMember?deletedname=" +
+          username,
         headers: {
           token: this.$store.state.token,
         },
@@ -767,8 +772,8 @@ export default {
           that.$message.success("删除成员成功", 1);
           for (let index = 0; index < that.team_members.length; index++) {
             const element = that.team_members[index];
-            if (element.username==username) {
-              that.team_members.splice(index,1);
+            if (element.username == username) {
+              that.team_members.splice(index, 1);
             }
           }
         } else {
@@ -777,10 +782,33 @@ export default {
         that.load_team();
       });
     },
-    handleRightMenuClick(vm, event) {
-      console.log(vm, event);
+    open_doc(docid){
+      this.$router.push({ path: "/doc/" + docid });
     },
-    createDocBTN() {},
+    delete_doc(vm,event) {
+      console.log(vm);
+      console.log(event);
+    },
+    createDocBTN() {
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/document",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data.contents.docid);
+        if (response.data.success == true) {
+          that.$message.success("创建文档成功", 1).then(() => {
+            that.$router.push({ path: "/doc/" + response.data.contents.docid });
+          });
+        } else {
+          that.$message.error("创建文档失败", 1);
+        }
+        that.createTeamVisible = false;
+      });
+    },
     createFromTempleteBTN() {
       this.createFromTempleteVisible = true;
     },
