@@ -326,22 +326,23 @@
         <div v-if="sider_status==3">
           <!--回收站页面部分-->
           <a-row>
-            <a-col :span="20"></a-col>
-            <a-col :span="2" style="text-align:left">
-              <a-button size="default" type="default" style="margin-top:50px">
+            <a-col :span="21"></a-col>
+            <a-col :span="3" style="text-align:right">
+              <a-button size="default" type="default" style="margin-top:50px;margin-right:48px">
                 <a-icon type="delete" />清空回收站
               </a-button>
             </a-col>
           </a-row>
-          <a-list
+          <div style="margin:24px;text-align:center">
+            <a-list
             :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
             :data-source="data"
-            style="text-align:center;margin:15px auto"
-          >
+            style="text-align:center;margin:15px"
+            >
             <a-list-item
               slot="renderItem"
               slot-scope="item"
-              style="text-align:center;margin:15px auto"
+              style="text-align:center"
             >
               <a-card
                 :bordered="false"
@@ -369,6 +370,7 @@
               </v-contextmenu>
             </a-list-item>
           </a-list>
+          </div>
         </div>
       </a-layout-content>
     </a-layout>
