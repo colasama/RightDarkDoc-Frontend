@@ -5,12 +5,13 @@
                 <a-col :span="15">
                     <div style="margin:8px 0 0 128px;text-align:left">
                         <a-icon type="arrow-left" class="returnNarrow"/>
-                        <span style="font-size:24px;"><b>{{title}}</b></span>
+                        <span style="font-size:24px;margin-right:5px"><b>{{title}}</b></span>
                         <a-popover placement="bottom" >
                             <template slot="content">
                                 点击即可收藏文档哦~
                             </template>
-                            <a-rate :default-value="0" count="1" style="margin:0px 0 5px 5px;font-size:24px" />
+                            <a-rate :default-value="0" count="1" 
+                            style="margin:0px 0 5px 5px;font-size:24px;" />
                             <!--↑说起来你可能不信，但是这个可以当按钮来用-->
                         </a-popover>
                         <span style="margin-left:5px">
@@ -48,7 +49,12 @@
                         <a-popover placement="bottomLeft" trigger="click">
                             <template slot="content">
                                 <div style="margin-top:12px" >
-                                    <a-radio-group v-model="personAuthValue" @change="onChange">
+                                    <!--div>
+                                        <a-switch size="small" style="margin:-2px 5px 0 0"/>
+                                        <span >是否公开</span>
+                                    </div>
+                                    <a-divider style="margin-top:24px;margin-bottom:10px"/-->
+                                    <a-radio-group style="margin-top:12px" v-model="personAuthValue" @change="onChange">
                                         <a-radio :value="1">
                                             允许查看
                                         </a-radio>
@@ -60,12 +66,14 @@
                                     <a-radio style="margin-bottom:0px">允许评论</a-radio>
                                 </div>
                                 <div style="text-align:right">
+                                    <a-button style="margin:24px 10px 10px 0px">停止分享</a-button>
                                     <a-button type="primary" style="margin:24px 10px 10px 0px">分享链接</a-button>
                                 </div>
                                 
                             </template>
                             <a-button @click="openShare"><a-icon type="share-alt"/>分享</a-button>
                         </a-popover>
+                        <!--a-button @click="test" ><a-icon type="save"/>TEST_测试</a-button-->
                     </div>
                 </a-col>
             </a-row>
@@ -78,9 +86,9 @@
                 <!--InEditor :editor="s1" :value="s2"></InEditor-->
                 <mavon-editor 
                     v-model="content" 
-                    ref="md" 
+                    ref="md"
                     @change="textChange" 
-                    style="min-height: 600px;z-index:0"
+                    style="min-height:1600px;z-index:0"
 
                 />
 
@@ -95,6 +103,9 @@
         width:1200px;
         background:#FFFFFF;
         margin: 24px auto;
+    }
+
+    .text-editor2{
         border: 1px hsl( 0,0%,82.7% ) solid;
         border-radius: var(--ck-border-radius);
         box-shadow: 0 0 5px hsla( 0,0%,0%,.1 );
@@ -138,6 +149,12 @@
     methods:{
         textChange(value,render){
             this.html = render;
+        },
+        test(){
+            console.log(this.html)
+        },
+        toWorkshop(){
+
         }
     },
     
