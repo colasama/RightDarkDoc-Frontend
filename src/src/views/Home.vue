@@ -63,9 +63,28 @@
               </div>
           </a-modal>
 
-          <a-button size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
+          <a-button @click="createTeamBTN" size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
             <a-icon type="team" />创建团队
           </a-button>
+
+          <!--创建团队的对话框-->
+          <a-modal 
+            width="520px"
+            v-model="createTeamVisible"
+            title="创建团队"
+            okText="确认"
+            centered
+            cancelText="取消"
+            @ok="handleOk"
+          >
+              <span style="color:#ff4c00">* </span>团队名称
+              <a-input style="margin-top:5px;margin-bottom:12px"></a-input>
+              <span style="color:#ff4c00">* </span>团队简介
+              <a-textarea
+                style="margin-top:5px"
+                :auto-size="{ minRows: 4, maxRows: 6 }"
+              />
+          </a-modal>
           <a-menu-item key="doc" style="margin-top:50px">
             <div style="margin:0px 0 0 20px">
               <a-icon type="file" />
@@ -403,6 +422,7 @@ export default {
   data() {
     return {
       createFromTempleteVisible:false,
+      createTeamVisible:false,
       current: ["mail"],
       openKeys: ["sub1"],
       teams: [
@@ -504,6 +524,9 @@ export default {
     },
     createFromTemplete(){
       this.createFromTempleteVisible=true;
+    },
+    createTeamBTN(){
+      this.createTeamVisible=true;
     }
   },
 };
