@@ -19,7 +19,7 @@
       >登录</a-button>
       <a-dropdown v-if="$store.state.token!=''">
         <a-menu slot="overlay">
-          <a-menu-item key="1" @click="toUserindex">个人主页</a-menu-item>
+          <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
         <a-button type="link" @click="toUserindex">
@@ -98,6 +98,7 @@ export default {
       this.$store.state.token='';
       this.$store.state.username='';
       this.$store.state.userid='';
+      window.sessionStorage.clear();
       this.$router.push({path:"/welcome"});
     }
   },
