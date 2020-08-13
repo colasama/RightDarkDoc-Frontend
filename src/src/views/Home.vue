@@ -16,7 +16,7 @@
             <a-icon type="down" />
             <a-menu slot="overlay" @click="onClick" style="text-align:center">
               <a-menu-item v-if="sider_status!=2" key="1">创建空白文档</a-menu-item>
-              <a-menu-item v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
+              <a-menu-item @click="createFromTemplete" v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="3">创建空白团队文档</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
             </a-menu>
@@ -402,7 +402,7 @@ export default {
   components: {},
   data() {
     return {
-      createFromTempleteVisible:true,
+      createFromTempleteVisible:false,
       current: ["mail"],
       openKeys: ["sub1"],
       teams: [
@@ -502,6 +502,9 @@ export default {
     handleRightMenuClick(vm, event) {
       console.log(vm, event);
     },
+    createFromTemplete(){
+      this.createFromTempleteVisible=true;
+    }
   },
 };
 </script>
