@@ -9,35 +9,39 @@
           mode="inline"
           @click="handleClick"
         >
-          <a-dropdown placement="bottomCenter" trigger="['click']">
-            <a-button size="large" type="primary" style="border-radius:0px;margin:50px 0 0 45px;width:160px">
+          <a-dropdown :trigger="['click']" placement="bottomCenter">
+            <a-button
+              size="large"
+              type="primary"
+              style="border-radius:0px;margin:50px 0 0 45px;width:160px"
+            >
               <a-icon type="form" />创建文档
             </a-button>
             <a-icon type="down" />
-            <a-menu slot="overlay" @click="onClick" style="text-align:center">
+            <a-menu slot="overlay" @click="createDocBTN" style="text-align:center">
               <a-menu-item v-if="sider_status!=2" key="1">创建空白文档</a-menu-item>
-              <a-menu-item @click="createFromTemplete" v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
+              <a-menu-item @click="createFromTempleteBTN" v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="3">创建空白团队文档</a-menu-item>
               <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
             </a-menu>
           </a-dropdown>
 
           <!--从模板新建文档的对话框-->
-          <a-modal 
+          <a-modal
             width="1020px"
             v-model="createFromTempleteVisible"
             title="选择模板"
             okText="确认"
             cancelText="取消"
-            @ok="handleOk"
-            >
-          <div style="text-align:center">
-            <a-list
+            @ok="createFromTemplete"
+          >
+            <div style="text-align:center">
+              <a-list
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }"
-                :data-source="data"
+                :data-source="docs"
                 style="text-align:center;margin:24px"
               >
-            <a-list-item
+                <a-list-item
                   slot="renderItem"
                   slot-scope="item"
                   style="text-align:center;margin:10px auto"
@@ -60,30 +64,36 @@
                   </a-card>
                 </a-list-item>
               </a-list>
-              </div>
+            </div>
           </a-modal>
 
-          <a-button @click="createTeamBTN" size="large" type="primary" style="border-radius:0px;margin:16px 0 0 45px;width:160px">
+          <a-button
+            @click="createTeamBTN"
+            size="large"
+            type="primary"
+            style="border-radius:0px;margin:16px 0 0 45px;width:160px"
+          >
             <a-icon type="team" />创建团队
           </a-button>
 
           <!--创建团队的对话框-->
-          <a-modal 
+          <a-modal
             width="520px"
             v-model="createTeamVisible"
             title="创建团队"
             okText="确认"
             centered
             cancelText="取消"
-            @ok="handleOk"
+            @ok="createteam"
           >
-              <span style="color:#ff4c00">* </span>团队名称
-              <a-input style="margin-top:5px;margin-bottom:12px"></a-input>
-              <span style="color:#ff4c00">* </span>团队简介
-              <a-textarea
-                style="margin-top:5px"
-                :auto-size="{ minRows: 4, maxRows: 6 }"
-              />
+            <span style="color:#ff4c00">*</span>团队名称
+            <a-input style="margin-top:5px;margin-bottom:12px" v-model="teamname"></a-input>
+            <span style="color:#ff4c00">*</span>团队简介
+            <a-textarea
+              v-model="teaminfo"
+              style="margin-top:5px"
+              :auto-size="{ minRows: 4, maxRows: 6 }"
+            />
           </a-modal>
           <a-menu-item key="doc" style="margin-top:50px">
             <div style="margin:0px 0 0 20px">
@@ -116,7 +126,7 @@
               <a-tab-pane key="1" tab="我的文档">
                 <a-list
                   :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
-                  :data-source="data"
+                  :data-source="docs"
                   style="text-align:center;margin:15px auto"
                 >
                   <a-list-item
@@ -143,24 +153,30 @@
 
                     <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" /><span style="margin-left:3px">打开</span>
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="edit" /><span style="margin-left:3px">重命名</span>
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px">重命名</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="control" /><span style="margin-left:3px">权限设置</span>
+                        <a-icon type="control" />
+                        <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="delete" /><span style="margin-left:3px">删除</span>
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item divider />
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" /><span style="margin-left:3px">分享</span>
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item divider />
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" /><span style="margin-left:3px">详细信息</span>
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
                       </v-contextmenu-item>
                     </v-contextmenu>
                   </a-list-item>
@@ -248,7 +264,7 @@
               <div style="font-size:30px;margin-left:24px">团队文档</div>
               <a-list
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
-                :data-source="data"
+                :data-source="docs"
                 style="text-align:center;margin:15px"
               >
                 <a-list-item
@@ -300,29 +316,28 @@
                 <a-list item-layout="horizontal" :data-source="team_members">
                   <div slot="header">
                     <a-avatar icon="user" />
-                    <a slot="title"> 创建者</a>
+                    <a slot="title">创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
                       <a-avatar icon="user" />
-                       {{item.username}}
+                      {{item.username}}
                     </div>
                     <transition name="slide-fade">
                       <a-icon v-if="ismanage" type="delete" @click="delete_member" />
                     </transition>
                   </a-list-item>
-                  
+
                   <div slot="footer" style="text-align:right">
                     <div style="text-align:right;margin-top:7px">
-                    <transition name="slide-fade">
-                      <a-button v-if="!ismanage" type="link">
-                      <a-icon  type="plus"/>
-                      邀请成员
-                    </a-button>
-                      <a-button v-if="ismanage" type="danger">
-                        <a-icon type="close" />解散团队
-                      </a-button>
-                    </transition>
+                      <transition name="slide-fade">
+                        <a-button v-if="!ismanage" type="link">
+                          <a-icon type="plus" />邀请成员
+                        </a-button>
+                        <a-button v-if="ismanage" type="danger">
+                          <a-icon type="close" />解散团队
+                        </a-button>
+                      </transition>
                     </div>
                   </div>
                 </a-list>
@@ -338,14 +353,12 @@
           <a-row>
             <a-col :span="21"></a-col>
             <a-col :span="3" style="text-align:right">
-              
               <a-popconfirm
                 placement="bottomRight"
                 title="确定要清空回收站吗?"
                 ok-text="确认"
                 cancel-text="算了"
-                @confirm="confirm"
-                @cancel="cancel"
+                @confirm="emptytrash"
               >
                 <a-button size="default" type="default" style="margin-top:50px;margin-right:48px">
                   <a-icon type="delete" />清空回收站
@@ -355,41 +368,37 @@
           </a-row>
           <div style="margin:24px;text-align:center">
             <a-list
-            :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
-            :data-source="data"
-            style="text-align:center;margin:15px"
+              :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+              :data-source="docs"
+              style="text-align:center;margin:15px"
             >
-            <a-list-item
-              slot="renderItem"
-              slot-scope="item"
-              style="text-align:center"
-            >
-              <a-card
-                :bordered="false"
-                :hoverable="true"
-                style="min-width:240px;max-width:240px;text-align:center"
-                @contextmenu.prevent
-                v-contextmenu:contextmenu
-              >
-                <div>
-                  <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                </div>
-                <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
-                <div style="font-size:12px;color:#9c9c9c">
-                  {{item.lastedittime}}
-                  <!--a-icon key="ellipsis" type="ellipsis" /-->
-                </div>
-              </a-card>
-              <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
-                <v-contextmenu-item @click="handleRightMenuClick">
-                  <a-icon type="redo" />恢复
-                </v-contextmenu-item>
-                <v-contextmenu-item @click="handleRightMenuClick">
-                  <a-icon type="delete" />彻底删除
-                </v-contextmenu-item>
-              </v-contextmenu>
-            </a-list-item>
-          </a-list>
+              <a-list-item slot="renderItem" slot-scope="item" style="text-align:center">
+                <a-card
+                  :bordered="false"
+                  :hoverable="true"
+                  style="min-width:240px;max-width:240px;text-align:center"
+                  @contextmenu.prevent
+                  v-contextmenu:contextmenu
+                >
+                  <div>
+                    <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                  </div>
+                  <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                  <div style="font-size:12px;color:#9c9c9c">
+                    {{item.lastedittime}}
+                    <!--a-icon key="ellipsis" type="ellipsis" /-->
+                  </div>
+                </a-card>
+                <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                  <v-contextmenu-item @click="handleRightMenuClick">
+                    <a-icon type="redo" />恢复
+                  </v-contextmenu-item>
+                  <v-contextmenu-item @click="handleRightMenuClick">
+                    <a-icon type="delete" />彻底删除
+                  </v-contextmenu-item>
+                </v-contextmenu>
+              </a-list-item>
+            </a-list>
           </div>
         </div>
       </a-layout-content>
@@ -407,33 +416,15 @@
 }
 </style>
 <script>
-const data = [
+import Vue from "vue";
+
+const docs = [
   {
     content: "一起来打雪仗吧",
     lastedittime: "2020.08.11 14:30:11",
   },
   {
     content: "其实我也没上过学",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    content: "今生再无悲喜",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    content: "好耶",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    content: "说，藤本树",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    content: "你哭什么啊",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    content: "不知道",
     lastedittime: "2020.08.11 14:30:11",
   },
 ];
@@ -443,10 +434,12 @@ export default {
   components: {},
   data() {
     return {
-      createFromTempleteVisible:false,
-      createTeamVisible:false,
-      current: ["mail"],
+      createFromTempleteVisible: false,
+      createTeamVisible: false,
       openKeys: ["sub1"],
+      teamname: "",
+      teaminfo: "",
+      docs,
       teams: [
         {
           teamid: 1,
@@ -458,30 +451,11 @@ export default {
           teamname: "鸽鸽鸽的团队",
           info: "这是一个绝对不鸽，永远准时的团队。",
         },
-        {
-          teamid: 3,
-          teamname: "团队A",
-          info: "团队A",
-        },
-        {
-          teamid: 4,
-          teamname: "团队B",
-          info: "团队B",
-        },
       ],
-      current_team:{},
-      team_members:[
+      current_team: {},
+      team_members: [
         {
           username: "成员1",
-        },
-        {
-          username: "成员2",
-        },
-        {
-          username: "成员3",
-        },
-        {
-          username: "成员4",
         },
       ],
       isleader: true,
@@ -489,7 +463,6 @@ export default {
       sider_status: 1,
       isedit_name: false,
       isedit_info: false,
-      data,
     };
   },
   watch: {
@@ -506,11 +479,11 @@ export default {
       }
       if (e.key[0] == "t") {
         this.sider_status = 2;
-        var current_teamid=e.key.substring(1);
+        var current_teamid = e.key.substring(1);
         for (let index = 0; index < this.teams.length; index++) {
           const element = this.teams[index];
-          if (element.teamid==current_teamid) {
-            this.current_team=this.teams[index];
+          if (element.teamid == current_teamid) {
+            this.current_team = this.teams[index];
           }
         }
       }
@@ -544,12 +517,37 @@ export default {
     handleRightMenuClick(vm, event) {
       console.log(vm, event);
     },
-    createFromTemplete(){
-      this.createFromTempleteVisible=true;
+    createDocBTN() {},
+    createFromTempleteBTN() {
+      this.createFromTempleteVisible = true;
     },
-    createTeamBTN(){
-      this.createTeamVisible=true;
-    }
+    createFromTemplete() {},
+    createTeamBTN() {
+      this.createTeamVisible = true;
+    },
+    createteam() {
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/team/create",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
+          teamname: this.teamname,
+          teaminfo: this.teaminfo,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        if (response.data.success==true) {
+          that.$message.success("创建团队成功", 1.5);
+        } else {
+          that.$message.error("创建团队失败", 1.5);
+        }
+        that.createTeamVisible = false;
+      });
+    },
+    emptytrash() {},
   },
 };
 </script>
