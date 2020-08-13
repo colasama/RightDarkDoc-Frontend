@@ -10,7 +10,7 @@
                             <template slot="content">
                                 点击即可收藏文档哦~
                             </template>
-                            <a-rate @change="addFav" count="1" :value="isFav"
+                            <a-rate @change="judgeFav" count="1" :value="isFav"
                             style="margin:0px 0 5px 5px;font-size:24px;" />
                             <!--↑说起来你可能不信，但是这个可以当按钮来用-->
                         </a-popover>
@@ -157,7 +157,7 @@
         auth:0,
         docid:this.$route.params.id,
         istrash:0,
-        isFav:0,
+        isFav:1,
       }
     },
     methods:{
@@ -224,6 +224,13 @@
                 }
             });
         },
+        judgeFav(){
+            if(this.isFav==1){
+                this.delFav();
+            }
+            else
+                this.addFav();
+        },
         addFav(){
             console.log("Faving...Now:"+this.isFav)
             var that = this;
@@ -239,16 +246,34 @@
             }).then(function (response) {
                 console.log(response.data);
                 if (response.data.success == true) {
-                that.$message.success("收藏成功", 1.5);
-                that.isFav=1;
+                    that.$message.success("收藏成功", 1.5);
+                    that.isFav=1;
                 } else {
-                that.$message.warning("你已经收藏了哦~", 1.5);
-                that.isFav=1;
+                that.$message.error("竟然收藏失败了？！", 1.5);
                 }
             });
         },
         delFav(){
-
+            console.log("Faving...Now:"+this.isFav)
+            var that = this;
+            Vue.axios({
+                method: "delete",
+                url: "http://39.106.230.20:8090/document/fav",
+                headers: {
+                    token: this.$store.state.token,
+                },
+                data: {
+                    docid: this.docid,
+                },
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data.success == true) {
+                    that.$message.success("成功取消收藏", 1.5);
+                    that.isFav=0;
+                } else {
+                that.$message.error("竟然取消收藏失败了？！", 1.5);
+                }
+            });
         }
     },
     created: function(){
