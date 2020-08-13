@@ -149,10 +149,12 @@
         title:'Untitled',
         edittime:'',
         createtime:'',
-        editcount:5,
+        creatorid:0,
+        editcount:0,
         teamauth:0,
         auth:0,
-        docid:this.$route.params.id
+        docid:this.$route.params.id,
+        istrash:0,
       }
     },
     methods:{
@@ -175,17 +177,17 @@
                     token: this.$store.state.token,
                 },
                 data: {
-                    docid:this.docid,
+                    docid: this.docid,
                     title: this.title,
                     content: this.content,
                     creattime:'2020-08-12T14:53:55.800+00:00',
                     lastedittime:'2020-08-12T14:53:55.800+00:00',
-                    editcount:2,
-                    lastedituserid:25,
-                    auth:1,
-                    teamauth:7,
-                    creatorid:25,
-                    istrash:0,
+                    editcount:this.editcount,
+                    lastedituserid: this.$store.state.userid,
+                    auth:this.auth,
+                    teamauth:this.teamauth,
+                    creatorid:this.creatorid,
+                    istrash:this.istrash,
                 },
             }).then(function (response) {
                 console.log(response.data);
@@ -215,7 +217,9 @@
             that.teamauth=response.data.contents.teamauth;
             that.createtime=response.data.contents.createtime;
             that.docid=response.data.contents.docid;
-            console.log(response.data.contents.content)
+            that.creatorid=response.data.contents.creatorid;
+            this.istrash=response.data.contents.istrash;
+            //console.log(response.data.contents.content)
 
             /*if (response.data.success == true) {
             that.$message.success("退出团队成功", 1.5);
