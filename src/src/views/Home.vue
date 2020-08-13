@@ -145,7 +145,6 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
-                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -170,7 +169,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
+                      <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -205,7 +204,6 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
-                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -230,7 +228,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
+                      <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -265,7 +263,6 @@
                       style="min-width:240px;max-width:240px;text-align:center"
                       @contextmenu.prevent
                       v-contextmenu:contextmenu
-                      @click="open_doc(item.docid)"
                     >
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -276,6 +273,7 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
+
                     <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
                       <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="folder-open" />
@@ -289,7 +287,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
+                      <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -373,17 +371,9 @@
                 </a-button>
               </div>
               <div v-if="!isleader">
-                <a-popconfirm
-                  placement="bottomRight"
-                  title="确定要退出团队吗?"
-                  ok-text="确认"
-                  cancel-text="算了"
-                  @confirm="exitTeam"
-                >
-                  <a-button v-if="!ismanage" type="primary">
-                    <a-icon type="logout" />退出团队
-                  </a-button>
-                </a-popconfirm>
+                <a-button v-if="!ismanage" type="primary">
+                  <a-icon type="logout" />退出团队
+                </a-button>
               </div>
             </a-col>
           </a-row>
@@ -409,7 +399,6 @@
                     style="min-width:240px;max-width:240px;text-align:center"
                     @contextmenu.prevent
                     v-contextmenu:contextmenu
-                    @click="open_doc(item.docid)"
                   >
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -431,7 +420,7 @@
                     <v-contextmenu-item @click="handleRightMenuClick">
                       <a-icon type="control" />权限设置
                     </v-contextmenu-item>
-                    <v-contextmenu-item @click="delete_doc">
+                    <v-contextmenu-item @click="handleRightMenuClick">
                       <a-icon type="delete" />删除
                     </v-contextmenu-item>
                     <v-contextmenu-item divider />
@@ -456,36 +445,19 @@
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
-                      <a-popconfirm
-                        placement="bottomRight"
-                        title="确定要删除该成员吗?"
-                        ok-text="确认"
-                        cancel-text="算了"
-                        @confirm="delete_member(item.username)"
-                      >
-                        <a-icon v-if="ismanage" type="delete" />
-                      </a-popconfirm>
+                      <a-icon v-if="ismanage" type="delete" @click="delete_member" />
                     </transition>
                   </a-list-item>
 
                   <div slot="footer" style="text-align:right">
                     <div style="text-align:right;margin-top:7px">
                       <transition name="slide-fade">
-                        <a-button v-if="!ismanage&&isleader" type="link">
+                        <a-button v-if="!ismanage" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
-                        <a-popconfirm
-                          v-if="ismanage"
-                          placement="bottomRight"
-                          title="确定要解散团队吗?"
-                          ok-text="确认"
-                          cancel-text="算了"
-                          @confirm="dismissTeam"
-                        >
-                          <a-button type="danger">
-                            <a-icon type="close" />解散团队
-                          </a-button>
-                        </a-popconfirm>
+                        <a-button v-if="ismanage" type="danger">
+                          <a-icon type="close" />解散团队
+                        </a-button>
                       </transition>
                     </div>
                   </div>
@@ -567,6 +539,16 @@
 <script>
 import Vue from "vue";
 
+const docs = [
+  {
+    title: "一起来打雪仗吧",
+    lastedittime: "2020.08.11 14:30:11",
+  },
+  {
+    title: "其实我也没上过学",
+    lastedittime: "2020.08.11 14:30:11",
+  },
+];
 // @ is an alias to /src
 export default {
   name: "Home",
@@ -578,12 +560,27 @@ export default {
       openKeys: ["sub1"],
       teamname: "",
       teaminfo: "",
-      docs: [],
-      teams: [],
+      docs,
+      teams: [
+        {
+          teamid: 1,
+          teamname: "咕咕咕的团队",
+          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
+        },
+        {
+          teamid: 2,
+          teamname: "鸽鸽鸽的团队",
+          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
+        },
+      ],
       current_team: {},
       team_creator: {},
-      team_members: [],
-      isleader: false,
+      team_members: [
+        {
+          username: "成员1",
+        },
+      ],
+      isleader: true,
       ismanage: false,
       sider_status: 1,
       isedit_name: false,
@@ -657,12 +654,6 @@ export default {
           console.log(response.data);
           that.team_creator = response.data.teamCreator;
           that.team_members = response.data.teamMembers;
-          if (that.team_creator.userid == that.$store.state.userid) {
-            that.isleader = true;
-          } else {
-            that.isleader = false;
-          }
-          console.log(that.isleader);
         });
         Vue.axios({
           method: "get",
@@ -675,16 +666,6 @@ export default {
       }
       if (e.key == "trash") {
         this.sider_status = 3;
-        Vue.axios({
-          method: "get",
-          url: "http://39.106.230.20:8090/document/trash",
-          headers: {
-            token: this.$store.state.token,
-          },
-        }).then(function (response) {
-          console.log(response.data);
-          that.docs = response.data.contents;
-        });
       }
     },
     tabchange(activeKey) {
@@ -732,83 +713,11 @@ export default {
       console.log(value);
       this.isedit_info = false;
     },
-    exitTeam() {
-      var that = this;
-      Vue.axios({
-        method: "get",
-        url:
-          "http://39.106.230.20:8090/team/" +
-          this.current_team.teamid +
-          "/exit",
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        if (response.data.success == true) {
-          that.$message.success("退出团队成功", 1.5).then(() => {
-            location.reload();
-          });
-        } else {
-          that.$message.error("退出团队失败", 1.5);
-        }
-        that.load_team();
-      });
+    delete_member() {},
+    handleRightMenuClick(vm, event) {
+      console.log(vm, event);
     },
-    handleRightMenuClick() {},
-    delete_member(username) {
-      var that = this;
-      Vue.axios({
-        method: "get",
-        url:
-          "http://39.106.230.20:8090/team/" +
-          this.current_team.teamid +
-          "/deleteMember?deletedname=" +
-          username,
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        if (response.data.success == true) {
-          that.$message.success("删除成员成功", 1);
-          for (let index = 0; index < that.team_members.length; index++) {
-            const element = that.team_members[index];
-            if (element.username == username) {
-              that.team_members.splice(index, 1);
-            }
-          }
-        } else {
-          that.$message.error("删除成员失败", 1);
-        }
-        that.load_team();
-      });
-    },
-    open_doc(docid){
-      this.$router.push({ path: "/doc/" + docid });
-    },
-    delete_doc(vm,event) {
-      console.log(vm);
-      console.log(event);
-    },
-    createDocBTN() {
-      var that = this;
-      Vue.axios({
-        method: "post",
-        url: "http://39.106.230.20:8090/document",
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        console.log(response.data.contents.docid);
-        if (response.data.success == true) {
-          that.$message.success("创建文档成功", 1).then(() => {
-            that.$router.push({ path: "/doc/" + response.data.contents.docid });
-          });
-        } else {
-          that.$message.error("创建文档失败", 1);
-        }
-        that.createTeamVisible = false;
-      });
-    },
+    createDocBTN() {},
     createFromTempleteBTN() {
       this.createFromTempleteVisible = true;
     },
@@ -831,55 +740,14 @@ export default {
       }).then(function (response) {
         console.log(response.data);
         if (response.data.success == true) {
-          that.$message.success("创建团队成功", 1.5).then(() => {
-            location.reload();
-          });
+          that.$message.success("创建团队成功", 1.5);
         } else {
           that.$message.error("创建团队失败", 1.5);
         }
         that.createTeamVisible = false;
       });
     },
-    dismissTeam() {
-      var that = this;
-      Vue.axios({
-        method: "get",
-        url:
-          "http://39.106.230.20:8090/team/" +
-          this.current_team.teamid +
-          "/deleteTeam",
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        if (response.data.success == true) {
-          that.$message.success("解散团队成功", 1.5).then(() => {
-            location.reload();
-          });
-        } else {
-          that.$message.error("解散团队失败", 1.5);
-        }
-        that.load_team();
-      });
-    },
-    emptytrash() {
-      var that = this;
-      Vue.axios({
-        method: "delete",
-        url: "http://39.106.230.20:8090/document/permanent/all",
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        if (response.data.success == true) {
-          that.$message.success("清空回收站成功", 1.5).then(() => {
-            location.reload();
-          });
-        } else {
-          that.$message.error("清空回收站失败", 1.5);
-        }
-      });
-    },
+    emptytrash() {},
   },
 };
 </script>

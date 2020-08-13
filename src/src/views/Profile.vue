@@ -33,9 +33,9 @@
             <a-col :span="6">
               {{data.username}}
             </a-col>
-            <a-col :span="6">
+            <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px" @click="handleUpdateInfo">修改</a-button>
-            </a-col>
+            </a-col> -->
           </a-row>
           <a-row style="margin-top:24px">
             <a-col :span="10">
@@ -44,9 +44,9 @@
             <a-col :span="6">
               {{data.description}}
             </a-col>
-            <a-col :span="6">
+            <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px">修改</a-button>
-            </a-col>
+            </a-col> -->
           </a-row>
           <a-row style="margin-top:24px">
             <a-col :span="10">
@@ -55,9 +55,9 @@
             <a-col :span="6">
               {{data.phone}}
             </a-col>
-            <a-col :span="6">
+            <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px">修改</a-button>
-            </a-col>
+            </a-col> -->
           </a-row>
           <a-row style="margin-top:24px">
             <a-col :span="10">
@@ -66,9 +66,9 @@
             <a-col :span="6">
               {{data.email}}
             </a-col>
-            <a-col :span="6">
+            <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px">修改</a-button>
-            </a-col>
+            </a-col> -->
           </a-row>
           <a-row style="margin-top:24px">
             <a-col :span="10">
@@ -77,16 +77,44 @@
             <a-col :span="6">
               {{data.birthday}}
             </a-col>
-            <a-col :span="6">
+            <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px">修改</a-button>
-            </a-col>
+            </a-col> -->
+          </a-row>
+          <a-row style="margin-top:30px;">
+            <a-button type="primary" @click="handleUpdateInfo">修改个人信息</a-button>
+            <a-button type="primary" @click="handleUpdatePassword" style="margin-left: 20px;">修改密码</a-button>
           </a-row>
         </div>
       </a-layout-content>
     </a-layout>
     <a-modal v-model="updateInfoModalVisible" title="修改个人信息" centered @ok="updateInfo">
-      <a-form>
-        <a-form-item></a-form-item>
+      <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
+        <a-form-item label="手机号">
+          <a-input :placeholder="temp.phone" />
+        </a-form-item>
+        <a-form-item label="生日" >
+          <a-date-picker style="width: 100%;" />
+        </a-form-item>
+        <a-form-item label="邮箱">
+          <a-input />
+        </a-form-item>
+        <a-form-item label="头像">
+          <a-input />
+        </a-form-item>
+        <a-form-item label="个人描述">
+          <a-input />
+        </a-form-item>
+      </a-form>>
+    </a-modal>
+    <a-modal v-model="updatePasswordModalVisible" title="修改密码" center @ok="updatePassword">
+      <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
+        <a-form-item label="旧密码">
+          <a-input />
+        </a-form-item>
+        <a-form-item label="新密码">
+          <a-input />
+        </a-form-item>
       </a-form>
     </a-modal>
   </div>
@@ -115,6 +143,7 @@
 }
 </style>
 <script>
+import Vue from 'vue'
 const data = {
   username: '咕咕咕',
   password: '000000',
@@ -132,6 +161,15 @@ export default {
       data,
       temp: {},
       updateInfoModalVisible: false,
+      updatePasswordModalVisible: false,
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+      },
     }
   },
   watch: {
@@ -144,7 +182,13 @@ export default {
   },
   methods: {
     getInfo() {
-      this.getRequest('/user/info', {}).then(response => {
+      Vue.axios({
+        methods: 'get',
+        url: 'http://39.106.230.20:8090/user/info',
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(response => {
         console.log(response.data)
         this.data = response.data
       })
@@ -161,7 +205,14 @@ export default {
       this.updateInfoModalVisible = true
     },
     updateInfo() {
-      this.putRequest('/user/mod_info', this.temp).then(response => {
+      Vue.axios({
+        methods: 'put',
+        url: 'http://39.106.230.20:8090/user/mod_info',
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: this.temp
+      }).then(response => {
         console.log(response.data)
         this.getInfo()
         this.$notify({
@@ -170,6 +221,27 @@ export default {
           type: 'success',
           duration: 2000
         })       
+      })
+      this.updateInfoModalVisible = false
+    },
+    handleUpdatePassword() {
+      this.temp = {
+        old_password: '',
+        new_password: ''
+      }
+      this.updatePasswordModalVisible = true
+    },
+    updatePassword() {
+      Vue.axios({
+        methods: 'put',
+        url: 'http://39.106.230.20:8090/user/mod_password',
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: this.temp
+      }).then(response => {
+        console.log(response.data)
+        
       })
     },
     handleClick(e) {
