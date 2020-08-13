@@ -1,9 +1,10 @@
 <template>
-  <ckeditor :editor="editor" :value="editorData"></ckeditor>
+  <ckeditor :editor="editor" :value="editorData" :config="editorConfig" @ready="onReady"></ckeditor>
 </template>
 
 <script>
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+  // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+  import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
   import CKEditor from '@ckeditor/ckeditor5-vue'
 
   export default {
@@ -20,11 +21,21 @@
     },
     data() {
       return {
-        editor: ClassicEditor,
+        // editor: ClassicEditor,
+        editor: DecoupledEditor,
         editorData: '',
         editorConfig: {
           placeholder: this.placeholder,
         }
+      }
+    },
+    methods: {
+      onReady(editor) {
+        // Insert the toolbar before the editable area.
+        editor.ui.getEditableElement().parentElement.insertBefore(
+          editor.ui.view.toolbar.element,
+          editor.ui.getEditableElement()
+        );
       }
     },
     watch: {

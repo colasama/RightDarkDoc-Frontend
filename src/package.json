@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^21.0.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^21.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
     "animate.css": "^4.1.0",
     "ant-design-vue": "^1.6.4",

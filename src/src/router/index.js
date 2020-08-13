@@ -46,6 +46,12 @@ Vue.use(VueRouter)
     name:'No',
     meta: {tittle:'文档 - 右墨文档',},
     component: () => import('../views/DocNoAuth.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    meta: {title:'个人信息 - 右墨文档',},
+    component: () => import('../views/Profile.vue')
   }
 ]
 
