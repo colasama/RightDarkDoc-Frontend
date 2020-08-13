@@ -46,7 +46,15 @@
         </div>
         <div style="text-align:center">
             <div class="text-editor">
-                <InEditor :editor="s1" :value="s2"></InEditor>
+                <!--InEditor :editor="s1" :value="s2"></InEditor-->
+                <mavon-editor 
+                    v-model="content" 
+                    ref="md" 
+                    @change="textChange" 
+                    style="min-height: 600px;z-index:0"
+                    :subfield="false"
+                />
+
             </div>
         </div>
         
@@ -58,25 +66,34 @@
         width:1200px;
         background:#FFFFFF;
         margin: 24px auto;
-        height:1200px;
         border: 1px hsl( 0,0%,82.7% ) solid;
         border-radius: var(--ck-border-radius);
         box-shadow: 0 0 5px hsla( 0,0%,0%,.1 );
     }
 </style>
 <script>
-  import InEditor from '@/components/InEditor'
-
+  //import InEditor from '@/components/InEditor'
+  import { mavonEditor } from 'mavon-editor'
+  import 'mavon-editor/dist/css/index.css'
   export default {
     name: 'Doc',
     components: {
-      InEditor
+      //InEditor,
+      mavonEditor
     },
     data() {
       return {
         groupAuthValue: 0,
         personAuthValue: 0,
+        content:'',//输入的Markdown
+        html:'',//渲染的html文件
       }
-    }
+    },
+    methods:{
+        textChange(value,render){
+            this.html = render;
+        }
+    },
+    
   }
 </script>
