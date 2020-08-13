@@ -453,7 +453,15 @@
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
-                      <a-icon v-if="ismanage" type="delete" @click="delete_member" />
+                      <a-popconfirm
+                        placement="bottomRight"
+                        title="确定要删除该成员吗?"
+                        ok-text="确认"
+                        cancel-text="算了"
+                        @confirm="delete_member(item.username)"
+                      >
+                        <a-icon v-if="ismanage" type="delete" />
+                      </a-popconfirm>
                     </transition>
                   </a-list-item>
 
@@ -463,9 +471,18 @@
                         <a-button v-if="!ismanage&&isleader" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
-                        <a-button v-if="ismanage" type="danger">
-                          <a-icon type="close" />解散团队
-                        </a-button>
+                        <a-popconfirm
+                          v-if="ismanage"
+                          placement="bottomRight"
+                          title="确定要解散团队吗?"
+                          ok-text="确认"
+                          cancel-text="算了"
+                          @confirm="dismissTeam"
+                        >
+                          <a-button type="danger">
+                            <a-icon type="close" />解散团队
+                          </a-button>
+                        </a-popconfirm>
                       </transition>
                     </div>
                   </div>
@@ -547,16 +564,6 @@
 <script>
 import Vue from "vue";
 
-const docs = [
-  {
-    title: "一起来打雪仗吧",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-  {
-    title: "其实我也没上过学",
-    lastedittime: "2020.08.11 14:30:11",
-  },
-];
 // @ is an alias to /src
 export default {
   name: "Home",
@@ -568,26 +575,11 @@ export default {
       openKeys: ["sub1"],
       teamname: "",
       teaminfo: "",
-      docs,
-      teams: [
-        {
-          teamid: 1,
-          teamname: "咕咕咕的团队",
-          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
-        },
-        {
-          teamid: 2,
-          teamname: "鸽鸽鸽的团队",
-          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
-        },
-      ],
+      docs: [],
+      teams: [],
       current_team: {},
       team_creator: {},
-      team_members: [
-        {
-          username: "成员1",
-        },
-      ],
+      team_members: [],
       isleader: false,
       ismanage: false,
       sider_status: 1,
@@ -680,6 +672,16 @@ export default {
       }
       if (e.key == "trash") {
         this.sider_status = 3;
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/document/trash",
+          headers: {
+            token: this.$store.state.token,
+          },
+        }).then(function (response) {
+          console.log(response.data);
+          that.docs = response.data.contents;
+        });
       }
     },
     tabchange(activeKey) {
@@ -731,21 +733,50 @@ export default {
       var that = this;
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/exit",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/exit",
         headers: {
           token: this.$store.state.token,
         },
       }).then(function (response) {
         if (response.data.success == true) {
-          that.$message.success("退出团队成功", 1.5);
+          that.$message.success("退出团队成功", 1.5).then(() => {
+            location.reload();
+          });
         } else {
           that.$message.error("退出团队失败", 1.5);
         }
-        that.
         that.load_team();
       });
     },
-    delete_member() {},
+    delete_member(username) {
+      var that=this;
+      Vue.axios({
+        method: "get",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/deleteMember?deletedname="+username,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("删除成员成功", 1);
+          for (let index = 0; index < that.team_members.length; index++) {
+            const element = that.team_members[index];
+            if (element.username==username) {
+              that.team_members.splice(index,1);
+            }
+          }
+        } else {
+          that.$message.error("删除成员失败", 1);
+        }
+        that.load_team();
+      });
+    },
     handleRightMenuClick(vm, event) {
       console.log(vm, event);
     },
@@ -772,14 +803,55 @@ export default {
       }).then(function (response) {
         console.log(response.data);
         if (response.data.success == true) {
-          that.$message.success("创建团队成功", 1.5);
+          that.$message.success("创建团队成功", 1.5).then(() => {
+            location.reload();
+          });
         } else {
           that.$message.error("创建团队失败", 1.5);
         }
         that.createTeamVisible = false;
       });
     },
-    emptytrash() {},
+    dismissTeam() {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/deleteTeam",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("解散团队成功", 1.5).then(() => {
+            location.reload();
+          });
+        } else {
+          that.$message.error("解散团队失败", 1.5);
+        }
+        that.load_team();
+      });
+    },
+    emptytrash() {
+      var that = this;
+      Vue.axios({
+        method: "delete",
+        url: "http://39.106.230.20:8090/document/permanent/all",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("清空回收站成功", 1.5).then(() => {
+            location.reload();
+          });
+        } else {
+          that.$message.error("清空回收站失败", 1.5);
+        }
+      });
+    },
   },
 };
 </script>
