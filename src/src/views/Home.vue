@@ -21,6 +21,48 @@
               <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
             </a-menu>
           </a-dropdown>
+
+          <!--从模板新建文档的对话框-->
+          <a-modal 
+            width="1020px"
+            v-model="createFromTempleteVisible"
+            title="选择模板"
+            okText="确认"
+            cancelText="取消"
+            @ok="handleOk"
+            >
+          <div style="text-align:center">
+            <a-list
+                :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }"
+                :data-source="data"
+                style="text-align:center;margin:24px"
+              >
+            <a-list-item
+                  slot="renderItem"
+                  slot-scope="item"
+                  style="text-align:center;margin:10px auto"
+                >
+                  <a-card
+                    :bordered="false"
+                    :hoverable="true"
+                    style="min-width:220px;max-width:220px;text-align:center"
+                    @contextmenu.prevent
+                    v-contextmenu:contextmenu
+                  >
+                    <div>
+                      <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                    </div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                    <div style="font-size:12px;color:#9c9c9c">
+                      {{item.lastedittime}}
+                      <!--a-icon key="ellipsis" type="ellipsis" /-->
+                    </div>
+                  </a-card>
+                </a-list-item>
+              </a-list>
+              </div>
+          </a-modal>
+
           <a-button size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
             <a-icon type="team" />创建团队
           </a-button>
@@ -82,24 +124,24 @@
 
                     <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" />打开
+                        <a-icon type="folder-open" /><span style="margin-left:3px">打开</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="edit" />重命名
+                        <a-icon type="edit" /><span style="margin-left:3px">重命名</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="control" />权限设置
+                        <a-icon type="control" /><span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="delete" />删除
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />分享
+                        <a-icon type="delete" /><span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item divider />
                       <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />详细信息
+                        <a-icon type="share-alt" /><span style="margin-left:3px">分享</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" /><span style="margin-left:3px">详细信息</span>
                       </v-contextmenu-item>
                     </v-contextmenu>
                   </a-list-item>
@@ -360,6 +402,7 @@ export default {
   components: {},
   data() {
     return {
+      createFromTempleteVisible:true,
       current: ["mail"],
       openKeys: ["sub1"],
       teams: [
