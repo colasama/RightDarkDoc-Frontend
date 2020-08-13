@@ -4,10 +4,15 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-    showNav: true
+    showNav: true,
+    token: '',
+    user: {
+        username: '',
+        userid: '',
+    },
 };
 export default new Vuex.Store({
-    state
+    state,
 })
 
 /*

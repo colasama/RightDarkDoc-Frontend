@@ -10,22 +10,22 @@
         size="small"
         @click="toRegister"
         style="margin-left:10px"
-        v-if="showLogin"
+        v-if="$store.state.token==''"
       >注册</a-button>
       <a-button
         type="primary"
         size="small"
         @click="toLogin"
         style="margin-left:15px;margin-right:48px"
-        v-if="showLogin"
+        v-if="$store.state.token==''"
       >登录</a-button>
-      <a-dropdown v-if="!showLogin">
+      <a-dropdown v-if="$store.state.token!=''">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="toUserindex">个人主页</a-menu-item>
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
         <a-button type="link" @click="toUserindex">
-          欢迎回来，{{username}}。
+          欢迎回来，{{$store.state.user.username}}。
           <a-icon type="down" />
         </a-button>
       </a-dropdown>
@@ -92,6 +92,11 @@ export default {
       this.current='login';
       this.$router.push({path:"/login"});
     },
+    exit(){
+      this.$store.state.token='';
+      this.$store.state.user.username='';
+      this.$store.state.userid='';
+    }
   },
 };
 </script>
