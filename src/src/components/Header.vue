@@ -92,12 +92,13 @@ export default {
       this.$router.push({path:"/"});
     },
     toUserindex(){
-
+      this.$router.push({path:"/profile"});
     },
     exit(){
       this.$store.state.token='';
       this.$store.state.username='';
       this.$store.state.userid='';
+      this.$router.push({path:"/welcome"});
     }
   },
 };
