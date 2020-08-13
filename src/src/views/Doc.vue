@@ -77,8 +77,6 @@
                     </div>
                 </a-col>
             </a-row>
-
-            
         </div>
         
         <div style="text-align:center">
@@ -128,6 +126,7 @@
   //import InEditor from '@/components/InEditor'
   import { mavonEditor } from 'mavon-editor'
   import 'mavon-editor/dist/css/index.css'
+  import Vue from "vue"
   export default {
     name: 'Doc',
     components: {
@@ -141,9 +140,11 @@
         personAuthValue: 0,
         content:'',//输入的Markdown
         html:'',//渲染的html文件
-        title:'我不做人啦',
+        title:'Untitled',
         edittime:"2020.08.13 20:15",
         editcount:5,
+        teamauth:0,
+        auth:0,
       }
     },
     methods:{
@@ -154,9 +155,35 @@
             console.log(this.html)
         },
         toWorkshop(){
-
+            
         }
     },
-    
+    created: function(){
+        var that = this;
+        Vue.axios({
+            method: "get",
+            url: "http://39.106.230.20:8090/document/"+this.$route.params.id,
+            headers: {
+            token: this.$store.state.token,
+            },
+        }).then(function (response) {
+            console.log(response)
+            that.title=response.data.contents.title;
+            that.content=response.data.contents.content;
+            that.edittime=response.data.contents.edittime;
+            that.editcount=response.data.contents.editcount;
+            that.auth=response.data.contents.auth;
+            that.teamauth=response.data.contents.teamauth;
+            console.log(response.data.contents.content)
+
+            /*if (response.data.success == true) {
+            that.$message.success("退出团队成功", 1.5);
+            } else {
+            that.$message.error("退出团队失败", 1.5);
+            }
+            that.
+            that.load_team();*/
+        });
+    },
   }
 </script>
