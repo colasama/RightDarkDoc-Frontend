@@ -34,7 +34,7 @@
               {{data.username}}
             </a-col>
             <a-col :span="6">
-              <a-button type="link" style="margin-top:-5px">修改</a-button>
+              <a-button type="link" style="margin-top:-5px" @click="handleUpdateInfo">修改</a-button>
             </a-col>
           </a-row>
           <a-row style="margin-top:24px">
@@ -84,6 +84,11 @@
         </div>
       </a-layout-content>
     </a-layout>
+    <a-modal v-model="updateInfoModalVisible" title="修改个人信息" centered @ok="updateInfo">
+      <a-form>
+        <a-form-item></a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 <style>
@@ -124,15 +129,9 @@ export default {
   components: {},
   data() {
     return {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-      },
       data,
+      temp: {},
+      updateInfoModalVisible: false,
     }
   },
   watch: {
@@ -140,7 +139,39 @@ export default {
       console.log("openKeys", val);
     },
   },
+  mounted() {
+    this.getInfo()
+  },
   methods: {
+    getInfo() {
+      this.getRequest('/user/info', {}).then(response => {
+        console.log(response.data)
+        this.data = response.data
+      })
+    },
+    handleUpdateInfo() {
+      const { phone, birthday, email, avatar, description } = this.data
+      this.temp = {
+        phone,
+        birthday,
+        email,
+        avatar,
+        description
+      },
+      this.updateInfoModalVisible = true
+    },
+    updateInfo() {
+      this.putRequest('/user/mod_info', this.temp).then(response => {
+        console.log(response.data)
+        this.getInfo()
+        this.$notify({
+          title: 'Success',
+          message: '添加成功',
+          type: 'success',
+          duration: 2000
+        })       
+      })
+    },
     handleClick(e) {
       console.log("click", e);
       this.stopmanage();
