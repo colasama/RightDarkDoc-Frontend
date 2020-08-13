@@ -10,6 +10,7 @@ import animate from 'animate.css'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import { postRequest, putRequest, deleteRequest, getRequest } from "@/utils/api";
 Vue.use(VueAxios, axios)
 
 //在store/index.js里已经引入vuex
@@ -26,3 +27,9 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+
+Vue.prototype.postRequest = postRequest;
+Vue.prototype.putRequest = putRequest;
+Vue.prototype.deleteRequest = deleteRequest;
+Vue.prototype.getRequest = getRequest;
