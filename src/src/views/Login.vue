@@ -90,19 +90,23 @@ export default {
           that.$store.state.token = response.data.token;
           Vue.axios({
             method: "get",
-            url: "http://39.106.230.20:8090/document/1",
+            url: "http://39.106.230.20:8090/user/info",
             headers: {
               token: that.$store.state.token,
             },
           })
             .then((response) => {
+              console.log(response.data);
+              that.$store.state.username = response.data.username;
+              that.$store.state.userid = response.data.userid;
+            })
+            .catch(function (response) {
               console.log(response);
-              that.state.user.username = response.data.username;
-              that.state.user.userid = response.data.userid;
             });
-          that.$message
-            .success("登录成功，即将跳转工作台", 1.5)
-            .then(() => that.$router.push({ path: "/" }));
+          that.$message.success("登录成功，即将跳转工作台", 1.5).then(() => {
+            that.$router.push({ path: "/" });
+            that.$store.state.showNav = true;
+          });
         } else {
           that.$message.error(response.data.message);
         }

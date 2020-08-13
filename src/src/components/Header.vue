@@ -2,9 +2,7 @@
   <div class="re-header">
     <div @click="toIndex" class="top-logo" />
 
-    <a-menu mode="horizontal" v-model="current" :style="{ lineHeight: '64px' }" class="header-menu">
-      <a-menu-item key="index" @click="toIndex">首页</a-menu-item>
-
+    <a-menu mode="horizontal" :style="{ lineHeight: '64px' }" class="header-menu">
       <a-button
         type="primary"
         size="small"
@@ -25,7 +23,7 @@
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
         <a-button type="link" @click="toUserindex">
-          欢迎回来，{{$store.state.user.username}}。
+          欢迎回来，{{$store.state.username}}。
           <a-icon type="down" />
         </a-button>
       </a-dropdown>
@@ -85,16 +83,20 @@ export default {
   watch: {},
   methods: {
     toRegister() {
-      this.current = "register";
       this.$router.push({ path: "/register" });
     },
     toLogin(){
-      this.current='login';
       this.$router.push({path:"/login"});
+    },
+    toIndex(){
+      this.$router.push({path:"/"});
+    },
+    toUserindex(){
+
     },
     exit(){
       this.$store.state.token='';
-      this.$store.state.user.username='';
+      this.$store.state.username='';
       this.$store.state.userid='';
     }
   },

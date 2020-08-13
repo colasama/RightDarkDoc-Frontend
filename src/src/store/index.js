@@ -6,10 +6,8 @@ Vue.use(Vuex)
 const state = {
     showNav: true,
     token: '',
-    user: {
-        username: '',
-        userid: '',
-    },
+    username: '',
+    userid: '',
 };
 export default new Vuex.Store({
     state,
