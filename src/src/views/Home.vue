@@ -56,7 +56,7 @@
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                     </div>
-                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                     <div style="font-size:12px;color:#9c9c9c">
                       {{item.lastedittime}}
                       <!--a-icon key="ellipsis" type="ellipsis" /-->
@@ -122,7 +122,12 @@
         <div v-if="sider_status==1">
           <!--我的文档页面部分-->
           <div class="card-container">
-            <a-tabs style="text-align:left;margin:24px" type="line">
+            <a-tabs
+              default-active-key="1"
+              style="text-align:left;margin:24px"
+              type="line"
+              @change="tabchange"
+            >
               <a-tab-pane key="1" tab="我的文档">
                 <a-list
                   :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
@@ -144,7 +149,7 @@
                       <div>
                         <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                       </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
                         {{item.lastedittime}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
@@ -182,8 +187,124 @@
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
-              <a-tab-pane key="2" tab="最近浏览"></a-tab-pane>
-              <a-tab-pane key="3" tab="我的收藏"></a-tab-pane>
+              <a-tab-pane key="2" tab="最近浏览">
+                <a-list
+                  :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+                  :data-source="docs"
+                  style="text-align:center;margin:15px auto"
+                >
+                  <a-list-item
+                    slot="renderItem"
+                    slot-scope="item"
+                    style="text-align:center;margin:15px auto"
+                  >
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      @contextmenu.prevent
+                      v-contextmenu:contextmenu
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastedittime}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
+                    </a-card>
+
+                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px">重命名</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="control" />
+                        <span style="margin-left:3px">权限设置</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px">删除</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </v-contextmenu-item>
+                    </v-contextmenu>
+                  </a-list-item>
+                </a-list>
+              </a-tab-pane>
+              <a-tab-pane key="3" tab="我的收藏">
+                <a-list
+                  :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+                  :data-source="docs"
+                  style="text-align:center;margin:15px auto"
+                >
+                  <a-list-item
+                    slot="renderItem"
+                    slot-scope="item"
+                    style="text-align:center;margin:15px auto"
+                  >
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      @contextmenu.prevent
+                      v-contextmenu:contextmenu
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastedittime}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
+                    </a-card>
+
+                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px">重命名</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="control" />
+                        <span style="margin-left:3px">权限设置</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px">删除</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </v-contextmenu-item>
+                    </v-contextmenu>
+                  </a-list-item>
+                </a-list>
+              </a-tab-pane>
             </a-tabs>
           </div>
         </div>
@@ -218,7 +339,7 @@
           <a-row>
             <a-col :span="21" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
-                <span style>{{current_team.info}}</span>
+                <span style>{{current_team.teaminfo}}</span>
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -231,7 +352,7 @@
               </div>
               <div v-if="isedit_info">
                 <a-input-search
-                  v-bind:defaultValue="current_team.info"
+                  v-bind:defaultValue="current_team.teaminfo"
                   enter-button="确定"
                   size="large"
                   @search="change_info"
@@ -282,7 +403,7 @@
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                     </div>
-                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                     <div style="font-size:12px;color:#9c9c9c">
                       {{item.lastedittime}}
                       <!--a-icon key="ellipsis" type="ellipsis" /-->
@@ -316,7 +437,7 @@
                 <a-list item-layout="horizontal" :data-source="team_members">
                   <div slot="header">
                     <a-avatar icon="user" />
-                    <a slot="title">创建者</a>
+                    <a slot="title">{{team_creator.username}}</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
@@ -383,7 +504,7 @@
                   <div>
                     <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                   </div>
-                  <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.content}}</div>
+                  <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                   <div style="font-size:12px;color:#9c9c9c">
                     {{item.lastedittime}}
                     <!--a-icon key="ellipsis" type="ellipsis" /-->
@@ -420,11 +541,11 @@ import Vue from "vue";
 
 const docs = [
   {
-    content: "一起来打雪仗吧",
+    title: "一起来打雪仗吧",
     lastedittime: "2020.08.11 14:30:11",
   },
   {
-    content: "其实我也没上过学",
+    title: "其实我也没上过学",
     lastedittime: "2020.08.11 14:30:11",
   },
 ];
@@ -444,15 +565,16 @@ export default {
         {
           teamid: 1,
           teamname: "咕咕咕的团队",
-          info: "这是一个绝对不鸽，永远准时的团队。",
+          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
         },
         {
           teamid: 2,
           teamname: "鸽鸽鸽的团队",
-          info: "这是一个绝对不鸽，永远准时的团队。",
+          teaminfo: "这是一个绝对不鸽，永远准时的团队。",
         },
       ],
       current_team: {},
+      team_creator: {},
       team_members: [
         {
           username: "成员1",
@@ -470,12 +592,51 @@ export default {
       console.log("openKeys", val);
     },
   },
+  updated() {},
+  mounted() {
+    var that = this;
+    this.load_team();
+    Vue.axios({
+      method: "get",
+      url: "http://39.106.230.20:8090/document/creator",
+      headers: {
+        token: this.$store.state.token,
+      },
+    }).then(function (response) {
+      console.log(response.data);
+      that.docs = response.data.contents;
+    });
+  },
   methods: {
+    load_team() {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/team/myTeams",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        that.teams = response.data.myAttendTeams;
+      });
+    },
     handleClick(e) {
+      var that = this;
       console.log("click", e);
       this.stopmanage();
       if (e.key == "doc") {
         this.sider_status = 1;
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/document/creator",
+          headers: {
+            token: this.$store.state.token,
+          },
+        }).then(function (response) {
+          console.log(response.data);
+          that.docs = response.data.contents;
+        });
       }
       if (e.key[0] == "t") {
         this.sider_status = 2;
@@ -486,10 +647,49 @@ export default {
             this.current_team = this.teams[index];
           }
         }
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/team/" + current_teamid + "/view",
+        }).then(function (response) {
+          console.log(response.data);
+          that.team_creator = response.data.teamCreator;
+          that.team_members = response.data.teamMembers;
+        });
+        Vue.axios({
+          method: "get",
+          url:
+            "http://39.106.230.20:8090/team/" + current_teamid + "/documents",
+        }).then(function (response) {
+          console.log(response.data);
+          that.docs = response.data.documents;
+        });
       }
       if (e.key == "trash") {
         this.sider_status = 3;
       }
+    },
+    tabchange(activeKey) {
+      var that = this;
+      var type = "";
+      if (activeKey == "1") {
+        type = "creator";
+      }
+      if (activeKey == "2") {
+        type = "view";
+      }
+      if (activeKey == "3") {
+        type = "fav";
+      }
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/document/" + type,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        that.docs = response.data.contents;
+      });
     },
     startmanage() {
       this.ismanage = true;
@@ -539,7 +739,7 @@ export default {
         },
       }).then(function (response) {
         console.log(response.data);
-        if (response.data.success==true) {
+        if (response.data.success == true) {
           that.$message.success("创建团队成功", 1.5);
         } else {
           that.$message.error("创建团队失败", 1.5);
