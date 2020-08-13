@@ -300,23 +300,30 @@
                 <a-list item-layout="horizontal" :data-source="team_members">
                   <div slot="header">
                     <a-avatar icon="user" />
-                    <a slot="title">创建者</a>
+                    <a slot="title"> 创建者</a>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
                       <a-avatar icon="user" />
-                      {{item.username}}
+                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
                       <a-icon v-if="ismanage" type="delete" @click="delete_member" />
                     </transition>
                   </a-list-item>
+                  
                   <div slot="footer" style="text-align:right">
+                    <div style="text-align:right;margin-top:7px">
                     <transition name="slide-fade">
-                      <a-button v-if="ismanage" type="danger" style="margin-top:12px">
+                      <a-button v-if="!ismanage" type="link">
+                      <a-icon  type="plus"/>
+                      邀请成员
+                    </a-button>
+                      <a-button v-if="ismanage" type="danger">
                         <a-icon type="close" />解散团队
                       </a-button>
                     </transition>
+                    </div>
                   </div>
                 </a-list>
               </div>
