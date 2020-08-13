@@ -99,6 +99,9 @@ export default {
               console.log(response.data);
               that.$store.state.username = response.data.username;
               that.$store.state.userid = response.data.userid;
+              window.sessionStorage.setItem('token',that.$store.state.token)
+              window.sessionStorage.setItem('username',that.$store.state.username)
+              window.sessionStorage.setItem('userid',that.$store.state.userid)
             })
             .catch(function (response) {
               console.log(response);

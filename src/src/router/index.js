@@ -60,7 +60,13 @@ const router = new VueRouter({
 })
 
 router.beforeResolve((to, from, next) => {
-  if (store.state.token==""&&to.fullPath=="/") {
+  if (store.state.token=="") {
+    store.state.token=window.sessionStorage.getItem('token');
+    store.state.username=window.sessionStorage.getItem('username');
+    store.state.userid=window.sessionStorage.getItem('userid');
+  }
+  console.log(store.state.token);
+  if (store.state.token==null&&to.fullPath=="/") {
     next('/welcome')
   }else{
     next()

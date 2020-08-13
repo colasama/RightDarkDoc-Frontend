@@ -98,6 +98,7 @@ export default {
       this.$store.state.token='';
       this.$store.state.username='';
       this.$store.state.userid='';
+      window.sessionStorage.clear();
       this.$router.push({path:"/welcome"});
     }
   },
