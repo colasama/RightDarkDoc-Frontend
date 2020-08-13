@@ -97,6 +97,10 @@
                       <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="share-alt" />分享
                       </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />详细信息
+                      </v-contextmenu-item>
                     </v-contextmenu>
                   </a-list-item>
                 </a-list>

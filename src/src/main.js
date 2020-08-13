@@ -8,6 +8,10 @@ import contentmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/index.css'
 import animate from 'animate.css'
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+
 //在store/index.js里已经引入vuex
 
 Vue.use(animate)//动画库插件
@@ -15,6 +19,7 @@ Vue.use(contentmenu)
 Vue.use(Antd)
 Vue.use(CKEditor)
 Vue.config.productionTip = false
+Vue.prototype.$axios = axios
 
 new Vue({
   router,
