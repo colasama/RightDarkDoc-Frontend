@@ -335,9 +335,19 @@
           <a-row>
             <a-col :span="21"></a-col>
             <a-col :span="3" style="text-align:right">
-              <a-button size="default" type="default" style="margin-top:50px;margin-right:48px">
-                <a-icon type="delete" />清空回收站
-              </a-button>
+              
+              <a-popconfirm
+                placement="bottomRight"
+                title="确定要清空回收站吗?"
+                ok-text="确认"
+                cancel-text="算了"
+                @confirm="confirm"
+                @cancel="cancel"
+              >
+                <a-button size="default" type="default" style="margin-top:50px;margin-right:48px">
+                  <a-icon type="delete" />清空回收站
+                </a-button>
+              </a-popconfirm>
             </a-col>
           </a-row>
           <div style="margin:24px;text-align:center">
