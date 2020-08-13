@@ -10,7 +10,7 @@
           @click="handleClick"
         >
           <a-dropdown placement="bottomCenter" trigger="['click']">
-            <a-button size="large" type="primary" style="margin:50px 0 0 45px;width:160px">
+            <a-button size="large" type="primary" style="border-radius:0px;margin:50px 0 0 45px;width:160px">
               <a-icon type="form" />创建文档
             </a-button>
             <a-icon type="down" />
@@ -63,7 +63,7 @@
               </div>
           </a-modal>
 
-          <a-button @click="createTeamBTN" size="large" type="primary" style="margin:20px 0 0 45px;width:160px">
+          <a-button @click="createTeamBTN" size="large" type="primary" style="border-radius:0px;margin:16px 0 0 45px;width:160px">
             <a-icon type="team" />创建团队
           </a-button>
 
@@ -332,6 +332,9 @@
         </div>
         <div v-if="sider_status==3">
           <!--回收站页面部分-->
+          <div style="font-size:40px;text-align:left;margin:48px 0 -24px 48px">
+            <b>回收站</b>
+          </div>
           <a-row>
             <a-col :span="21"></a-col>
             <a-col :span="3" style="text-align:right">
