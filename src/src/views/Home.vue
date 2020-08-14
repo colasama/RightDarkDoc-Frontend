@@ -60,7 +60,7 @@
                     </div>
                     <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                     <div style="font-size:12px;color:#9c9c9c">
-                      {{item.lastedittime}}
+                      {{item.lastetidtimeString}}
                       <!--a-icon key="ellipsis" type="ellipsis" /-->
                     </div>
                   </a-card>
@@ -142,7 +142,7 @@
                         <span style="margin-left:3px">详细信息</span>
                       </v-contextmenu-item>
                     </v-contextmenu>
-                    
+
         <v-contextmenu
                       ref="contextmenuM"
                       @contextmenu="handleContextMenu"
@@ -275,7 +275,7 @@
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastedittime}}
+                        {{item.lastetidtimeString}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
@@ -306,7 +306,7 @@
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastedittime}}
+                        {{item.lastetidtimeString}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
@@ -337,7 +337,7 @@
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastedittime}}
+                        {{item.lastetidtimeString}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
@@ -453,7 +453,7 @@
                     </div>
                     <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                     <div style="font-size:12px;color:#9c9c9c">
-                      {{item.lastedittime}}
+                      {{item.lastetidtimeString}}
                       <!--a-icon key="ellipsis" type="ellipsis" /-->
                     </div>
                   </a-card>
@@ -461,6 +461,28 @@
               </a-list>
             </a-col>
             <a-col :span="2" style="text-align:left;margin-right:24px">
+
+              <a-modal
+                v-model="inviteVisible"
+                title="邀请成员"
+                :footer="null"
+              >
+                <a-input allowClear="true" :value="memberName" placeholder="请输入成员名称" @change="changeMemberName"></a-input>
+                这里是通过检测memberName来实时更新找到的用户列表,借助Input控件的change事件即可完成，应该是@change但是具体函数我没写。
+                <a-list item-layout="horizontal" :data-source="memberData">
+                  <a-list-item slot="renderItem" slot-scope="item">
+                        <a-row style="margin:12px 48px 12px 28px;width:100%">
+                          <a-col :span="22">
+                            <a-avatar size="large">null</a-avatar> {{ item.name }}
+                          </a-col>
+                          <a-col :span="2" style="text-align:right">
+                            <a-button type="primary" :disabled="false">邀请</a-button>
+                          </a-col>
+                        </a-row>
+                  </a-list-item>
+                </a-list>
+              </a-modal>
+
               <div style="font-size:20px">团队成员</div>
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
@@ -552,7 +574,7 @@
                   </div>
                   <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                   <div style="font-size:12px;color:#9c9c9c">
-                    {{item.lastedittime}}
+                    {{item.lastetidtimeString}}
                     <!--a-icon key="ellipsis" type="ellipsis" /-->
                   </div>
                 </a-card>
@@ -582,6 +604,8 @@ export default {
   components: {},
   data() {
     return {
+      memberName:'',
+      inviteVisible:true,
       createFromTempleteVisible: false,
       createTeamVisible: false,
       openKeys: ["sub1"],
@@ -599,6 +623,11 @@ export default {
       isedit_name: false,
       isedit_info: false,
       current_docid: 0,
+      memberData:[
+        {"name":"Colanns1"},
+        {"name":"Colanns2"},
+        {"name":"Colanns3"},
+      ]
     };
   },
   watch: {

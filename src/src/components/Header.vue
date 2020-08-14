@@ -22,11 +22,10 @@
       <a-popover v-if="$store.state.token!=''" placement="bottom">
         <template slot="content">
           <a-list item-layout="horizontal" :data-source="data">
-            <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item slot="renderItem" slot-scope="item">
               <a-list-item-meta
                 :description="item.description"
               >
-                {{index}}
                 <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
                 <a-avatar
                   slot="avatar"
@@ -97,11 +96,12 @@
 const data = [
   {
     title: '加入团队通知',
-    description: '米奇妙♂妙♂屋向你发送了一个',
+    description: '米奇妙♂妙♂屋向你发送了一个团队邀♂请。',
+    type:''
   },
   {
     title: '你真的很棒棒',
-    description: '竟然使用了超级无敌的右墨文档'
+    description: '竟然使用了超级无敌的右墨文档。'
   },
 ];
 export default {
