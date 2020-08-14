@@ -7,7 +7,7 @@
     </a-breadcrumb>
     <a-layout class="profileBox">
       <a-layout-sider style="text-align:center;background:#F3F3F3">
-        <a-avatar :size="64" style="margin-top:120px"></a-avatar>
+        <a-avatar :size="64" style="margin-top:120px" :src="data.avatar"></a-avatar>
         <a-menu
           style="background:#F3F3F3;margin-top:50px"
           :default-selected-keys="['1']"
@@ -75,7 +75,7 @@
               <b><a-icon type="calendar"/> 生日</b>
             </a-col>
             <a-col :span="6">
-              {{data.birthday}}
+              {{ birthday }}
             </a-col>
             <!-- <a-col :span="6">
               <a-button type="link" style="margin-top:-5px">修改</a-button>
@@ -91,29 +91,29 @@
     <a-modal v-model="updateInfoModalVisible" title="修改个人信息" centered @ok="updateInfo">
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
         <a-form-item label="手机号">
-          <a-input :placeholder="temp.phone" />
+          <a-input v-model="temp.phone" />
         </a-form-item>
         <a-form-item label="生日" >
-          <a-date-picker style="width: 100%;" />
+          <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 100%;" />
         </a-form-item>
         <a-form-item label="邮箱">
-          <a-input />
+          <a-input v-model="temp.email" />
         </a-form-item>
         <a-form-item label="头像">
-          <a-input />
+          <a-input v-model="temp.avatar" />
         </a-form-item>
         <a-form-item label="个人描述">
-          <a-input />
+          <a-input v-model="temp.description" />
         </a-form-item>
       </a-form>>
     </a-modal>
     <a-modal v-model="updatePasswordModalVisible" title="修改密码" center @ok="updatePassword">
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
         <a-form-item label="旧密码">
-          <a-input />
+          <a-input v-model="temp.old_password"/>
         </a-form-item>
         <a-form-item label="新密码">
-          <a-input />
+          <a-input v-model="temp.new_password"/>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -144,21 +144,13 @@
 </style>
 <script>
 import Vue from 'vue'
-const data = {
-  username: '咕咕咕',
-  password: '000000',
-  phone: '13000000000',
-  birthday: '2000/01/15',
-  avatar: 'xxx',
-  description: '000000',
-  email:'233@cc.com'
-}
 export default {
   name: "Home",
   components: {},
   data() {
     return {
-      data,
+      openKeys: [],
+      data: {},
       temp: {},
       updateInfoModalVisible: false,
       updatePasswordModalVisible: false,
@@ -172,6 +164,12 @@ export default {
       },
     }
   },
+  computed: {
+    birthday: function() {
+      const date = this.data.birthday
+      return date ? date.split('T')[0] : ''
+    }
+  },
   watch: {
     openKeys(val) {
       console.log("openKeys", val);
@@ -183,7 +181,7 @@ export default {
   methods: {
     getInfo() {
       Vue.axios({
-        methods: 'get',
+        method: 'get',
         url: 'http://39.106.230.20:8090/user/info',
         headers: {
           token: this.$store.state.token,
@@ -206,7 +204,7 @@ export default {
     },
     updateInfo() {
       Vue.axios({
-        methods: 'put',
+        method: 'put',
         url: 'http://39.106.230.20:8090/user/mod_info',
         headers: {
           token: this.$store.state.token,
@@ -215,12 +213,7 @@ export default {
       }).then(response => {
         console.log(response.data)
         this.getInfo()
-        this.$notify({
-          title: 'Success',
-          message: '添加成功',
-          type: 'success',
-          duration: 2000
-        })       
+        this.$message.success("修改成功", 1.5)
       })
       this.updateInfoModalVisible = false
     },
@@ -233,7 +226,7 @@ export default {
     },
     updatePassword() {
       Vue.axios({
-        methods: 'put',
+        method: 'put',
         url: 'http://39.106.230.20:8090/user/mod_password',
         headers: {
           token: this.$store.state.token,
@@ -241,8 +234,10 @@ export default {
         data: this.temp
       }).then(response => {
         console.log(response.data)
-        
+        this.getInfo()
+        this.$message.success("修改成功", 1.5)
       })
+      this.updatePasswordModalVisible = false
     },
     handleClick(e) {
       console.log("click", e);
