@@ -657,6 +657,22 @@ export default {
         });
       }
     },
+    load_team_info() {
+      var that = this;
+      Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/view",
+        }).then(function (response) {
+          console.log(response.data);
+          that.team_creator = response.data.teamCreator;
+          that.team_members = response.data.teamMembers;
+          if (that.team_creator.userid == that.$store.state.userid) {
+            that.isleader = true;
+          } else {
+            that.isleader = false;
+          }
+        });
+    },
     handleClick(e) {
       console.log("click", e);
       this.stopmanage();
@@ -673,6 +689,7 @@ export default {
             this.current_team = this.teams[index];
           }
         }
+        this.load_team_info()
         this.load_doc();
       }
       if (e.key == "trash") {
@@ -804,15 +821,15 @@ export default {
       var that = this;
       Vue.axios({
         method: "post",
-        url: "http://39.106.230.20:8090/document",
+        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/createDocument",
         headers: {
           token: this.$store.state.token,
         },
       }).then(function (response) {
-        console.log(response.data.contents.docid);
+        console.log(response.data.teamDocument.docid);
         if (response.data.success == true) {
           that.$message.success("创建文档成功", 1).then(() => {
-            that.$router.push({ path: "/doc/" + response.data.contents.docid });
+            that.$router.push({ path: "/doc/" + response.data.teamDocument.docid });
           });
         } else {
           that.$message.error("创建文档失败", 1);
