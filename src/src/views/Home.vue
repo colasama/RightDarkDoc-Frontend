@@ -122,125 +122,125 @@
       </a-layout-sider>
       <a-layout-content style="background:#fff">
         <v-contextmenu
-                      ref="contextmenuS"
-                      @contextmenu="handleContextMenu"
-                      theme="bright"
-                      style="width:180px"
-                    >
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </v-contextmenu-item>
-                    </v-contextmenu>
+          ref="contextmenuS"
+          @contextmenu="handleContextMenu"
+          theme="bright"
+          style="width:180px"
+        >
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="folder-open" />
+            <span style="margin-left:3px">打开</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">分享</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">详细信息</span>
+          </v-contextmenu-item>
+        </v-contextmenu>
 
         <v-contextmenu
-                      ref="contextmenuM"
-                      @contextmenu="handleContextMenu"
-                      theme="bright"
-                      style="width:180px"
-                    >
-                      <v-contextmenu-item @click="open_doc(current_docid)">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc(current_docid)">
-                        <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </v-contextmenu-item>
-                    </v-contextmenu>
+          ref="contextmenuM"
+          @contextmenu="handleContextMenu"
+          theme="bright"
+          style="width:180px"
+        >
+          <v-contextmenu-item @click="open_doc(current_docid)">
+            <a-icon type="folder-open" />
+            <span style="margin-left:3px">打开</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="edit" />
+            <span style="margin-left:3px">重命名</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="control" />
+            <span style="margin-left:3px">权限设置</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="delete_doc(current_docid)">
+            <a-icon type="delete" />
+            <span style="margin-left:3px">删除</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">分享</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">详细信息</span>
+          </v-contextmenu-item>
+        </v-contextmenu>
 
         <v-contextmenu
-                      ref="contextmenuZ"
-                      @contextmenu="handleContextMenu"
-                      theme="bright"
-                      style="width:180px"
-                    >
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </v-contextmenu-item>
-                    </v-contextmenu>
+          ref="contextmenuZ"
+          @contextmenu="handleContextMenu"
+          theme="bright"
+          style="width:180px"
+        >
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="folder-open" />
+            <span style="margin-left:3px">打开</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">分享</span>
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">详细信息</span>
+          </v-contextmenu-item>
+        </v-contextmenu>
 
         <v-contextmenu
-                    ref="contextmenuT"
-                    @contextmenu="handleContextMenu"
-                    theme="bright"
-                    style="width:180px"
-                  >
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="folder-open" />打开
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-                      <a-icon type="edit" />重命名
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-                      <a-icon type="control" />权限设置
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="delete_doc" v-if="isleader">
-                      <a-icon type="delete" />删除
-                    </v-contextmenu-item>
-                    <v-contextmenu-item divider />
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="share-alt" />分享
-                    </v-contextmenu-item>
-                    <v-contextmenu-item divider />
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="share-alt" />
-                      <span style="margin-left:3px">详细信息</span>
-                    </v-contextmenu-item>
-                  </v-contextmenu>
+          ref="contextmenuT"
+          @contextmenu="handleContextMenu"
+          theme="bright"
+          style="width:180px"
+        >
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="folder-open" />打开
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
+            <a-icon type="edit" />重命名
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
+            <a-icon type="control" />权限设置
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="delete_doc" v-if="isleader">
+            <a-icon type="delete" />删除
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />分享
+          </v-contextmenu-item>
+          <v-contextmenu-item divider />
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="share-alt" />
+            <span style="margin-left:3px">详细信息</span>
+          </v-contextmenu-item>
+        </v-contextmenu>
 
         <v-contextmenu
-                  ref="contextmenu"
-                  @contextmenu="handleContextMenu"
-                  theme="bright"
-                  style="width:180px"
-                >
-                  <v-contextmenu-item @click="handleRightMenuClick">
-                    <a-icon type="redo" />恢复
-                  </v-contextmenu-item>
-                  <v-contextmenu-item @click="handleRightMenuClick">
-                    <a-icon type="delete" />彻底删除
-                  </v-contextmenu-item>
-                </v-contextmenu>
+          ref="contextmenu"
+          @contextmenu="handleContextMenu"
+          theme="bright"
+          style="width:180px"
+        >
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="redo" />恢复
+          </v-contextmenu-item>
+          <v-contextmenu-item @click="handleRightMenuClick">
+            <a-icon type="delete" />彻底删除
+          </v-contextmenu-item>
+        </v-contextmenu>
 
         <div v-if="sider_status==1">
           <!--我的文档页面部分-->
@@ -461,24 +461,24 @@
               </a-list>
             </a-col>
             <a-col :span="2" style="text-align:left;margin-right:24px">
-
-              <a-modal
-                v-model="inviteVisible"
-                title="邀请成员"
-                :footer="null"
-              >
-                <a-input allowClear="true" :value="memberName" placeholder="请输入成员名称" @change="changeMemberName"></a-input>
-                这里是通过检测memberName来实时更新找到的用户列表,借助Input控件的change事件即可完成，应该是@change但是具体函数我没写。
+              <a-modal v-model="inviteVisible" title="邀请成员" :footer="null">
+                <a-input
+                  allowClear="true"
+                  :value="memberName"
+                  placeholder="请输入成员名称"
+                  @change="changeMemberName"
+                ></a-input>这里是通过检测memberName来实时更新找到的用户列表,借助Input控件的change事件即可完成，应该是@change但是具体函数我没写。
                 <a-list item-layout="horizontal" :data-source="memberData">
                   <a-list-item slot="renderItem" slot-scope="item">
-                        <a-row style="margin:12px 48px 12px 28px;width:100%">
-                          <a-col :span="22">
-                            <a-avatar size="large">null</a-avatar> {{ item.name }}
-                          </a-col>
-                          <a-col :span="2" style="text-align:right">
-                            <a-button type="primary" :disabled="false">邀请</a-button>
-                          </a-col>
-                        </a-row>
+                    <a-row style="margin:12px 48px 12px 28px;width:100%">
+                      <a-col :span="22">
+                        <a-avatar size="large">null</a-avatar>
+                        {{ item.name }}
+                      </a-col>
+                      <a-col :span="2" style="text-align:right">
+                        <a-button type="primary" :disabled="false">邀请</a-button>
+                      </a-col>
+                    </a-row>
                   </a-list-item>
                 </a-list>
               </a-modal>
@@ -578,7 +578,6 @@
                     <!--a-icon key="ellipsis" type="ellipsis" /-->
                   </div>
                 </a-card>
-                
               </a-list-item>
             </a-list>
           </div>
@@ -604,8 +603,8 @@ export default {
   components: {},
   data() {
     return {
-      memberName:'',
-      inviteVisible:false,
+      memberName: "",
+      inviteVisible: false,
       createFromTempleteVisible: false,
       createTeamVisible: false,
       openKeys: ["sub1"],
@@ -623,11 +622,11 @@ export default {
       isedit_name: false,
       isedit_info: false,
       current_docid: 0,
-      memberData:[
-        {"name":"Colanns1"},
-        {"name":"Colanns2"},
-        {"name":"Colanns3"},
-      ]
+      memberData: [
+        { name: "Colanns1" },
+        { name: "Colanns2" },
+        { name: "Colanns3" },
+      ],
     };
   },
   watch: {
@@ -694,18 +693,21 @@ export default {
     load_team_info() {
       var that = this;
       Vue.axios({
-          method: "get",
-          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/view",
-        }).then(function (response) {
-          console.log(response.data);
-          that.team_creator = response.data.teamCreator;
-          that.team_members = response.data.teamMembers;
-          if (that.team_creator.userid == that.$store.state.userid) {
-            that.isleader = true;
-          } else {
-            that.isleader = false;
-          }
-        });
+        method: "get",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/view",
+      }).then(function (response) {
+        console.log(response.data);
+        that.team_creator = response.data.teamCreator;
+        that.team_members = response.data.teamMembers;
+        if (that.team_creator.userid == that.$store.state.userid) {
+          that.isleader = true;
+        } else {
+          that.isleader = false;
+        }
+      });
     },
     handleClick(e) {
       console.log("click", e);
@@ -723,7 +725,7 @@ export default {
             this.current_team = this.teams[index];
           }
         }
-        this.load_team_info()
+        this.load_team_info();
         this.load_doc();
       }
       if (e.key == "trash") {
@@ -752,35 +754,41 @@ export default {
     change_name(value) {
       var that = this;
       Vue.axios({
-          method: "post",
-          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/update",
-          headers: {
-            token: this.$store.state.token,
-          },
-          data: {
+        method: "post",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/update",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
           newTeamname: value,
         },
-        }).then(function (response) {
-          console.log(response.data);
-          that.current_team.teamname=value;
-        });
+      }).then(function (response) {
+        console.log(response.data);
+        that.current_team.teamname = value;
+      });
       this.isedit_name = false;
     },
     change_info(value) {
       var that = this;
       Vue.axios({
-          method: "post",
-          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/update",
-          headers: {
-            token: this.$store.state.token,
-          },
-          data: {
+        method: "post",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/update",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
           newTeaminfo: value,
         },
-        }).then(function (response) {
-          console.log(response.data);
-          that.current_team.teaminfo=value;
-        });
+      }).then(function (response) {
+        console.log(response.data);
+        that.current_team.teaminfo = value;
+      });
       this.isedit_info = false;
     },
     exitTeam() {
@@ -881,7 +889,10 @@ export default {
       var that = this;
       Vue.axios({
         method: "post",
-        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/createDocument",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/createDocument",
         headers: {
           token: this.$store.state.token,
         },
@@ -889,7 +900,9 @@ export default {
         console.log(response.data.teamDocument.docid);
         if (response.data.success == true) {
           that.$message.success("创建文档成功", 1).then(() => {
-            that.$router.push({ path: "/doc/" + response.data.teamDocument.docid });
+            that.$router.push({
+              path: "/doc/" + response.data.teamDocument.docid,
+            });
           });
         } else {
           that.$message.error("创建文档失败", 1);
@@ -963,8 +976,7 @@ export default {
         },
       }).then(function (response) {
         if (response.data.success == true) {
-          that.$message.success("清空回收站成功", 1.5).then(() => {
-          });
+          that.$message.success("清空回收站成功", 1.5).then(() => {});
         } else {
           that.$message.error("清空回收站失败", 1.5);
         }
@@ -974,9 +986,9 @@ export default {
     rightEvent(docid) {
       console.log(docid);
     },
-    showInviteModal(){
-      this.inviteVisible=true;
-    }
+    showInviteModal() {
+      this.inviteVisible = true;
+    },
   },
 };
 </script>
