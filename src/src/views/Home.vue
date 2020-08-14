@@ -511,7 +511,7 @@
                   <div slot="footer" style="text-align:right">
                     <div style="text-align:right;margin-top:7px">
                       <transition name="slide-fade">
-                        <a-button v-if="!ismanage&&isleader" type="link">
+                        <a-button v-if="!ismanage&&isleader" @click="showInviteModal" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
                         <a-popconfirm
@@ -605,7 +605,7 @@ export default {
   data() {
     return {
       memberName:'',
-      inviteVisible:true,
+      inviteVisible:false,
       createFromTempleteVisible: false,
       createTeamVisible: false,
       openKeys: ["sub1"],
@@ -974,6 +974,9 @@ export default {
     rightEvent(docid) {
       console.log(docid);
     },
+    showInviteModal(){
+      this.inviteVisible=true;
+    }
   },
 };
 </script>
