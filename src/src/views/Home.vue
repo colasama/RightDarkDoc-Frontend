@@ -721,11 +721,37 @@ export default {
       this.isedit_info = true;
     },
     change_name(value) {
-      console.log(value);
+      var that = this;
+      Vue.axios({
+          method: "post",
+          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/update",
+          headers: {
+            token: this.$store.state.token,
+          },
+          data: {
+          newTeamname: value,
+        },
+        }).then(function (response) {
+          console.log(response.data);
+          that.current_team.teamname=value;
+        });
       this.isedit_name = false;
     },
     change_info(value) {
-      console.log(value);
+      var that = this;
+      Vue.axios({
+          method: "post",
+          url: "http://39.106.230.20:8090/team/" + this.current_team.teamid + "/update",
+          headers: {
+            token: this.$store.state.token,
+          },
+          data: {
+          newTeaminfo: value,
+        },
+        }).then(function (response) {
+          console.log(response.data);
+          that.current_team.teaminfo=value;
+        });
       this.isedit_info = false;
     },
     exitTeam() {
