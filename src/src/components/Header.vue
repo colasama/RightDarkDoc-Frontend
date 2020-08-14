@@ -90,6 +90,7 @@ export default {
     },
     toIndex(){
       this.$router.push({path:"/"});
+      location.reload();
     },
     toUserindex(){
       this.$router.push({path:"/profile"});

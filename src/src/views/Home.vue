@@ -18,11 +18,15 @@
               <a-icon type="form" />创建文档
             </a-button>
             <a-icon type="down" />
-            <a-menu slot="overlay" @click="createDocBTN" style="text-align:center">
-              <a-menu-item v-if="sider_status!=2" key="1">创建空白文档</a-menu-item>
+            <a-menu slot="overlay" style="text-align:center">
+              <a-menu-item v-if="sider_status!=2" key="1" @click="createDocBTN">创建空白文档</a-menu-item>
               <a-menu-item @click="createFromTempleteBTN" v-if="sider_status!=2" key="2">从模板创建</a-menu-item>
-              <a-menu-item v-if="sider_status==2" key="3">创建空白团队文档</a-menu-item>
-              <a-menu-item v-if="sider_status==2" key="4">从模板创建团队文档</a-menu-item>
+              <a-menu-item v-if="sider_status==2" key="3" @click="createTeamDocBTN">创建空白团队文档</a-menu-item>
+              <a-menu-item
+                @click="createFromTempleteTeamBTN"
+                v-if="sider_status==2"
+                key="4"
+              >从模板创建团队文档</a-menu-item>
             </a-menu>
           </a-dropdown>
 
@@ -143,8 +147,8 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
                       <div>
@@ -156,9 +160,13 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-
-                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
-                      <v-contextmenu-item @click="handleRightMenuClick">
+                    <v-contextmenu
+                      ref="contextmenu"
+                      @contextmenu="handleContextMenu"
+                      theme="bright"
+                      style="width:180px"
+                    >
+                      <v-contextmenu-item @click="open_doc(current_docid)">
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
                       </v-contextmenu-item>
@@ -170,7 +178,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
+                      <v-contextmenu-item @click="delete_doc(current_docid)">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
@@ -574,6 +582,7 @@ export default {
       createFromTempleteVisible: false,
       createTeamVisible: false,
       openKeys: ["sub1"],
+      activeKey: 1,
       teamname: "",
       teaminfo: "",
       docs: [],
@@ -586,6 +595,7 @@ export default {
       sider_status: 1,
       isedit_name: false,
       isedit_info: false,
+      current_docid: 0,
     };
   },
   watch: {
@@ -595,18 +605,8 @@ export default {
   },
   updated() {},
   mounted() {
-    var that = this;
     this.load_team();
-    Vue.axios({
-      method: "get",
-      url: "http://39.106.230.20:8090/document/creator",
-      headers: {
-        token: this.$store.state.token,
-      },
-    }).then(function (response) {
-      console.log(response.data);
-      that.docs = response.data.contents;
-    });
+    this.load_doc();
   },
   methods: {
     load_team() {
@@ -622,24 +622,51 @@ export default {
         that.teams = response.data.myAttendTeams;
       });
     },
-    handleClick(e) {
+    load_doc() {
       var that = this;
-      console.log("click", e);
-      this.stopmanage();
-      if (e.key == "doc") {
-        this.sider_status = 1;
+      var type = "";
+      if (this.activeKey == "1") {
+        type = "creator";
+      }
+      if (this.activeKey == "2") {
+        type = "view";
+      }
+      if (this.activeKey == "3") {
+        type = "fav";
+      }
+      if (this.sider_status == 3) {
+        type = "trash";
+      }
+      if (this.sider_status != 2) {
         Vue.axios({
           method: "get",
-          url: "http://39.106.230.20:8090/document/creator",
+          url: "http://39.106.230.20:8090/document/" + type,
           headers: {
             token: this.$store.state.token,
           },
         }).then(function (response) {
-          console.log(response.data);
           that.docs = response.data.contents;
         });
+      } else {
+        Vue.axios({
+          method: "get",
+          url:
+            "http://39.106.230.20:8090/team/" +
+            this.current_team.teamid +
+            "/documents",
+        }).then(function (response) {
+          that.docs = response.data.documents;
+        });
       }
-      if (e.key[0] == "t") {
+    },
+    handleClick(e) {
+      console.log("click", e);
+      this.stopmanage();
+      if (e.key == "doc") {
+        this.sider_status = 1;
+        this.load_doc();
+      }
+      if (e.key[0] == "t" && e.key != "trash") {
         this.sider_status = 2;
         var current_teamid = e.key.substring(1);
         for (let index = 0; index < this.teams.length; index++) {
@@ -648,65 +675,16 @@ export default {
             this.current_team = this.teams[index];
           }
         }
-        Vue.axios({
-          method: "get",
-          url: "http://39.106.230.20:8090/team/" + current_teamid + "/view",
-        }).then(function (response) {
-          console.log(response.data);
-          that.team_creator = response.data.teamCreator;
-          that.team_members = response.data.teamMembers;
-          if (that.team_creator.userid == that.$store.state.userid) {
-            that.isleader = true;
-          } else {
-            that.isleader = false;
-          }
-          console.log(that.isleader);
-        });
-        Vue.axios({
-          method: "get",
-          url:
-            "http://39.106.230.20:8090/team/" + current_teamid + "/documents",
-        }).then(function (response) {
-          console.log(response.data);
-          that.docs = response.data.documents;
-        });
+        this.load_doc();
       }
       if (e.key == "trash") {
         this.sider_status = 3;
-        Vue.axios({
-          method: "get",
-          url: "http://39.106.230.20:8090/document/trash",
-          headers: {
-            token: this.$store.state.token,
-          },
-        }).then(function (response) {
-          console.log(response.data);
-          that.docs = response.data.contents;
-        });
+        this.load_doc();
       }
     },
     tabchange(activeKey) {
-      var that = this;
-      var type = "";
-      if (activeKey == "1") {
-        type = "creator";
-      }
-      if (activeKey == "2") {
-        type = "view";
-      }
-      if (activeKey == "3") {
-        type = "fav";
-      }
-      Vue.axios({
-        method: "get",
-        url: "http://39.106.230.20:8090/document/" + type,
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then(function (response) {
-        console.log(response.data);
-        that.docs = response.data.contents;
-      });
+      this.activeKey = activeKey;
+      this.load_doc();
     },
     startmanage() {
       this.ismanage = true;
@@ -752,6 +730,10 @@ export default {
         that.load_team();
       });
     },
+    handleContextMenu(ref) {
+      console.log(ref.data.attrs.docid);
+      this.current_docid = ref.data.attrs.docid;
+    },
     handleRightMenuClick() {},
     delete_member(username) {
       var that = this;
@@ -780,12 +762,11 @@ export default {
         that.load_team();
       });
     },
-    open_doc(docid){
+    open_doc(docid) {
       this.$router.push({ path: "/doc/" + docid });
     },
-    delete_doc(vm,event) {
-      console.log(vm);
-      console.log(event);
+    delete_doc(docid) {
+      console.log(docid);
     },
     createDocBTN() {
       var that = this;
@@ -807,7 +788,30 @@ export default {
         that.createTeamVisible = false;
       });
     },
+    createTeamDocBTN() {
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/document",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data.contents.docid);
+        if (response.data.success == true) {
+          that.$message.success("创建文档成功", 1).then(() => {
+            that.$router.push({ path: "/doc/" + response.data.contents.docid });
+          });
+        } else {
+          that.$message.error("创建文档失败", 1);
+        }
+        that.createTeamVisible = false;
+      });
+    },
     createFromTempleteBTN() {
+      this.createFromTempleteVisible = true;
+    },
+    createFromTempleteTeamBTN() {
       this.createFromTempleteVisible = true;
     },
     createFromTemplete() {},
@@ -878,9 +882,9 @@ export default {
         }
       });
     },
-    rightEvent(docid){
-      console.log(docid)
-    }
+    rightEvent(docid) {
+      console.log(docid);
+    },
   },
 };
 </script>
