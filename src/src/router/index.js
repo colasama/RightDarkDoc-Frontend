@@ -52,6 +52,18 @@ Vue.use(VueRouter)
     name: 'Profile',
     meta: {title:'个人信息 - 右墨文档',},
     component: () => import('../views/Profile.vue')
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    meta: {title:'消息 - 右墨文档',},
+    component: () => import('../views/Message.vue')
+  },
+  {
+    path: '/doc404',
+    name: 'Doc404',
+    meta: {title:'404 - 右墨文档',},
+    component: () => import('../views/Doc404.vue')
   }
 ]
 
