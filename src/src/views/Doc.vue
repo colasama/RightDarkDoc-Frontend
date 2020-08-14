@@ -1,6 +1,5 @@
 <template>
-    <div style="text-align:center;background:#FAFAFA">
-        
+    <div style="text-align:center;background:#FAFAFA">      
         <div class="subNavi">
             <a-row>
                 <a-col :span="15">
@@ -101,7 +100,28 @@
             </div>
         </div>
         
-        
+        <a-list class="commentList" :header="`${data.length} replies`" item-layout="horizontal" :data-source="data">
+            <a-list-item slot="renderItem" slot-scope="item">
+                <a-comment :author="item.username" :avatar="item.avatar">
+                  <p slot="content">{{ item.content }}</p>  
+                </a-comment>
+                <!-- <a-button></a-button> -->
+                <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
+            </a-list-item>
+        </a-list>
+        <a-comment class="addComment">
+            <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
+            <div slot="content">
+                <a-form-item>
+                    <a-textarea :rows="4" :value="comment" @change="handleChange" />
+                </a-form-item>
+                <a-form-item>
+                    <a-button html-type="submit" type="primary" @click="handleSubmitComment">
+                        添加评论
+                    </a-button>
+                </a-form-item>
+            </div>
+        </a-comment>
     </div>
 </template>
 <style>
@@ -135,6 +155,15 @@
   import { mavonEditor } from 'mavon-editor'
   import 'mavon-editor/dist/css/index.css'
   import Vue from "vue"
+  const data = [{
+      username: '1',
+      avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3669125061,4091191473&fm=26&gp=0.jpg',
+      content: '这是一条评论'
+  }, {
+      username: '2',
+      avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2556005214,1106499338&fm=26&gp=0.jpg',
+      content: '这是第二条评论'
+  }]
   export default {
     name: 'Doc',
     components: {
@@ -158,6 +187,10 @@
         docid:this.$route.params.id,
         istrash:0,
         isFav:1,
+        // data - comment list, userinfo - 当前用户信息, value - 新评论
+        data,
+        userinfo: {},
+        comment: ''
       }
     },
     methods:{
@@ -274,6 +307,20 @@
                 that.$message.error("竟然取消收藏失败了？！", 1.5);
                 }
             });
+        },
+
+        // comment
+        getInfo() {
+
+        },
+        getCommentList() {
+
+        },
+        handleSubmitComment() {
+
+        },
+        handleChange(e) {
+            this.comment = e.target.value
         }
     },
     created: function(){
