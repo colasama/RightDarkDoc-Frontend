@@ -24,8 +24,9 @@
           <a-list item-layout="horizontal" :data-source="data">
             <a-list-item slot="renderItem" slot-scope="item, index">
               <a-list-item-meta
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                :description="item.description"
               >
+                {{index}}
                 <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
                 <a-avatar
                   slot="avatar"
@@ -95,16 +96,12 @@
 <script>
 const data = [
   {
-    title: 'Ant Design Title 1',
+    title: '加入团队通知',
+    description: '米奇妙♂妙♂屋向你发送了一个',
   },
   {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
+    title: '你真的很棒棒',
+    description: '竟然使用了超级无敌的右墨文档'
   },
 ];
 export default {
