@@ -17,9 +17,28 @@
         style="margin-left:15px;margin-right:48px"
         v-if="$store.state.token==''"
       >登录</a-button>
-      <a-button  v-if="$store.state.token!=''" type="link">
-        <a-icon type="bell" style="color:#313131"/>
-      </a-button>
+
+      
+      <a-popover v-if="$store.state.token!=''" placement="bottom">
+        <template slot="content">
+          <a-list item-layout="horizontal" :data-source="data">
+            <a-list-item slot="renderItem" slot-scope="item, index">
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+                <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
+                <a-avatar
+                  slot="avatar"
+                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />
+              </a-list-item-meta>
+            </a-list-item>
+          </a-list>
+        </template>
+        <a-button type="link">
+          <a-icon type="bell" style="color:#313131"/>
+        </a-button>
+      </a-popover>
       <a-dropdown v-if="$store.state.token!=''">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
@@ -74,11 +93,26 @@
 
 
 <script>
+const data = [
+  {
+    title: 'Ant Design Title 1',
+  },
+  {
+    title: 'Ant Design Title 2',
+  },
+  {
+    title: 'Ant Design Title 3',
+  },
+  {
+    title: 'Ant Design Title 4',
+  },
+];
 export default {
   components: {},
   data() {
     return {
       showLogin: true,
+      data
     };
   },
   created: function () {},

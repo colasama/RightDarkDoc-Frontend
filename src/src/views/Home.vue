@@ -121,45 +121,30 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <div v-if="sider_status==1">
-          <!--我的文档页面部分-->
-          <div class="card-container">
-            <a-tabs
-              default-active-key="1"
-              style="text-align:left;margin:24px"
-              type="line"
-              @change="tabchange"
-            >
-              <a-tab-pane key="1" tab="我的文档">
-                <a-list
-                  :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
-                  :data-source="docs"
-                  style="text-align:center;margin:15px auto"
-                >
-                  <a-list-item
-                    slot="renderItem"
-                    slot-scope="item"
-                    style="text-align:center;margin:15px auto"
-                  >
-                    <a-card
-                      :bordered="false"
-                      :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenu
-                      :docid="item.docid"
-                      @click="open_doc(item.docid)"
+        <v-contextmenu
+                      ref="contextmenuS"
+                      @contextmenu="handleContextMenu"
+                      theme="bright"
+                      style="width:180px"
                     >
-                      <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                      </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastedittime}}
-                        <!--a-icon key="ellipsis" type="ellipsis" /-->
-                      </div>
-                    </a-card>
-                    <v-contextmenu
-                      ref="contextmenu"
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </v-contextmenu-item>
+                    </v-contextmenu>
+                    
+        <v-contextmenu
+                      ref="contextmenuM"
                       @contextmenu="handleContextMenu"
                       theme="bright"
                       style="width:180px"
@@ -191,6 +176,109 @@
                         <span style="margin-left:3px">详细信息</span>
                       </v-contextmenu-item>
                     </v-contextmenu>
+
+        <v-contextmenu
+                      ref="contextmenuZ"
+                      @contextmenu="handleContextMenu"
+                      theme="bright"
+                      style="width:180px"
+                    >
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </v-contextmenu-item>
+                      <v-contextmenu-item divider />
+                      <v-contextmenu-item @click="handleRightMenuClick">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </v-contextmenu-item>
+                    </v-contextmenu>
+
+        <v-contextmenu
+                    ref="contextmenuT"
+                    @contextmenu="handleContextMenu"
+                    theme="bright"
+                    style="width:180px"
+                  >
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="folder-open" />打开
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
+                      <a-icon type="edit" />重命名
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
+                      <a-icon type="control" />权限设置
+                    </v-contextmenu-item>
+                    <v-contextmenu-item @click="delete_doc" v-if="isleader">
+                      <a-icon type="delete" />删除
+                    </v-contextmenu-item>
+                    <v-contextmenu-item divider />
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="share-alt" />分享
+                    </v-contextmenu-item>
+                    <v-contextmenu-item divider />
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="share-alt" />
+                      <span style="margin-left:3px">详细信息</span>
+                    </v-contextmenu-item>
+                  </v-contextmenu>
+
+        <v-contextmenu
+                  ref="contextmenu"
+                  @contextmenu="handleContextMenu"
+                  theme="bright"
+                  style="width:180px"
+                >
+                  <v-contextmenu-item @click="handleRightMenuClick">
+                    <a-icon type="redo" />恢复
+                  </v-contextmenu-item>
+                  <v-contextmenu-item @click="handleRightMenuClick">
+                    <a-icon type="delete" />彻底删除
+                  </v-contextmenu-item>
+                </v-contextmenu>
+
+        <div v-if="sider_status==1">
+          <!--我的文档页面部分-->
+          <div class="card-container">
+            <a-tabs
+              default-active-key="1"
+              style="text-align:left;margin:24px"
+              type="line"
+              @change="tabchange"
+            >
+              <a-tab-pane key="1" tab="我的文档">
+                <a-list
+                  :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
+                  :data-source="docs"
+                  style="text-align:center;margin:15px auto"
+                >
+                  <a-list-item
+                    slot="renderItem"
+                    slot-scope="item"
+                    style="text-align:center;margin:15px auto"
+                  >
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      v-contextmenu:contextmenuM
+                      :docid="item.docid"
+                      @click="open_doc(item.docid)"
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastedittime}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
+                    </a-card>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -209,7 +297,7 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenu
+                      v-contextmenu:contextmenuZ
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -222,27 +310,6 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-                    <v-contextmenu
-                      ref="contextmenu"
-                      @contextmenu="handleContextMenu"
-                      theme="bright"
-                      style="width:180px"
-                    >
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </v-contextmenu-item>
-                    </v-contextmenu>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -261,7 +328,7 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenu
+                      v-contextmenu:contextmenuS
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -274,27 +341,6 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-                    <v-contextmenu
-                      ref="contextmenu"
-                      @contextmenu="handleContextMenu"
-                      theme="bright"
-                      style="width:180px"
-                    >
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item divider />
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </v-contextmenu-item>
-                    </v-contextmenu>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -398,7 +444,7 @@
                     :bordered="false"
                     :hoverable="true"
                     style="min-width:240px;max-width:240px;text-align:center"
-                    v-contextmenu:contextmenu
+                    v-contextmenu:contextmenuT
                     :docid="item.docid"
                     @click="open_doc(item.docid)"
                   >
@@ -411,35 +457,6 @@
                       <!--a-icon key="ellipsis" type="ellipsis" /-->
                     </div>
                   </a-card>
-
-                  <v-contextmenu
-                    ref="contextmenu"
-                    @contextmenu="handleContextMenu"
-                    theme="bright"
-                    style="width:180px"
-                  >
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="folder-open" />打开
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-                      <a-icon type="edit" />重命名
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-                      <a-icon type="control" />权限设置
-                    </v-contextmenu-item>
-                    <v-contextmenu-item @click="delete_doc" v-if="isleader">
-                      <a-icon type="delete" />删除
-                    </v-contextmenu-item>
-                    <v-contextmenu-item divider />
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="share-alt" />分享
-                    </v-contextmenu-item>
-                    <v-contextmenu-item divider />
-                    <v-contextmenu-item @click="handleRightMenuClick">
-                      <a-icon type="share-alt" />
-                      <span style="margin-left:3px">详细信息</span>
-                    </v-contextmenu-item>
-                  </v-contextmenu>
                 </a-list-item>
               </a-list>
             </a-col>
@@ -539,19 +556,7 @@
                     <!--a-icon key="ellipsis" type="ellipsis" /-->
                   </div>
                 </a-card>
-                <v-contextmenu
-                  ref="contextmenu"
-                  @contextmenu="handleContextMenu"
-                  theme="bright"
-                  style="width:180px"
-                >
-                  <v-contextmenu-item @click="handleRightMenuClick">
-                    <a-icon type="redo" />恢复
-                  </v-contextmenu-item>
-                  <v-contextmenu-item @click="handleRightMenuClick">
-                    <a-icon type="delete" />彻底删除
-                  </v-contextmenu-item>
-                </v-contextmenu>
+                
               </a-list-item>
             </a-list>
           </div>
