@@ -100,28 +100,32 @@
             </div>
         </div>
         
-        <a-list class="commentList" :header="`${data.length} replies`" item-layout="horizontal" :data-source="data">
-            <a-list-item slot="renderItem" slot-scope="item">
-                <a-comment :author="item.username" :avatar="item.avatar">
-                  <p slot="content">{{ item.content }}</p>  
+        <div class="commentBox">
+            <div style="margin:48px">
+                <a-list class="commentList" :header="`${data.length} replies`" item-layout="horizontal" :data-source="data">
+                    <a-list-item slot="renderItem" slot-scope="item">
+                        <a-comment :author="item.username" :avatar="item.avatar">
+                        <p slot="content">{{ item.content }}</p>  
+                        </a-comment>
+                        <!-- <a-button></a-button> -->
+                        <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
+                    </a-list-item>
+                </a-list>
+                <a-comment class="addComment">
+                    <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
+                    <div slot="content">
+                        <a-form-item>
+                            <a-textarea :rows="4" :value="comment" @change="handleChange" />
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button html-type="submit" type="primary" @click="handleSubmitComment">
+                                添加评论
+                            </a-button>
+                        </a-form-item>
+                    </div>
                 </a-comment>
-                <!-- <a-button></a-button> -->
-                <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
-            </a-list-item>
-        </a-list>
-        <a-comment class="addComment">
-            <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
-            <div slot="content">
-                <a-form-item>
-                    <a-textarea :rows="4" :value="comment" @change="handleChange" />
-                </a-form-item>
-                <a-form-item>
-                    <a-button html-type="submit" type="primary" @click="handleSubmitComment">
-                        添加评论
-                    </a-button>
-                </a-form-item>
             </div>
-        </a-comment>
+        </div>
     </div>
 </template>
 <style>
@@ -149,6 +153,16 @@
         margin-right:10px;
         cursor:pointer;
     }
+
+    .commentBox{
+        width:1200px;
+        margin:24px auto;
+        background:#FFFFFF;
+        border: 1px hsl( 0,0%,92.7% ) solid;
+        border-radius: var(--ck-border-radius);
+        box-shadow: 0 0 5px hsla( 0,0%,0%,.1 );
+    }
+
 </style>
 <script>
   //import InEditor from '@/components/InEditor'
