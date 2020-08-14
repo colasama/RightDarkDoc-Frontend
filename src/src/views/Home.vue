@@ -54,8 +54,6 @@
                     :bordered="false"
                     :hoverable="true"
                     style="min-width:220px;max-width:220px;text-align:center"
-                    @contextmenu.prevent
-                    v-contextmenu:contextmenu
                   >
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -211,8 +209,8 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
                       <div>
@@ -224,23 +222,15 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-
-                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                    <v-contextmenu
+                      ref="contextmenu"
+                      @contextmenu="handleContextMenu"
+                      theme="bright"
+                      style="width:180px"
+                    >
                       <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
-                        <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item divider />
                       <v-contextmenu-item @click="handleRightMenuClick">
@@ -271,8 +261,8 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      @contextmenu.prevent
                       v-contextmenu:contextmenu
+                      :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
                       <div>
@@ -284,22 +274,15 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
-                    <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                    <v-contextmenu
+                      ref="contextmenu"
+                      @contextmenu="handleContextMenu"
+                      theme="bright"
+                      style="width:180px"
+                    >
                       <v-contextmenu-item @click="handleRightMenuClick">
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="handleRightMenuClick">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </v-contextmenu-item>
-                      <v-contextmenu-item @click="delete_doc">
-                        <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
                       </v-contextmenu-item>
                       <v-contextmenu-item divider />
                       <v-contextmenu-item @click="handleRightMenuClick">
@@ -415,8 +398,8 @@
                     :bordered="false"
                     :hoverable="true"
                     style="min-width:240px;max-width:240px;text-align:center"
-                    @contextmenu.prevent
                     v-contextmenu:contextmenu
+                    :docid="item.docid"
                     @click="open_doc(item.docid)"
                   >
                     <div>
@@ -429,22 +412,32 @@
                     </div>
                   </a-card>
 
-                  <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                  <v-contextmenu
+                    ref="contextmenu"
+                    @contextmenu="handleContextMenu"
+                    theme="bright"
+                    style="width:180px"
+                  >
                     <v-contextmenu-item @click="handleRightMenuClick">
                       <a-icon type="folder-open" />打开
                     </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick">
+                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
                       <a-icon type="edit" />重命名
                     </v-contextmenu-item>
-                    <v-contextmenu-item @click="handleRightMenuClick">
+                    <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
                       <a-icon type="control" />权限设置
                     </v-contextmenu-item>
-                    <v-contextmenu-item @click="delete_doc">
+                    <v-contextmenu-item @click="delete_doc" v-if="isleader">
                       <a-icon type="delete" />删除
                     </v-contextmenu-item>
                     <v-contextmenu-item divider />
                     <v-contextmenu-item @click="handleRightMenuClick">
                       <a-icon type="share-alt" />分享
+                    </v-contextmenu-item>
+                    <v-contextmenu-item divider />
+                    <v-contextmenu-item @click="handleRightMenuClick">
+                      <a-icon type="share-alt" />
+                      <span style="margin-left:3px">详细信息</span>
                     </v-contextmenu-item>
                   </v-contextmenu>
                 </a-list-item>
@@ -534,8 +527,8 @@
                   :bordered="false"
                   :hoverable="true"
                   style="min-width:240px;max-width:240px;text-align:center"
-                  @contextmenu.prevent
                   v-contextmenu:contextmenu
+                  :docid="item.docid"
                 >
                   <div>
                     <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -546,7 +539,12 @@
                     <!--a-icon key="ellipsis" type="ellipsis" /-->
                   </div>
                 </a-card>
-                <v-contextmenu ref="contextmenu" theme="bright" style="width:180px">
+                <v-contextmenu
+                  ref="contextmenu"
+                  @contextmenu="handleContextMenu"
+                  theme="bright"
+                  style="width:180px"
+                >
                   <v-contextmenu-item @click="handleRightMenuClick">
                     <a-icon type="redo" />恢复
                   </v-contextmenu-item>
@@ -731,7 +729,6 @@ export default {
       });
     },
     handleContextMenu(ref) {
-      console.log(ref.data.attrs.docid);
       this.current_docid = ref.data.attrs.docid;
     },
     handleRightMenuClick() {},
@@ -767,6 +764,21 @@ export default {
     },
     delete_doc(docid) {
       console.log(docid);
+      var that = this;
+      Vue.axios({
+        method: "delete",
+        url: "http://39.106.230.20:8090/document/" + docid,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("删除文档成功", 1);
+        } else {
+          that.$message.error("删除文档失败", 1);
+        }
+        that.load_doc();
+      });
     },
     createDocBTN() {
       var that = this;
@@ -875,11 +887,11 @@ export default {
       }).then(function (response) {
         if (response.data.success == true) {
           that.$message.success("清空回收站成功", 1.5).then(() => {
-            location.reload();
           });
         } else {
           that.$message.error("清空回收站失败", 1.5);
         }
+        that.load_doc();
       });
     },
     rightEvent(docid) {
