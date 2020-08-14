@@ -17,6 +17,9 @@
         style="margin-left:15px;margin-right:48px"
         v-if="$store.state.token==''"
       >登录</a-button>
+      <a-button  v-if="$store.state.token!=''" type="link">
+        <a-icon type="bell" style="color:#313131"/>
+      </a-button>
       <a-dropdown v-if="$store.state.token!=''">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
