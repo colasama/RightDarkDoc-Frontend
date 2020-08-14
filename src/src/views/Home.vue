@@ -234,10 +234,10 @@
           theme="bright"
           style="width:180px"
         >
-          <v-contextmenu-item @click="handleRightMenuClick">
+          <v-contextmenu-item @click="restore_doc">
             <a-icon type="redo" />恢复
           </v-contextmenu-item>
-          <v-contextmenu-item @click="handleRightMenuClick">
+          <v-contextmenu-item @click="delete_trash">
             <a-icon type="delete" />彻底删除
           </v-contextmenu-item>
         </v-contextmenu>
@@ -463,20 +463,28 @@
             <a-col :span="2" style="text-align:left;margin-right:24px">
               <a-modal v-model="inviteVisible" title="邀请成员" :footer="null">
                 <a-input
-                  allowClear="true"
-                  :value="memberName"
+                  allowClear
+                  v-model="memberName"
                   placeholder="请输入成员名称"
                   @change="changeMemberName"
-                ></a-input>这里是通过检测memberName来实时更新找到的用户列表,借助Input控件的change事件即可完成，应该是@change但是具体函数我没写。
+                ></a-input>
                 <a-list item-layout="horizontal" :data-source="memberData">
-                  <a-list-item slot="renderItem" slot-scope="item">
+                  <a-list-item
+                    slot="renderItem"
+                    slot-scope="item"
+                    v-if="check_member(item.userid)"
+                  >
                     <a-row style="margin:12px 48px 12px 28px;width:100%">
                       <a-col :span="22">
                         <a-avatar size="large">null</a-avatar>
-                        {{ item.name }}
+                        {{ item.username }}
                       </a-col>
                       <a-col :span="2" style="text-align:right">
-                        <a-button type="primary" :disabled="false">邀请</a-button>
+                        <a-button
+                          type="primary"
+                          @click="invite_member(item.username)"
+                          :disabled="false"
+                        >邀请</a-button>
                       </a-col>
                     </a-row>
                   </a-list-item>
@@ -514,18 +522,9 @@
                         <a-button v-if="!ismanage&&isleader" @click="showInviteModal" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
-                        <a-popconfirm
-                          v-if="ismanage"
-                          placement="bottomRight"
-                          title="确定要解散团队吗?"
-                          ok-text="确认"
-                          cancel-text="算了"
-                          @confirm="dismissTeam"
-                        >
-                          <a-button type="danger">
-                            <a-icon type="close" />解散团队
-                          </a-button>
-                        </a-popconfirm>
+                        <a-button type="danger" @click="dismissTeam">
+                          <a-icon type="close" />解散团队
+                        </a-button>
                       </transition>
                     </div>
                   </div>
@@ -622,11 +621,7 @@ export default {
       isedit_name: false,
       isedit_info: false,
       current_docid: 0,
-      memberData: [
-        { name: "Colanns1" },
-        { name: "Colanns2" },
-        { name: "Colanns3" },
-      ],
+      memberData: [],
     };
   },
   watch: {
@@ -944,26 +939,132 @@ export default {
         that.createTeamVisible = false;
       });
     },
-    dismissTeam() {
+    changeMemberName() {
+      if (this.memberName != "") {
+        var that = this;
+        Vue.axios({
+          method: "post",
+          url: "http://39.106.230.20:8090/user/fuzSearch",
+          headers: {
+            token: this.$store.state.token,
+          },
+          data: {
+            username: this.memberName,
+          },
+        }).then(function (response) {
+          that.memberData = response.data.contents;
+        });
+      } else {
+        this.memberData = [];
+      }
+    },
+    check_member(userid) {
+      if (userid==this.$store.state.userid) {
+        return false;
+      }
+      for (const user of this.team_members) {
+        if (user.userid==userid) {
+          return false;
+        }
+      }
+      return true;
+    },
+    invite_member(username) {
       var that = this;
       Vue.axios({
         method: "get",
-        url:
-          "http://39.106.230.20:8090/team/" +
-          this.current_team.teamid +
-          "/deleteTeam",
+        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/inviteMember",
+        headers: {
+          token: that.$store.state.token,
+        },
+        params: {
+          inviteename: username,
+        }
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("邀请成功", 1)
+        } else {
+          that.$message.error("邀请失败", 1);
+        }
+        that.load_team_info();
+      });
+    },
+    dismissTeam() {
+      var that = this;
+      this.$confirm({
+        title: "确定要解散团队吗?",
+        content: "解散后团队文档将成为文档创建者的个人文档",
+        okText: "解散",
+        okType: "danger",
+        cancelText: "算了",
+        onOk() {
+          Vue.axios({
+            method: "get",
+            url:
+              "http://39.106.230.20:8090/team/" +
+              that.current_team.teamid +
+              "/deleteTeam",
+            headers: {
+              token: that.$store.state.token,
+            },
+          }).then(function (response) {
+            if (response.data.success == true) {
+              that.$message.success("解散团队成功", 1.5).then(() => {
+                location.reload();
+              });
+            } else {
+              that.$message.error("解散团队失败", 1.5);
+            }
+            that.load_team();
+          });
+        },
+        onCancel() {},
+      });
+    },
+    restore_doc() {
+      var that = this;
+      Vue.axios({
+        method: "put",
+        url: "http://39.106.230.20:8090/document/recover/" + this.current_docid,
         headers: {
           token: this.$store.state.token,
         },
       }).then(function (response) {
         if (response.data.success == true) {
-          that.$message.success("解散团队成功", 1.5).then(() => {
-            location.reload();
-          });
+          that.$message.success("恢复成功", 1).then(() => {});
         } else {
-          that.$message.error("解散团队失败", 1.5);
+          that.$message.error("恢复失败", 1);
         }
-        that.load_team();
+        that.load_doc();
+      });
+    },
+    delete_trash() {
+      var that = this;
+      this.$confirm({
+        title: "确定永久删除该文档吗?",
+        content: "文档将无法恢复",
+        okText: "删除",
+        okType: "danger",
+        cancelText: "算了",
+        onOk() {
+          Vue.axios({
+            method: "delete",
+            url:
+              "http://39.106.230.20:8090/document/permanent/" +
+              that.current_docid,
+            headers: {
+              token: that.$store.state.token,
+            },
+          }).then(function (response) {
+            if (response.data.success == true) {
+              that.$message.success("删除成功", 1.5).then(() => {});
+            } else {
+              that.$message.error("删除失败", 1.5);
+            }
+            that.load_doc();
+          });
+        },
+        onCancel() {},
       });
     },
     emptytrash() {
