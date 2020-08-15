@@ -107,7 +107,12 @@
                         <a-comment :author="item.username" :avatar="item.avatar">
                         <p slot="content">{{ item.content }}</p>  
                         </a-comment>
-                        <!-- <a-button></a-button> -->
+                        <a-button 
+                            v-if="userinfo.userid === item.userid || userinfo.userid === creatorid" 
+                            type="primary"
+                            @click="handleDeleteComment(item)">
+                            删除
+                        </a-button>
                         <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
                     </a-list-item>
                 </a-list>
@@ -325,13 +330,36 @@
 
         // comment
         getInfo() {
-
+            Vue.axios({
+                method: 'get',
+                url: 'http://39.106.230.20:8090/user/info',
+                headers: {
+                token: this.$store.state.token,
+                },
+            }).then(response => {
+                console.log(response.data)
+                this.userinfo = response.data
+            })
         },
         getCommentList() {
-
+            Vue.axios({
+                method: 'get',
+                url: `http://localhost:8090/document/${this.docid}/comments`
+            }).then(response => {
+                console.log(response.data)
+                this.data = response.data
+            })
         },
         handleSubmitComment() {
 
+        },
+        handleDeleteComment(item) {
+            Vue.axios({
+                method: 'get',
+                url: `http://localhost:8090/document/${this.docid}/comment/${item.comid}/delete`
+            }).then(response => {
+                this.$message.success('删除成功', 1.5)
+            })
         },
         handleChange(e) {
             this.comment = e.target.value
