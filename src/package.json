@@ -17,6 +17,7 @@
     "mavon-editor": "^2.9.0",
     "v-contextmenu": "^2.9.0",
     "vue": "^2.6.11",
+    "vue-avatar": "^2.3.0",
     "vue-axios": "^2.1.5",
     "vue-router": "^3.2.0",
     "vue-runtime-helpers": "^1.1.2",
