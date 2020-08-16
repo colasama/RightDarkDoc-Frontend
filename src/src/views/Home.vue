@@ -1,6 +1,18 @@
 <template>
   <div class="home">
     <a-layout style="height:100%">
+      <a-drawer
+        title="详细信息" 
+        placement="right"
+        maskClosable
+        :closable="true"
+        :visible="doc_info_visible"
+        @close="on_info_Close"
+      >
+        <p>标题</p>
+        <p>创建者</p>
+        <p>创建时间</p>
+      </a-drawer>
       <a-layout-sider style="min-width: 256px;height:100%;text-align:left;">
         <a-menu
           style="width: 256px;height:100%;text-align:left;"
@@ -159,7 +171,7 @@
                         </div>
                       </a-card>
                       <a-menu slot="overlay" style="width:180px">
-                        <a-menu-item key="1">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
@@ -171,7 +183,7 @@
                           <a-icon type="control" />
                           <span style="margin-left:3px">权限设置</span>
                         </a-menu-item>
-                        <a-menu-item key="4">
+                        <a-menu-item key="4" @click="delete_doc(item.docid)">
                           <a-icon type="delete" />
                           <span style="margin-left:3px">删除</span>
                         </a-menu-item>
@@ -181,7 +193,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="6">
+                        <a-menu-item key="6" @click="show_doc_info(item.docid)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -219,7 +231,7 @@
                         </div>
                       </a-card>
                       <a-menu slot="overlay" style="width:180px">
-                        <a-menu-item key="1">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
@@ -228,7 +240,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="3">
+                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -266,7 +278,7 @@
                         </div>
                       </a-card>
                       <a-menu slot="overlay" style="width:180px">
-                        <a-menu-item key="1">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
@@ -275,7 +287,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="3">
+                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -385,7 +397,6 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenuT
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -399,7 +410,7 @@
                       </div>
                     </a-card>
                     <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
+                      <a-menu-item key="1" @click="open_doc(item.docid)">
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
                       </a-menu-item>
@@ -411,7 +422,7 @@
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </a-menu-item>
-                      <a-menu-item key="4" v-if="isleader">
+                      <a-menu-item key="4" v-if="isleader" @click="delete_doc(item.docid)">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </a-menu-item>
@@ -421,7 +432,7 @@
                         <span style="margin-left:3px">分享</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="6">
+                      <a-menu-item key="6" @click="show_doc_info(item.docid)">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">详细信息</span>
                       </a-menu-item>
@@ -473,7 +484,9 @@
                       :username="`${team_creator.username}`"
                     ></avatar>
                     {{team_creator.username}}
-                    <span><a-icon type="crown" style="font-size:16px;color:#E85A4F"/></span>
+                    <span>
+                      <a-icon type="crown" style="font-size:16px;color:#E85A4F" />
+                    </span>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
@@ -561,11 +574,11 @@
                     </div>
                   </a-card>
                   <a-menu slot="overlay" style="width:180px">
-                    <a-menu-item key="1">
+                    <a-menu-item key="1" @click="restore_doc(item.docid)">
                       <a-icon type="redo" />
                       <span style="margin-left:3px">恢复</span>
                     </a-menu-item>
-                    <a-menu-item key="2">
+                    <a-menu-item key="2" @click="delete_trash(item.docid)">
                       <a-icon type="delete" />
                       <span style="margin-left:3px">彻底删除</span>
                     </a-menu-item>
@@ -619,6 +632,7 @@ export default {
       isedit_info: false,
       current_docid: 0,
       memberData: [],
+      doc_info_visible: false,
     };
   },
   watch: {
@@ -805,9 +819,6 @@ export default {
         that.load_team();
       });
     },
-    handleContextMenu(ref) {
-      this.current_docid = ref.data.attrs.docid;
-    },
     handleRightMenuClick() {},
     delete_member(username) {
       var that = this;
@@ -840,7 +851,6 @@ export default {
       this.$router.push({ path: "/doc/" + docid });
     },
     delete_doc(docid) {
-      console.log(docid);
       var that = this;
       Vue.axios({
         method: "delete",
@@ -856,6 +866,13 @@ export default {
         }
         that.load_doc();
       });
+    },
+    show_doc_info(docid) {
+      console.log(docid);
+      this.doc_info_visible=true;
+    },
+    on_info_Close() {
+      this.doc_info_visible=false;
     },
     createDocBTN() {
       var that = this;
@@ -1021,11 +1038,11 @@ export default {
         onCancel() {},
       });
     },
-    restore_doc() {
+    restore_doc(docid) {
       var that = this;
       Vue.axios({
         method: "put",
-        url: "http://39.106.230.20:8090/document/recover/" + this.current_docid,
+        url: "http://39.106.230.20:8090/document/recover/" + docid,
         headers: {
           token: this.$store.state.token,
         },
@@ -1038,7 +1055,7 @@ export default {
         that.load_doc();
       });
     },
-    delete_trash() {
+    delete_trash(docid) {
       var that = this;
       this.$confirm({
         title: "确定永久删除该文档吗?",
@@ -1049,9 +1066,7 @@ export default {
         onOk() {
           Vue.axios({
             method: "delete",
-            url:
-              "http://39.106.230.20:8090/document/permanent/" +
-              that.current_docid,
+            url: "http://39.106.230.20:8090/document/permanent/" + docid,
             headers: {
               token: that.$store.state.token,
             },
