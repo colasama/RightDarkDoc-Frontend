@@ -8,14 +8,14 @@
         size="small"
         @click="toRegister"
         style="margin-left:10px"
-        v-if="$store.state.token==''"
+        v-if="$store.state.token==null"
       >注册</a-button>
       <a-button
         type="primary"
         size="small"
         @click="toLogin"
         style="margin-left:15px;margin-right:48px"
-        v-if="$store.state.token==''"
+        v-if="$store.state.token==null"
       >登录</a-button>
 
       
@@ -39,7 +39,7 @@
           <a-icon type="bell" style="color:#313131"/>
         </a-button>
       </a-popover>
-      <a-dropdown v-if="$store.state.token!=''">
+      <a-dropdown v-if="$store.state.token!=null">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
@@ -130,7 +130,7 @@ export default {
       this.$router.push({path:"/profile"});
     },
     exit(){
-      this.$store.state.token='';
+      this.$store.state.token=null;
       this.$store.state.username='';
       this.$store.state.userid='';
       window.sessionStorage.clear();

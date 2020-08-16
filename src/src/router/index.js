@@ -72,7 +72,7 @@ const router = new VueRouter({
 })
 
 router.beforeResolve((to, from, next) => {
-  if (store.state.token=="") {
+  if (store.state.token==null) {
     store.state.token=window.sessionStorage.getItem('token');
     store.state.username=window.sessionStorage.getItem('username');
     store.state.userid=window.sessionStorage.getItem('userid');

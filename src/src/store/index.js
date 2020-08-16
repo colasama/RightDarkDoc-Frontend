@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const state = {
     showNav: true,
-    token: '',
+    token: null,
     username: '',
     userid: '',
 };
