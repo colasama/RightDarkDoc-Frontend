@@ -27,6 +27,9 @@
     </div>
   </div-->
   <div>
+    <div class="hoverTest">
+
+    </div>
     <a-popconfirm
       title="Are you sure delete this task?"
       ok-text="Yes"
@@ -90,5 +93,14 @@ export default {
 <style scoped>
   .box {
     width: 100%;
+  }
+  .hoverTest{
+    min-width:100px;
+    min-height:100px;
+    background-color:red;
+  }
+
+  .hoverTest.hover{
+    background-color:aqua;
   }
 </style>

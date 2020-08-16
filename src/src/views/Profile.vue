@@ -9,13 +9,31 @@
     </a-breadcrumb>
     <a-layout class="profileBox">
       <a-layout-sider style="text-align:center;background:#F3F3F3">
-        <a-avatar :size="64" v-if="data.avatar!=null" style="margin-top:120px" :src="data.avatar"></a-avatar>
-        <avatar
-          :size="64"
-          v-if="data.avatar==null"
-          :username="`${data.username}`"
-          style="margin-top:120px;margin-left:auto;margin-right:auto"
-        ></avatar>
+        
+
+        <a-upload
+            style="margin:0 auto"
+            name="image"
+            :show-upload-list="false"
+            action="http://182.92.57.178:5000/pictures/add"
+            :before-upload="beforeUpload"
+            @change="handleChange"
+          >
+            <a-avatar
+              :size="64"
+              class="avatarStyle"
+              v-if="data.avatar!=null"
+              :src="data.avatar"
+            />
+
+            <avatar
+              :size="64"
+              class="avatarStyle"
+              v-if="data.avatar==null"
+              :username="`${data.username}`"
+            ></avatar>
+          </a-upload>
+
         <a-menu
           style="background:#F3F3F3;margin-top:50px"
           :default-selected-keys="['1']"
@@ -24,7 +42,7 @@
           @click="handleClick"
         >
           <a-menu-item key="1">账号信息</a-menu-item>
-          <a-menu-item key="2">头像</a-menu-item>
+          <!--a-menu-item key="2">头像</a-menu-item-->
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff;text-align:left;" v-if="sider_status==1">
@@ -93,12 +111,13 @@
           </a-row>
         </div>
       </a-layout-content>
-      <a-layout-content
+      <!--a-layout-content
         v-if="sider_status==2"
-        style="background:#fff;text-align:center;"
+        style="background:#fff;"
       >
-        <div>
+        <div style="text-align:center;margin:auto">
           <a-upload
+            style="margin:0 auto"
             name="image"
             list-type="picture-card"
             class="avatar-uploader"
@@ -114,7 +133,7 @@
             </div>
           </a-upload>点击即可上传头像
         </div>
-      </a-layout-content>
+      </a-layout-content-->
     </a-layout>
     <a-modal v-model="updateInfoModalVisible" title="修改个人信息" centered @ok="updateInfo">
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
@@ -145,6 +164,17 @@
   </div>
 </template>
 <style>
+.avatarStyle{
+  cursor:pointer;
+  margin-top:120px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.avatarStyle.hover {
+  color: #000000;
+}
+
 .profile {
   background: #fafafa;
   text-align: center;
@@ -355,11 +385,18 @@ export default {
   opacity: 0;
 }
 .avatar-uploader > .ant-upload {
-  margin-left: 128px;
   width: 128px;
   height: 128px;
+  text-align: center;
+  padding: 24px;
 }
+
+.ant-upload-select-picture-card{
+  text-align:center;
+}
+
 .ant-upload-select-picture-card i {
+  
   font-size: 32px;
   color: #999;
 }
