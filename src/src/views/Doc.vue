@@ -21,7 +21,7 @@
                         /></b>
                         </span>
                         <span style="margin-left:5px">
-                            上次修改时间是{{edittime}}，共计修改了{{editcount}}次。
+                            上次修改时间是{{lastetidtimeString}}，共计修改了{{editcount}}次。
                             </span>
                     </div>
                     
@@ -193,8 +193,7 @@
         content:'',//输入的Markdown
         html:'',//渲染的html文件
         title:'Untitled',
-        edittime:'',
-        createtime:'',
+        lastetidtimeString:'',
         creatorid:0,
         editcount:0,
         teamauth:0,
@@ -254,13 +253,9 @@
                     docid: this.docid,
                     title: this.title,
                     content: this.content,
-                    creattime:'2020-08-12T14:53:55.800+00:00',
-                    lastedittime:'2020-08-12T14:53:55.800+00:00',
-                    editcount:this.editcount,
                     lastedituserid: this.$store.state.userid,
                     auth:this.auth,
                     teamauth:this.teamauth,
-                    creatorid:this.creatorid,
                     istrash:this.istrash,
                 },
             }).then(function (response) {
@@ -402,10 +397,10 @@
             token: this.$store.state.token,
             },
         }).then(function (response) {
-            console.log(response)
+            console.log(response);
             that.title=response.data.contents.title;
             that.content=response.data.contents.content;
-            that.edittime=response.data.contents.edittime;
+            that.lastetidtimeString=response.data.contents.lastetidtimeString;
             that.editcount=response.data.contents.editcount;
             that.auth=response.data.contents.auth;
             that.teamauth=response.data.contents.teamauth;

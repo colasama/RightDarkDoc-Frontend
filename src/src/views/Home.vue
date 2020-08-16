@@ -1,6 +1,18 @@
 <template>
   <div class="home">
     <a-layout style="height:100%">
+      <a-drawer
+        title="详细信息" 
+        placement="right"
+        maskClosable
+        :closable="true"
+        :visible="doc_info_visible"
+        @close="on_info_Close"
+      >
+        <p>标题</p>
+        <p>创建者</p>
+        <p>创建时间</p>
+      </a-drawer>
       <a-layout-sider style="min-width: 256px;height:100%;text-align:left;">
         <a-menu
           style="width: 256px;height:100%;text-align:left;"
@@ -141,52 +153,52 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
-                  <a-dropdown :trigger="['contextmenu']">
-                    <a-card
-                      :bordered="false"
-                      :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
-                      :docid="item.docid"
-                      @click="open_doc(item.docid)"
-                    >
-                      <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                      </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastetidtimeString}}
-                        <!--a-icon key="ellipsis" type="ellipsis" /-->
-                      </div>
-                    </a-card>
-                    <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </a-menu-item>
-                      <a-menu-item key="3">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </a-menu-item>
-                      <a-menu-item key="4">
-                        <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="5">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="6">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </a-menu-item>
-                    </a-menu>
-                  </a-dropdown>
+                    <a-dropdown :trigger="['contextmenu']">
+                      <a-card
+                        :bordered="false"
+                        :hoverable="true"
+                        style="min-width:240px;max-width:240px;text-align:center"
+                        :docid="item.docid"
+                        @click="open_doc(item.docid)"
+                      >
+                        <div>
+                          <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                        </div>
+                        <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                        <div style="font-size:12px;color:#9c9c9c">
+                          {{item.lastetidtimeString}}
+                          <!--a-icon key="ellipsis" type="ellipsis" /-->
+                        </div>
+                      </a-card>
+                      <a-menu slot="overlay" style="width:180px">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
+                          <a-icon type="folder-open" />
+                          <span style="margin-left:3px">打开</span>
+                        </a-menu-item>
+                        <a-menu-item key="2">
+                          <a-icon type="edit" />
+                          <span style="margin-left:3px">重命名</span>
+                        </a-menu-item>
+                        <a-menu-item key="3">
+                          <a-icon type="control" />
+                          <span style="margin-left:3px">权限设置</span>
+                        </a-menu-item>
+                        <a-menu-item key="4" @click="delete_doc(item.docid)">
+                          <a-icon type="delete" />
+                          <span style="margin-left:3px">删除</span>
+                        </a-menu-item>
+                        <a-menu-divider />
+                        <a-menu-item key="5">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">分享</span>
+                        </a-menu-item>
+                        <a-menu-divider />
+                        <a-menu-item key="6" @click="show_doc_info(item.docid)">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">详细信息</span>
+                        </a-menu-item>
+                      </a-menu>
+                    </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -201,39 +213,39 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
-                  <a-dropdown :trigger="['contextmenu']">
-                    <a-card
-                      :bordered="false"
-                      :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
-                      :docid="item.docid"
-                      @click="open_doc(item.docid)"
-                    >
-                      <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                      </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastetidtimeString}}
-                        <!--a-icon key="ellipsis" type="ellipsis" /-->
-                      </div>
-                    </a-card>
-                    <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="3">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </a-menu-item>
-                    </a-menu>
-                  </a-dropdown>
+                    <a-dropdown :trigger="['contextmenu']">
+                      <a-card
+                        :bordered="false"
+                        :hoverable="true"
+                        style="min-width:240px;max-width:240px;text-align:center"
+                        :docid="item.docid"
+                        @click="open_doc(item.docid)"
+                      >
+                        <div>
+                          <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                        </div>
+                        <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                        <div style="font-size:12px;color:#9c9c9c">
+                          {{item.lastetidtimeString}}
+                          <!--a-icon key="ellipsis" type="ellipsis" /-->
+                        </div>
+                      </a-card>
+                      <a-menu slot="overlay" style="width:180px">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
+                          <a-icon type="folder-open" />
+                          <span style="margin-left:3px">打开</span>
+                        </a-menu-item>
+                        <a-menu-item key="2">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">分享</span>
+                        </a-menu-item>
+                        <a-menu-divider />
+                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">详细信息</span>
+                        </a-menu-item>
+                      </a-menu>
+                    </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -248,39 +260,39 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
-                  <a-dropdown :trigger="['contextmenu']">
-                    <a-card
-                      :bordered="false"
-                      :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
-                      :docid="item.docid"
-                      @click="open_doc(item.docid)"
-                    >
-                      <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                      </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastetidtimeString}}
-                        <!--a-icon key="ellipsis" type="ellipsis" /-->
-                      </div>
-                    </a-card>
-                    <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="3">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </a-menu-item>
-                    </a-menu>
-                  </a-dropdown>
+                    <a-dropdown :trigger="['contextmenu']">
+                      <a-card
+                        :bordered="false"
+                        :hoverable="true"
+                        style="min-width:240px;max-width:240px;text-align:center"
+                        :docid="item.docid"
+                        @click="open_doc(item.docid)"
+                      >
+                        <div>
+                          <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                        </div>
+                        <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                        <div style="font-size:12px;color:#9c9c9c">
+                          {{item.lastetidtimeString}}
+                          <!--a-icon key="ellipsis" type="ellipsis" /-->
+                        </div>
+                      </a-card>
+                      <a-menu slot="overlay" style="width:180px">
+                        <a-menu-item key="1" @click="open_doc(item.docid)">
+                          <a-icon type="folder-open" />
+                          <span style="margin-left:3px">打开</span>
+                        </a-menu-item>
+                        <a-menu-item key="2">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">分享</span>
+                        </a-menu-item>
+                        <a-menu-divider />
+                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
+                          <a-icon type="share-alt" />
+                          <span style="margin-left:3px">详细信息</span>
+                        </a-menu-item>
+                      </a-menu>
+                    </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -385,7 +397,6 @@
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenuT
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -397,23 +408,23 @@
                         {{item.lastetidtimeString}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
-                  </a-card>
+                    </a-card>
                     <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
+                      <a-menu-item key="1" @click="open_doc(item.docid)">
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
                       </a-menu-item>
                       <a-menu-item key="2" v-if="isleader">
                         <a-icon type="edit" />
-                        <span style="margin-left:3px" >重命名</span>
+                        <span style="margin-left:3px">重命名</span>
                       </a-menu-item>
                       <a-menu-item key="3" v-if="isleader">
                         <a-icon type="control" />
-                        <span style="margin-left:3px" >权限设置</span>
+                        <span style="margin-left:3px">权限设置</span>
                       </a-menu-item>
-                      <a-menu-item key="4" v-if="isleader">
+                      <a-menu-item key="4" v-if="isleader" @click="delete_doc(item.docid)">
                         <a-icon type="delete" />
-                        <span style="margin-left:3px" >删除</span>
+                        <span style="margin-left:3px">删除</span>
                       </a-menu-item>
                       <a-menu-divider />
                       <a-menu-item key="5">
@@ -421,7 +432,7 @@
                         <span style="margin-left:3px">分享</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="6">
+                      <a-menu-item key="6" @click="show_doc_info(item.docid)">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">详细信息</span>
                       </a-menu-item>
@@ -439,11 +450,7 @@
                   @change="changeMemberName"
                 ></a-input>
                 <a-list item-layout="horizontal" :data-source="memberData">
-                  <a-list-item
-                    slot="renderItem"
-                    slot-scope="item"
-                    v-if="check_member(item.userid)"
-                  >
+                  <a-list-item slot="renderItem" slot-scope="item" v-if="check_member(item.userid)">
                     <a-row style="margin:12px 48px 12px 28px;width:100%">
                       <a-col :span="22">
                         <a-avatar size="large">null</a-avatar>
@@ -465,12 +472,31 @@
               <div>
                 <a-list item-layout="horizontal" :data-source="team_members">
                   <div slot="header">
-                    <a-avatar icon="user" />
-                    <a slot="title">{{team_creator.username}}</a>
+                    <a-avatar
+                      :size="36"
+                      v-if="team_creator.avatar!=null"
+                      :src="team_creator.avatar"
+                    ></a-avatar>
+                    <avatar
+                      :size="36"
+                      inline
+                      v-if="team_creator.avatar==null"
+                      :username="`${team_creator.username}`"
+                    ></avatar>
+                    {{team_creator.username}}
+                    <span>
+                      <a-icon type="crown" style="font-size:16px;color:#E85A4F" />
+                    </span>
                   </div>
                   <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left">
-                      <a-avatar icon="user" />
+                      <a-avatar :size="36" v-if="item.avatar!=null" :src="item.avatar"></a-avatar>
+                      <avatar
+                        :size="36"
+                        inline
+                        v-if="item.avatar==null"
+                        :username="`${item.username}`"
+                      ></avatar>
                       {{item.username}}
                     </div>
                     <transition name="slide-fade">
@@ -492,7 +518,7 @@
                         <a-button v-if="!ismanage&&isleader" @click="showInviteModal" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
-                        <a-button  v-if="ismanage&&isleader" type="danger" @click="dismissTeam">
+                        <a-button v-if="ismanage&&isleader" type="danger" @click="dismissTeam">
                           <a-icon type="close" />解散团队
                         </a-button>
                       </transition>
@@ -532,50 +558,32 @@
             >
               <a-list-item slot="renderItem" slot-scope="item" style="text-align:center">
                 <a-dropdown :trigger="['contextmenu']">
-                    <a-card
-                      :bordered="false"
-                      :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
-                      :docid="item.docid"
-                    >
-                      <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                      </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                      <div style="font-size:12px;color:#9c9c9c">
-                        {{item.lastetidtimeString}}
-                        <!--a-icon key="ellipsis" type="ellipsis" /-->
-                      </div>
-                    </a-card>
-                    <a-menu slot="overlay" style="width:180px">
-                      <a-menu-item key="1">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </a-menu-item>
-                      <a-menu-item key="3">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </a-menu-item>
-                      <a-menu-item key="4">
-                        <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="5">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="6">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
-                      </a-menu-item>
-                    </a-menu>
-                  </a-dropdown>
+                  <a-card
+                    :bordered="false"
+                    :hoverable="true"
+                    style="min-width:240px;max-width:240px;text-align:center"
+                    :docid="item.docid"
+                  >
+                    <div>
+                      <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                    </div>
+                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                    <div style="font-size:12px;color:#9c9c9c">
+                      {{item.lastetidtimeString}}
+                      <!--a-icon key="ellipsis" type="ellipsis" /-->
+                    </div>
+                  </a-card>
+                  <a-menu slot="overlay" style="width:180px">
+                    <a-menu-item key="1" @click="restore_doc(item.docid)">
+                      <a-icon type="redo" />
+                      <span style="margin-left:3px">恢复</span>
+                    </a-menu-item>
+                    <a-menu-item key="2" @click="delete_trash(item.docid)">
+                      <a-icon type="delete" />
+                      <span style="margin-left:3px">彻底删除</span>
+                    </a-menu-item>
+                  </a-menu>
+                </a-dropdown>
               </a-list-item>
             </a-list>
           </div>
@@ -595,10 +603,13 @@
 </style>
 <script>
 import Vue from "vue";
+import Avatar from "vue-avatar";
 // @ is an alias to /src
 export default {
   name: "Home",
-  components: {},
+  components: {
+    Avatar,
+  },
   data() {
     return {
       memberName: "",
@@ -621,6 +632,7 @@ export default {
       isedit_info: false,
       current_docid: 0,
       memberData: [],
+      doc_info_visible: false,
     };
   },
   watch: {
@@ -807,9 +819,6 @@ export default {
         that.load_team();
       });
     },
-    handleContextMenu(ref) {
-      this.current_docid = ref.data.attrs.docid;
-    },
     handleRightMenuClick() {},
     delete_member(username) {
       var that = this;
@@ -842,7 +851,6 @@ export default {
       this.$router.push({ path: "/doc/" + docid });
     },
     delete_doc(docid) {
-      console.log(docid);
       var that = this;
       Vue.axios({
         method: "delete",
@@ -858,6 +866,13 @@ export default {
         }
         that.load_doc();
       });
+    },
+    show_doc_info(docid) {
+      console.log(docid);
+      this.doc_info_visible=true;
+    },
+    on_info_Close() {
+      this.doc_info_visible=false;
     },
     createDocBTN() {
       var that = this;
@@ -958,11 +973,11 @@ export default {
       }
     },
     check_member(userid) {
-      if (userid==this.$store.state.userid) {
+      if (userid == this.$store.state.userid) {
         return false;
       }
       for (const user of this.team_members) {
-        if (user.userid==userid) {
+        if (user.userid == userid) {
           return false;
         }
       }
@@ -972,16 +987,19 @@ export default {
       var that = this;
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/team/"+this.current_team.teamid+"/inviteMember",
+        url:
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/inviteMember",
         headers: {
           token: that.$store.state.token,
         },
         params: {
           inviteename: username,
-        }
+        },
       }).then(function (response) {
         if (response.data.success == true) {
-          that.$message.success("邀请成功", 1)
+          that.$message.success("邀请成功", 1);
         } else {
           that.$message.error("邀请失败", 1);
         }
@@ -1020,11 +1038,11 @@ export default {
         onCancel() {},
       });
     },
-    restore_doc() {
+    restore_doc(docid) {
       var that = this;
       Vue.axios({
         method: "put",
-        url: "http://39.106.230.20:8090/document/recover/" + this.current_docid,
+        url: "http://39.106.230.20:8090/document/recover/" + docid,
         headers: {
           token: this.$store.state.token,
         },
@@ -1037,7 +1055,7 @@ export default {
         that.load_doc();
       });
     },
-    delete_trash() {
+    delete_trash(docid) {
       var that = this;
       this.$confirm({
         title: "确定永久删除该文档吗?",
@@ -1048,9 +1066,7 @@ export default {
         onOk() {
           Vue.axios({
             method: "delete",
-            url:
-              "http://39.106.230.20:8090/document/permanent/" +
-              that.current_docid,
+            url: "http://39.106.230.20:8090/document/permanent/" + docid,
             headers: {
               token: that.$store.state.token,
             },
