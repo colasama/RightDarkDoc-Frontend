@@ -10,6 +10,8 @@ import animate from 'animate.css'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueClipboard from 'vue-clipboard2'
+
 Vue.use(VueAxios, axios)
 
 //在store/index.js里已经引入vuex
@@ -18,6 +20,8 @@ Vue.use(animate)//动画库插件
 Vue.use(contentmenu)
 Vue.use(Antd)
 Vue.use(CKEditor)
+Vue.use(VueClipboard)
+
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 
