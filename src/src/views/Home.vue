@@ -549,30 +549,12 @@
                     </a-card>
                     <a-menu slot="overlay" style="width:180px">
                       <a-menu-item key="1">
-                        <a-icon type="folder-open" />
-                        <span style="margin-left:3px">打开</span>
+                        <a-icon type="redo" />
+                        <span style="margin-left:3px">恢复</span>
                       </a-menu-item>
                       <a-menu-item key="2">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </a-menu-item>
-                      <a-menu-item key="3">
-                        <a-icon type="control" />
-                        <span style="margin-left:3px">权限设置</span>
-                      </a-menu-item>
-                      <a-menu-item key="4">
                         <a-icon type="delete" />
-                        <span style="margin-left:3px">删除</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="5">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">分享</span>
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item key="6">
-                        <a-icon type="share-alt" />
-                        <span style="margin-left:3px">详细信息</span>
+                        <span style="margin-left:3px">彻底删除</span>
                       </a-menu-item>
                     </a-menu>
                   </a-dropdown>

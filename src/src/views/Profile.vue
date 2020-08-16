@@ -219,15 +219,14 @@ export default {
       if (info.file.status === "done") {
         // Get this url from response in real world.
         this.imageUrl = info.file.response.url;
+        this.data.avatar = this.imageUrl;
         Vue.axios({
           method: "put",
           url: "http://39.106.230.20:8090/user/mod_info",
           headers: {
             token: this.$store.state.token,
           },
-          data: {
-            avatar: this.imageUrl,
-          },
+          data: this.data,
         }).then((response) => {
           console.log(response.data);
           this.getInfo();
@@ -273,6 +272,7 @@ export default {
         (this.updateInfoModalVisible = true);
     },
     updateInfo() {
+      this.temp.avatar = this.data.avatar;
       Vue.axios({
         method: "put",
         url: "http://39.106.230.20:8090/user/mod_info",
