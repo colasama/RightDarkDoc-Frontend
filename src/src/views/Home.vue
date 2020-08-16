@@ -121,127 +121,6 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
-        <v-contextmenu
-          ref="contextmenuS"
-          @contextmenu="handleContextMenu"
-          theme="bright"
-          style="width:180px"
-        >
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="folder-open" />
-            <span style="margin-left:3px">打开</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">分享</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">详细信息</span>
-          </v-contextmenu-item>
-        </v-contextmenu>
-
-        <v-contextmenu
-          ref="contextmenuM"
-          @contextmenu="handleContextMenu"
-          theme="bright"
-          style="width:180px"
-        >
-          <v-contextmenu-item @click="open_doc(current_docid)">
-            <a-icon type="folder-open" />
-            <span style="margin-left:3px">打开</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="edit" />
-            <span style="margin-left:3px">重命名</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="control" />
-            <span style="margin-left:3px">权限设置</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="delete_doc(current_docid)">
-            <a-icon type="delete" />
-            <span style="margin-left:3px">删除</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">分享</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">详细信息</span>
-          </v-contextmenu-item>
-        </v-contextmenu>
-
-        <v-contextmenu
-          ref="contextmenuZ"
-          @contextmenu="handleContextMenu"
-          theme="bright"
-          style="width:180px"
-        >
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="folder-open" />
-            <span style="margin-left:3px">打开</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">分享</span>
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">详细信息</span>
-          </v-contextmenu-item>
-        </v-contextmenu>
-
-        <v-contextmenu
-          ref="contextmenuT"
-          @contextmenu="handleContextMenu"
-          theme="bright"
-          style="width:180px"
-        >
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="folder-open" />打开
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-            <a-icon type="edit" />重命名
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="handleRightMenuClick" v-if="isleader">
-            <a-icon type="control" />权限设置
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="delete_doc" v-if="isleader">
-            <a-icon type="delete" />删除
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />分享
-          </v-contextmenu-item>
-          <v-contextmenu-item divider />
-          <v-contextmenu-item @click="handleRightMenuClick">
-            <a-icon type="share-alt" />
-            <span style="margin-left:3px">详细信息</span>
-          </v-contextmenu-item>
-        </v-contextmenu>
-
-        <v-contextmenu
-          ref="contextmenu"
-          @contextmenu="handleContextMenu"
-          theme="bright"
-          style="width:180px"
-        >
-          <v-contextmenu-item @click="restore_doc">
-            <a-icon type="redo" />恢复
-          </v-contextmenu-item>
-          <v-contextmenu-item @click="delete_trash">
-            <a-icon type="delete" />彻底删除
-          </v-contextmenu-item>
-        </v-contextmenu>
-
         <div v-if="sider_status==1">
           <!--我的文档页面部分-->
           <div class="card-container">
@@ -262,11 +141,11 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
+                  <a-dropdown :trigger="['contextmenu']">
                     <a-card
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenuM
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -279,6 +158,35 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
+                    <a-menu slot="overlay" style="width:180px">
+                      <a-menu-item key="1">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </a-menu-item>
+                      <a-menu-item key="2">
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px">重命名</span>
+                      </a-menu-item>
+                      <a-menu-item key="3">
+                        <a-icon type="control" />
+                        <span style="margin-left:3px">权限设置</span>
+                      </a-menu-item>
+                      <a-menu-item key="4">
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px">删除</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="5">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="6">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -293,11 +201,11 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
+                  <a-dropdown :trigger="['contextmenu']">
                     <a-card
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenuZ
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -310,6 +218,22 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
+                    <a-menu slot="overlay" style="width:180px">
+                      <a-menu-item key="1">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </a-menu-item>
+                      <a-menu-item key="2">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="3">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -324,11 +248,11 @@
                     slot-scope="item"
                     style="text-align:center;margin:15px auto"
                   >
+                  <a-dropdown :trigger="['contextmenu']">
                     <a-card
                       :bordered="false"
                       :hoverable="true"
                       style="min-width:240px;max-width:240px;text-align:center"
-                      v-contextmenu:contextmenuS
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -341,6 +265,22 @@
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
                     </a-card>
+                    <a-menu slot="overlay" style="width:180px">
+                      <a-menu-item key="1">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </a-menu-item>
+                      <a-menu-item key="2">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="3">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
                   </a-list-item>
                 </a-list>
               </a-tab-pane>
@@ -440,23 +380,53 @@
                   slot-scope="item"
                   style="text-align:center;margin:15px"
                 >
-                  <a-card
-                    :bordered="false"
-                    :hoverable="true"
-                    style="min-width:240px;max-width:240px;text-align:center"
-                    v-contextmenu:contextmenuT
-                    :docid="item.docid"
-                    @click="open_doc(item.docid)"
-                  >
-                    <div>
-                      <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                    </div>
-                    <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                    <div style="font-size:12px;color:#9c9c9c">
-                      {{item.lastetidtimeString}}
-                      <!--a-icon key="ellipsis" type="ellipsis" /-->
-                    </div>
+                  <a-dropdown :trigger="['contextmenu']">
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      v-contextmenu:contextmenuT
+                      :docid="item.docid"
+                      @click="open_doc(item.docid)"
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastetidtimeString}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
                   </a-card>
+                    <a-menu slot="overlay" style="width:180px">
+                      <a-menu-item key="1">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </a-menu-item>
+                      <a-menu-item key="2" v-if="isleader">
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px" >重命名</span>
+                      </a-menu-item>
+                      <a-menu-item key="3" v-if="isleader">
+                        <a-icon type="control" />
+                        <span style="margin-left:3px" >权限设置</span>
+                      </a-menu-item>
+                      <a-menu-item key="4" v-if="isleader">
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px" >删除</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="5">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="6">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
                 </a-list-item>
               </a-list>
             </a-col>
@@ -561,22 +531,51 @@
               style="text-align:center;margin:15px"
             >
               <a-list-item slot="renderItem" slot-scope="item" style="text-align:center">
-                <a-card
-                  :bordered="false"
-                  :hoverable="true"
-                  style="min-width:240px;max-width:240px;text-align:center"
-                  v-contextmenu:contextmenu
-                  :docid="item.docid"
-                >
-                  <div>
-                    <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
-                  </div>
-                  <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
-                  <div style="font-size:12px;color:#9c9c9c">
-                    {{item.lastetidtimeString}}
-                    <!--a-icon key="ellipsis" type="ellipsis" /-->
-                  </div>
-                </a-card>
+                <a-dropdown :trigger="['contextmenu']">
+                    <a-card
+                      :bordered="false"
+                      :hoverable="true"
+                      style="min-width:240px;max-width:240px;text-align:center"
+                      :docid="item.docid"
+                    >
+                      <div>
+                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                      </div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:12px;color:#9c9c9c">
+                        {{item.lastetidtimeString}}
+                        <!--a-icon key="ellipsis" type="ellipsis" /-->
+                      </div>
+                    </a-card>
+                    <a-menu slot="overlay" style="width:180px">
+                      <a-menu-item key="1">
+                        <a-icon type="folder-open" />
+                        <span style="margin-left:3px">打开</span>
+                      </a-menu-item>
+                      <a-menu-item key="2">
+                        <a-icon type="edit" />
+                        <span style="margin-left:3px">重命名</span>
+                      </a-menu-item>
+                      <a-menu-item key="3">
+                        <a-icon type="control" />
+                        <span style="margin-left:3px">权限设置</span>
+                      </a-menu-item>
+                      <a-menu-item key="4">
+                        <a-icon type="delete" />
+                        <span style="margin-left:3px">删除</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="5">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">分享</span>
+                      </a-menu-item>
+                      <a-menu-divider />
+                      <a-menu-item key="6">
+                        <a-icon type="share-alt" />
+                        <span style="margin-left:3px">详细信息</span>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
               </a-list-item>
             </a-list>
           </div>
