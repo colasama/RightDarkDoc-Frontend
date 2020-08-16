@@ -522,7 +522,7 @@
                         <a-button v-if="!ismanage&&isleader" @click="showInviteModal" type="link">
                           <a-icon type="plus" />邀请成员
                         </a-button>
-                        <a-button type="danger" @click="dismissTeam">
+                        <a-button  v-if="ismanage&&isleader" type="danger" @click="dismissTeam">
                           <a-icon type="close" />解散团队
                         </a-button>
                       </transition>
