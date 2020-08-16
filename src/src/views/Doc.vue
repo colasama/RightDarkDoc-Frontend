@@ -358,6 +358,7 @@
                 method: 'get',
                 url: `http://localhost:8090/document/${this.docid}/comment/${item.comid}/delete`
             }).then(response => {
+                console.log(response.data);
                 this.$message.success('删除成功', 1.5)
             })
         },
