@@ -9,7 +9,7 @@
                             <template slot="content">
                                 点击即可收藏文档哦~
                             </template>
-                            <a-rate @change="judgeFav" count="1" :value="isFav"
+                            <a-rate @change="judgeFav" :count="1" :value="isFav"
                             style="margin:0px 0 5px 5px;font-size:24px;" />
                             <!--↑说起来你可能不信，但是这个可以当按钮来用-->
                         </a-popover>
@@ -105,10 +105,13 @@
                 <a-list class="commentList" :header="`${data.length} replies`" item-layout="horizontal" :data-source="data">
                     <a-list-item slot="renderItem" slot-scope="item">
                         <a-comment :author="item.username" :avatar="item.avatar">
-                        <p slot="content">{{ item.content }}</p>  
+                            <p slot="content">{{ item.comment.content }}</p>  
+                            <a-tooltip slot="datetime" :title="item.comment.commenttime.format('YYYY-MM-DD HH:mm:ss')">
+                                <span>{{ item.comment.commenttime.fromNow() }}</span>
+                            </a-tooltip>
                         </a-comment>
                         <a-button 
-                            v-if="userinfo.userid === item.userid || userinfo.userid === creatorid" 
+                            v-if="userinfo.userid === item.comment.userid || userinfo.userid === creatorid" 
                             type="primary"
                             @click="handleDeleteComment(item)">
                             删除
@@ -174,15 +177,8 @@
   import { mavonEditor } from 'mavon-editor'
   import 'mavon-editor/dist/css/index.css'
   import Vue from "vue"
-  const data = [{
-      username: '1',
-      avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3669125061,4091191473&fm=26&gp=0.jpg',
-      content: '这是一条评论'
-  }, {
-      username: '2',
-      avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2556005214,1106499338&fm=26&gp=0.jpg',
-      content: '这是第二条评论'
-  }]
+  import moment from 'moment'
+
   export default {
     name: 'Doc',
     components: {
@@ -207,7 +203,7 @@
         istrash:0,
         isFav:1,
         // data - comment list, userinfo - 当前用户信息, value - 新评论
-        data,
+        data: [],
         userinfo: {},
         comment: ''
       }
@@ -334,7 +330,7 @@
                 method: 'get',
                 url: 'http://39.106.230.20:8090/user/info',
                 headers: {
-                token: this.$store.state.token,
+                    token: this.$store.state.token,
                 },
             }).then(response => {
                 console.log(response.data)
@@ -344,22 +340,53 @@
         getCommentList() {
             Vue.axios({
                 method: 'get',
-                url: `http://localhost:8090/document/${this.docid}/comments`
+                url: `http://39.106.230.20:8090/document/${this.docid}/comments`
             }).then(response => {
-                console.log(response.data)
-                this.data = response.data
+                const { commentsAndUsernameAndAvatar, success, message } = response.data
+                this.data = commentsAndUsernameAndAvatar
+                this.data.forEach(x => x.comment.commenttime = moment(x.comment.commenttimestring))
+                if (success == false) {
+                    this.$message.error(message, 1.5)
+                } 
             })
         },
         handleSubmitComment() {
-
+            Vue.axios({
+                method: 'post',
+                url: `http://39.106.230.20:8090/document/${this.docid}/createComment`,
+                data: {
+                    content: this.comment
+                },
+                headers: {
+                    token: this.$store.state.token
+                }
+            }).then(response => {
+                const { success, message } = response.data
+                if (success == true) {
+                    this.comment = ''
+                    this.$message.success(message, 1.5)
+                } else {
+                    this.$message.error(message, 1.5)
+                }
+                this.getCommentList()
+            })
         },
         handleDeleteComment(item) {
+            console.log(item)
             Vue.axios({
                 method: 'get',
-                url: `http://localhost:8090/document/${this.docid}/comment/${item.comid}/delete`
+                url: `http://39.106.230.20:8090/document/${item.comment.docid}/comment/${item.comment.comid}/delete`,
+                headers: {
+                    token: this.$store.state.token
+                }
             }).then(response => {
-                console.log(response.data);
-                this.$message.success('删除成功', 1.5)
+                const { success, message } = response.data
+                if (success == true) {
+                    this.$message.success(message, 1.5)
+                } else {
+                    this.$message.error(message, 1.5)
+                }
+                this.getCommentList()
             })
         },
         handleChange(e) {
@@ -385,7 +412,7 @@
             that.createtime=response.data.contents.createtime;
             that.docid=response.data.contents.docid;
             that.creatorid=response.data.contents.creatorid;
-            this.istrash=response.data.contents.istrash;
+            that.istrash=response.data.contents.istrash;
         });
         Vue.axios({
             method: "get",
@@ -404,5 +431,9 @@
             console.log("okay")
         });
     },
+    mounted() {
+        this.getInfo()
+        this.getCommentList()
+    }
   }
 </script>
