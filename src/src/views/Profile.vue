@@ -53,7 +53,7 @@
           <a-row style="margin-top:24px">
             <a-col :span="10">
               <b>
-                <a-icon type="user" />账户
+                <a-icon type="user" /> 账户
               </b>
             </a-col>
             <a-col :span="6">{{data.username}}</a-col>
@@ -64,7 +64,7 @@
           <a-row style="margin-top:24px">
             <a-col :span="10">
               <b>
-                <a-icon type="info-circle" />简介
+                <a-icon type="info-circle" /> 简介
               </b>
             </a-col>
             <a-col :span="6">{{data.description}}</a-col>
@@ -75,7 +75,7 @@
           <a-row style="margin-top:24px">
             <a-col :span="10">
               <b>
-                <a-icon type="phone" />手机
+                <a-icon type="phone" /> 手机
               </b>
             </a-col>
             <a-col :span="6">{{data.phone}}</a-col>
@@ -86,7 +86,7 @@
           <a-row style="margin-top:24px">
             <a-col :span="10">
               <b>
-                <a-icon type="mail" />邮箱
+                <a-icon type="mail" /> 邮箱
               </b>
             </a-col>
             <a-col :span="6">{{data.email}}</a-col>
@@ -97,7 +97,7 @@
           <a-row style="margin-top:24px">
             <a-col :span="10">
               <b>
-                <a-icon type="calendar" />生日
+                <a-icon type="calendar" /> 生日
               </b>
             </a-col>
             <a-col :span="6">{{ birthday }}</a-col>
