@@ -8,6 +8,7 @@ const state = {
     token: null,
     username: '',
     userid: '',
+    message: [],
 };
 export default new Vuex.Store({
     state,

@@ -19,9 +19,7 @@
         <a-menu
           style="background:#F3F3F3;margin-top:50px"
           :default-selected-keys="['1']"
-          :open-keys.sync="openKeys"
           mode="inline"
-          @click="handleClick"
         >
           <a-menu-item key="1">当前</a-menu-item>
           <a-menu-item key="2">历史消息</a-menu-item>

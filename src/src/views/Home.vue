@@ -13,7 +13,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="file-text" /> 标题
+                <a-icon type="file-text" />标题
               </b>
             </a-col>
             <a-col>{{current_doc.title}}</a-col>
@@ -21,7 +21,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="user" /> 创建者
+                <a-icon type="user" />创建者
               </b>
             </a-col>
             <a-col>{{current_doc.createusername}}</a-col>
@@ -29,7 +29,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="clock-circle" /> 创建时间
+                <a-icon type="clock-circle" />创建时间
               </b>
             </a-col>
             <a-col>{{current_doc.createtimeString}}</a-col>
@@ -37,7 +37,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="clock-circle" /> 最后修改时间
+                <a-icon type="clock-circle" />最后修改时间
               </b>
             </a-col>
             <a-col>{{current_doc.lastetidtimeString}}</a-col>
@@ -45,7 +45,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="hourglass" /> 修改次数
+                <a-icon type="hourglass" />修改次数
               </b>
             </a-col>
             <a-col>{{current_doc.editcount}}</a-col>
@@ -53,7 +53,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="user" /> 最后修改用户
+                <a-icon type="user" />最后修改用户
               </b>
             </a-col>
             <a-col>{{current_doc.lasteditusername}}</a-col>
@@ -61,7 +61,7 @@
           <a-row style="margin-top:24px">
             <a-col>
               <b>
-                <a-icon type="folder" /> 类型
+                <a-icon type="folder" />类型
               </b>
             </a-col>
             <a-col>{{current_doc.teamid ? "团队文档" : "普通文档"}}</a-col>
@@ -216,7 +216,10 @@
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
-                        <div>
+                        <div v-if="item.teamid!=0">
+                          <TeamFileIcon width="72" height="72" />
+                        </div>
+                        <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
@@ -276,7 +279,10 @@
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
-                        <div>
+                        <div v-if="item.teamid!=0">
+                          <TeamFileIcon width="72" height="72" />
+                        </div>
+                        <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
@@ -323,7 +329,10 @@
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
-                        <div>
+                        <div v-if="item.teamid!=0">
+                          <TeamFileIcon width="72" height="72" />
+                        </div>
+                        <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
@@ -456,9 +465,7 @@
                       @click="open_doc(item.docid)"
                     >
                       <div>
-                        <TeamFileIcon
-                        width="72"
-                        height="72"/>
+                        <TeamFileIcon width="72" height="72" />
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
@@ -667,13 +674,13 @@
 <script>
 import Vue from "vue";
 import Avatar from "vue-avatar";
-import TeamFileIcon from '../components/TeamFileIcon.vue';
+import TeamFileIcon from "../components/TeamFileIcon.vue";
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
     Avatar,
-    TeamFileIcon
+    TeamFileIcon,
   },
   data() {
     return {

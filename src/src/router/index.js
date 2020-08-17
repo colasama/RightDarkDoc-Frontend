@@ -94,7 +94,20 @@ router.beforeResolve((to, from, next) => {
       next('/doc404');
     });
   }
-  if (store.state.token==null&&to.fullPath=="/") {
+  if (store.state.token!=null) {
+    Vue.axios({
+      method: "get",
+      url: "http://39.106.230.20:8090/message/unread",
+      headers: {
+        token: store.state.token,
+      },
+    }).then(function (response) {
+      store.state.message=response.data.unReadMessages;
+    }).catch(function (res) {
+      console.log(res);
+    });
+  }
+  if (store.state.token==null&&(to.name=="Home"||to.name=="Profile")) {
     next('/welcome');
   }else{
     next();

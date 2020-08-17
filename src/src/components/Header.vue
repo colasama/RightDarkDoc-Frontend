@@ -18,15 +18,11 @@
         v-if="$store.state.token==null"
       >登录</a-button>
 
-      
       <a-popover v-if="$store.state.token!=''" placement="bottom">
         <template slot="content">
-          <a-list item-layout="horizontal" :data-source="data">
+          <a-list item-layout="horizontal" :data-source="$store.state.message">
             <a-list-item slot="renderItem" slot-scope="item">
-              <a-list-item-meta
-                :description="item.description"
-              >
-                <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
+              <a-list-item-meta :description="item.content">
                 <a-avatar
                   slot="avatar"
                   src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
@@ -36,7 +32,9 @@
           </a-list>
         </template>
         <a-button type="link" @click="tomessage">
-          <a-icon type="bell" style="color:#313131"/>
+          <a-badge v-bind:count="$store.state.message.length" >
+            <a-icon type="bell" style="color:#313131;font-size:20px" />
+          </a-badge>
         </a-button>
       </a-popover>
       <a-dropdown v-if="$store.state.token!=null">
@@ -93,23 +91,11 @@
 
 
 <script>
-const data = [
-  {
-    title: '加入团队通知',
-    description: '米奇妙♂妙♂屋向你发送了一个团队邀♂请。',
-    type:''
-  },
-  {
-    title: '你真的很棒棒',
-    description: '竟然使用了超级无敌的右墨文档。'
-  },
-];
 export default {
   components: {},
   data() {
     return {
       showLogin: true,
-      data
     };
   },
   created: function () {},
@@ -119,26 +105,26 @@ export default {
     toRegister() {
       this.$router.push({ path: "/register" });
     },
-    toLogin(){
-      this.$router.push({path:"/login"});
+    toLogin() {
+      this.$router.push({ path: "/login" });
     },
-    toIndex(){
-      this.$router.push({path:"/"});
+    toIndex() {
+      this.$router.push({ path: "/" });
       location.reload();
     },
-    toUserindex(){
-      this.$router.push({path:"/profile"});
+    toUserindex() {
+      this.$router.push({ path: "/profile" });
     },
-    tomessage(){
-      this.$router.push({path:'/message'})
+    tomessage() {
+      this.$router.push({ path: "/message" });
     },
-    exit(){
-      this.$store.state.token=null;
-      this.$store.state.username='';
-      this.$store.state.userid='';
+    exit() {
+      this.$store.state.token = null;
+      this.$store.state.username = "";
+      this.$store.state.userid = "";
       window.sessionStorage.clear();
-      this.$router.push({path:"/welcome"});
-    }
+      this.$router.push({ path: "/welcome" });
+    },
   },
 };
 </script>
