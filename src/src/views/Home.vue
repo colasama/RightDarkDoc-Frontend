@@ -24,7 +24,7 @@
                 <a-icon type="user" />创建者
               </b>
             </a-col>
-            <a-col>{{current_doc.creatorid}}</a-col>
+            <a-col>{{current_doc.createusername}}</a-col>
           </a-row>
           <a-row style="margin-top:24px">
             <a-col>
@@ -56,7 +56,7 @@
                 <a-icon type="user" />最后修改用户
               </b>
             </a-col>
-            <a-col>{{current_doc.lastedituserid}}</a-col>
+            <a-col>{{current_doc.lasteditusername}}</a-col>
           </a-row>
           <a-row style="margin-top:24px">
             <a-col>
@@ -692,7 +692,7 @@ export default {
       isedit_name: false,
       isedit_info: false,
       current_docid: 0,
-      current_doc:{},
+      current_doc: {},
       memberData: [],
       doc_info_visible: false,
     };
@@ -930,7 +930,20 @@ export default {
       });
     },
     show_doc_info(doc) {
-      this.current_doc=doc;
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/user/" + doc.creatorid,
+      }).then(function (response) {
+        doc.createusername = response.data.user.username;
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/user/" + doc.lastedituserid,
+        }).then(function (response) {
+          doc.lasteditusername = response.data.user.username;
+          that.current_doc = doc;
+        });
+      });
       this.doc_info_visible = true;
     },
     on_info_Close() {
