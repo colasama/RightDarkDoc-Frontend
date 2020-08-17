@@ -105,9 +105,9 @@
               <a-button type="link" style="margin-top:-5px">修改</a-button>
             </a-col>-->
           </a-row>
-          <a-row style="margin-top:30px;">
+          <a-row style="margin:30px 64px 0 0;">
             <a-button type="primary" @click="handleUpdateInfo">修改个人信息</a-button>
-            <a-button type="primary" @click="handleUpdatePassword" style="margin-left: 20px;">修改密码</a-button>
+            <a-button type="primary" @click="handleUpdatePassword" style="margin-left: 16px;">修改密码</a-button>
           </a-row>
         </div>
       </a-layout-content>
@@ -135,29 +135,33 @@
         </div>
       </a-layout-content-->
     </a-layout>
-    <a-modal v-model="updateInfoModalVisible" title="修改个人信息" centered @ok="updateInfo">
-      <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
+    <a-modal width="480px" v-model="updateInfoModalVisible"
+    title="修改个人信息" centered @ok="updateInfo"
+    okText="确认" cancelText="取消">
+      <a-form style="margin:24px 24px 24px 48px" :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
         <a-form-item label="手机号">
-          <a-input v-model="temp.phone" />
+          <a-input style="width:240px" v-model="temp.phone" />
         </a-form-item>
         <a-form-item label="生日">
-          <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 100%;" />
+          <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 240px" />
         </a-form-item>
         <a-form-item label="邮箱">
-          <a-input v-model="temp.email" />
+          <a-input style="width:240px" v-model="temp.email" />
         </a-form-item>
         <a-form-item label="个人描述">
-          <a-input v-model="temp.description" />
+          <a-input style="width:240px" v-model="temp.description" />
         </a-form-item>
-      </a-form>>
+      </a-form>
     </a-modal>
-    <a-modal v-model="updatePasswordModalVisible" title="修改密码" center @ok="updatePassword">
-      <a-form :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
+    <a-modal width="480px" v-model="updatePasswordModalVisible"
+    title="修改密码" centered @ok="updatePassword"
+    cancelTest="取消" okText="确认">
+      <a-form style="margin:24px" :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
         <a-form-item label="旧密码">
-          <a-input v-model="temp.old_password" />
+          <a-input style="width:270px" v-model="temp.old_password" />
         </a-form-item>
         <a-form-item label="新密码">
-          <a-input v-model="temp.new_password" />
+          <a-input style="width:270px" v-model="temp.new_password" />
         </a-form-item>
       </a-form>
     </a-modal>
