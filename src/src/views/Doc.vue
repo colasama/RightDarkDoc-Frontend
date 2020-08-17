@@ -41,13 +41,13 @@
                   </a-radio-group>
                 </div>
               </template>
-              <a-button style="margin-right:24px" v-if="teamid!=0">
+              <a-button style="margin-right:24px" v-if="teamid!=0&&isteamauth">
                 <a-icon type="safety" />团队权限
               </a-button>
             </a-popover>
             <a-popover placement="bottomLeft" trigger="click">
               <template slot="content">
-                <div style="margin-top:12px">
+                <div style="margin-top:12px" v-if="creatorid==$store.state.userid">
                   <a-radio-group v-model="tempauth" @change="onAuthChange">
                     <a-radio-button :value="1">可查看</a-radio-button>
                     <a-radio-button :value="3">可讨论</a-radio-button>
@@ -59,7 +59,11 @@
                   v-if="tempauth!=0"
                 >分享链接http://localhost:8080/#/doc/{{docid}}</div>
                 <div style="text-align:center">
-                  <a-button style="margin:24px 10px 10px 0px" @click="stopShare">停止分享</a-button>
+                  <a-button
+                    style="margin:24px 10px 10px 0px"
+                    @click="stopShare"
+                    v-if="creatorid==$store.state.userid"
+                  >停止分享</a-button>
                 </div>
               </template>
               <a-button>
@@ -76,6 +80,9 @@
       <div class="text-editor">
         <!--InEditor :editor="s1" :value="s2"></InEditor-->
         <mavon-editor
+          v-bind:editable="iseditable"
+          :subfield="iseditable"
+          defaultOpen="preview"
           v-model="content"
           ref="md"
           @imgAdd="$imgAdd"
@@ -113,7 +120,7 @@
             <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
           </a-list-item>
         </a-list>
-        <a-comment class="addComment">
+        <a-comment class="addComment" v-if="iscommentable">
           <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
           <div slot="content">
             <a-form-item>
@@ -178,8 +185,8 @@ export default {
   },
   data() {
     return {
-      tempauth:0,
-      tempteamauth:1,
+      tempauth: 0,
+      tempteamauth: 1,
       submenuCurrent: "",
       groupAuthValue: 0,
       personAuthValue: 0,
@@ -191,6 +198,9 @@ export default {
       editcount: 0,
       teamauth: 0,
       auth: 0,
+      iseditable: true,
+      iscommentable: true,
+      isteamauth: false,
       teamid: 0,
       docid: this.$route.params.id,
       istrash: 0,
@@ -325,7 +335,7 @@ export default {
       }).then(function (response) {
         if (response.data.success == true) {
           that.$message.success("权限更改成功！", 1);
-          that.auth=that.tempauth;
+          that.auth = that.tempauth;
         } else {
           that.$message.error("权限更改失败！", 1);
         }
@@ -346,7 +356,7 @@ export default {
       }).then(function (response) {
         if (response.data.success == true) {
           that.$message.success("权限更改成功！", 1);
-          that.auth=that.tempauth;
+          that.auth = that.tempauth;
         } else {
           that.$message.error("权限更改失败！", 1);
         }
@@ -368,7 +378,7 @@ export default {
       }).then(function (response) {
         if (response.data.success == true) {
           that.$message.success("已停止共享！", 1);
-          that.auth=that.tempauth;
+          that.auth = that.tempauth;
         } else {
           that.$message.error("权限更改失败！", 1);
         }
@@ -469,8 +479,23 @@ export default {
       that.creatorid = response.data.contents.creatorid;
       that.istrash = response.data.contents.istrash;
       that.teamid = response.data.contents.teamid;
-      that.tempauth=that.auth;
-      that.tempteamauth=that.teamauth;
+      that.tempauth = that.auth;
+      that.tempteamauth = that.teamauth;
+      if (that.teamid != 0) {
+        if (that.creatorid == that.$store.state.userid) {
+          that.isteamauth == true;
+        }
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/team/" + that.teamid + "/view",
+        }).then(function (res) {
+          if (res.data.teamCreator.userid == that.$store.state.userid) {
+            that.isteamauth = true;
+          } else {
+            that.isteamauth = false;
+          }
+        });
+      }
     });
     Vue.axios({
       method: "get",
