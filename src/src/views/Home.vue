@@ -2,7 +2,7 @@
   <div class="home">
     <a-layout style="height:100%">
       <a-drawer
-        title="详细信息" 
+        title="详细信息"
         placement="right"
         maskClosable
         :closable="true"
@@ -453,7 +453,13 @@
                   <a-list-item slot="renderItem" slot-scope="item" v-if="check_member(item.userid)">
                     <a-row style="margin:12px 48px 12px 28px;width:100%">
                       <a-col :span="22">
-                        <a-avatar size="large">null</a-avatar>
+                        <a-avatar :size="36" v-if="item.avatar!=null" :src="item.avatar"></a-avatar>
+                        <avatar
+                          :size="36"
+                          inline
+                          v-if="item.avatar==null"
+                          :username="`${item.username}`"
+                        ></avatar>
                         {{ item.username }}
                       </a-col>
                       <a-col :span="2" style="text-align:right">
@@ -869,10 +875,10 @@ export default {
     },
     show_doc_info(docid) {
       console.log(docid);
-      this.doc_info_visible=true;
+      this.doc_info_visible = true;
     },
     on_info_Close() {
-      this.doc_info_visible=false;
+      this.doc_info_visible = false;
     },
     createDocBTN() {
       var that = this;
@@ -999,7 +1005,7 @@ export default {
         },
       }).then(function (response) {
         if (response.data.success == true) {
-          that.$message.success("邀请成功", 1);
+          that.$message.success("邀请已发送", 1);
         } else {
           that.$message.error("邀请失败", 1);
         }

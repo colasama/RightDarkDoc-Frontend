@@ -35,7 +35,7 @@
             </a-list-item>
           </a-list>
         </template>
-        <a-button type="link">
+        <a-button type="link" @click="tomessage">
           <a-icon type="bell" style="color:#313131"/>
         </a-button>
       </a-popover>
@@ -128,6 +128,9 @@ export default {
     },
     toUserindex(){
       this.$router.push({path:"/profile"});
+    },
+    tomessage(){
+      this.$router.push({path:'/message'})
     },
     exit(){
       this.$store.state.token=null;
