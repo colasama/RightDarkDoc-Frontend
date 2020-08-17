@@ -217,7 +217,7 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" />
+                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px" />
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -280,7 +280,7 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" />
+                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -330,7 +330,7 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" />
+                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -465,7 +465,7 @@
                       @click="open_doc(item.docid)"
                     >
                       <div>
-                        <TeamFileIcon width="72" height="72" />
+                        <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
