@@ -9,9 +9,64 @@
         :visible="doc_info_visible"
         @close="on_info_Close"
       >
-        <p>标题</p>
-        <p>创建者</p>
-        <p>创建时间</p>
+        <div style>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="file-text" />标题
+              </b>
+            </a-col>
+            <a-col>{{current_doc.title}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="user" />创建者
+              </b>
+            </a-col>
+            <a-col>{{current_doc.creatorid}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="clock-circle" />创建时间
+              </b>
+            </a-col>
+            <a-col>{{current_doc.createtimeString}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="clock-circle" />最后修改时间
+              </b>
+            </a-col>
+            <a-col>{{current_doc.lastetidtimeString}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="clock-circle" />修改次数
+              </b>
+            </a-col>
+            <a-col>{{current_doc.editcount}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="user" />最后修改用户
+              </b>
+            </a-col>
+            <a-col>{{current_doc.lastedituserid}}</a-col>
+          </a-row>
+          <a-row style="margin-top:24px">
+            <a-col>
+              <b>
+                <a-icon type="folder" />类型
+              </b>
+            </a-col>
+            <a-col>{{current_doc.teamid ? "团队文档" : "普通文档"}}</a-col>
+          </a-row>
+        </div>
       </a-drawer>
       <a-layout-sider style="min-width: 256px;height:100%;text-align:left;">
         <a-menu
@@ -193,7 +248,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="6" @click="show_doc_info(item.docid)">
+                        <a-menu-item key="6" @click="show_doc_info(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -240,7 +295,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
+                        <a-menu-item key="3" @click="show_doc_info(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -287,7 +342,7 @@
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="3" @click="show_doc_info(item.docid)">
+                        <a-menu-item key="3" @click="show_doc_info(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -432,7 +487,7 @@
                         <span style="margin-left:3px">分享</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="6" @click="show_doc_info(item.docid)">
+                      <a-menu-item key="6" @click="show_doc_info(item)">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">详细信息</span>
                       </a-menu-item>
@@ -637,6 +692,7 @@ export default {
       isedit_name: false,
       isedit_info: false,
       current_docid: 0,
+      current_doc:{},
       memberData: [],
       doc_info_visible: false,
     };
@@ -873,8 +929,8 @@ export default {
         that.load_doc();
       });
     },
-    show_doc_info(docid) {
-      console.log(docid);
+    show_doc_info(doc) {
+      this.current_doc=doc;
       this.doc_info_visible = true;
     },
     on_info_Close() {
