@@ -25,7 +25,7 @@
               <a-list-item-meta :description="item.content">
                 <a-avatar
                   slot="avatar"
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  v-bind:icon="typetoIcon(item.type)"
                 />
               </a-list-item-meta>
             </a-list-item>
@@ -117,6 +117,21 @@ export default {
     },
     tomessage() {
       this.$router.push({ path: "/message" });
+    },
+    typetoIcon(type){
+      var str = "info";
+      switch (type) {
+        case 0:
+          str = "info";
+          break;
+        case 1:
+          str = "team";
+          break;
+        case 2:
+          str = "team";
+          break;  
+      }
+      return str;
     },
     exit() {
       this.$store.state.token = null;

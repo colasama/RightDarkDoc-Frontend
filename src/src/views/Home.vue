@@ -64,7 +64,7 @@
                 <a-icon type="folder" />类型
               </b>
             </a-col>
-            <a-col>{{current_doc.teamid ? "团队文档" : "普通文档"}}</a-col>
+            <a-col>{{current_doc.teamid ? ("团队文档"+"（团队号："+current_doc.teamid+"）"): "普通文档"}}</a-col>
           </a-row>
         </div>
       </a-drawer>
@@ -109,7 +109,7 @@
             <div style="text-align:center">
               <a-list
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }"
-                :data-source="docs"
+                :data-source="templates"
                 style="text-align:center;margin:24px"
               >
                 <a-list-item
@@ -118,9 +118,11 @@
                   style="text-align:center;margin:10px auto"
                 >
                   <a-card
-                    :bordered="false"
+                    v-bind:bordered="item.tempid==current_tempid"
                     :hoverable="true"
-                    style="min-width:220px;max-width:220px;text-align:center"
+                    style="min-width:220px;max-width:220px;text-align:center;border-color:#457AD3;"
+                    @click="chooseTemplate(item.tempid)"
+                    @ok="createFromTemplete"
                   >
                     <div>
                       <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -217,7 +219,11 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px" />
+                          <TeamFileIcon
+                            width="72"
+                            height="72"
+                            style="margin-bottom:-10px;margin-top:-3px"
+                          />
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -280,7 +286,11 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
+                          <TeamFileIcon
+                            width="72"
+                            height="72"
+                            style="margin-bottom:-10px;margin-top:-3px"
+                          />
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -330,7 +340,11 @@
                         @click="open_doc(item.docid)"
                       >
                         <div v-if="item.teamid!=0">
-                          <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
+                          <TeamFileIcon
+                            width="72"
+                            height="72"
+                            style="margin-bottom:-10px;margin-top:-3px"
+                          />
                         </div>
                         <div v-else>
                           <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
@@ -468,7 +482,11 @@
                       @click="open_doc(item.docid)"
                     >
                       <div>
-                        <TeamFileIcon width="72" height="72" style="margin-bottom:-10px;margin-top:-3px"/>
+                        <TeamFileIcon
+                          width="72"
+                          height="72"
+                          style="margin-bottom:-10px;margin-top:-3px"
+                        />
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
@@ -697,6 +715,7 @@ export default {
       teaminfo: "",
       docs: [],
       teams: [],
+      templates: [],
       current_team: {},
       team_creator: {},
       team_members: [],
@@ -707,6 +726,7 @@ export default {
       isedit_info: false,
       current_docid: 0,
       current_doc: {},
+      current_tempid: 0,
       memberData: [],
       doc_info_visible: false,
     };
@@ -720,6 +740,7 @@ export default {
   mounted() {
     this.load_team();
     this.load_doc();
+    this.load_template();
   },
   methods: {
     load_team() {
@@ -790,6 +811,21 @@ export default {
           that.isleader = false;
         }
       });
+    },
+    load_template() {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/template/pub",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        that.templates = response.data.contents;
+      });
+    },
+    chooseTemplate(tempid) {
+      this.current_tempid = tempid;
     },
     handleClick(e) {
       console.log("click", e);
@@ -1010,11 +1046,50 @@ export default {
     },
     createFromTempleteBTN() {
       this.createFromTempleteVisible = true;
+      this.current_team = null;
     },
     createFromTempleteTeamBTN() {
       this.createFromTempleteVisible = true;
     },
-    createFromTemplete() {},
+    createFromTemplete() {
+      if (this.current_tempid == 0) {
+        this.$message.error("请选择模板", 1);
+        return;
+      }
+      var url = "";
+      if (this.current_team == null) {
+        url =
+          "http://39.106.230.20:8090/document/template/" + this.current_tempid;
+      } else {
+        url =
+          "http://39.106.230.20:8090/team/" +
+          this.current_team.teamid +
+          "/createDocument/template/" +
+          this.current_tempid;
+      }
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: url,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("创建文档成功", 1).then(() => {
+            if (that.current_team == null) {
+              that.$router.push({ path: "/doc/" + response.data.contents.docid });
+            }
+            else{
+              that.$router.push({ path: "/doc/" + response.data.teamDocument.docid });
+            }
+          });
+        } else {
+          that.$message.error("创建文档失败", 1);
+        }
+        that.createFromTempleteVisible = false;
+      });
+    },
     createTeamBTN() {
       this.createTeamVisible = true;
     },
@@ -1187,9 +1262,6 @@ export default {
         }
         that.load_doc();
       });
-    },
-    rightEvent(docid) {
-      console.log(docid);
     },
     showInviteModal() {
       this.inviteVisible = true;
