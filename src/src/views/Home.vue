@@ -456,7 +456,9 @@
                       @click="open_doc(item.docid)"
                     >
                       <div>
-                        <a-icon style="font-size:64px;color:#457AD3" type="file-word"></a-icon>
+                        <TeamFileIcon
+                        width="64"
+                        height="64"/>
                       </div>
                       <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                       <div style="font-size:12px;color:#9c9c9c">
@@ -665,11 +667,13 @@
 <script>
 import Vue from "vue";
 import Avatar from "vue-avatar";
+import TeamFileIcon from '../components/TeamFileIcon.vue';
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
     Avatar,
+    TeamFileIcon
   },
   data() {
     return {
