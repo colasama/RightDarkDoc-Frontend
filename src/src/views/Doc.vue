@@ -33,9 +33,10 @@
           <div style="margin:11px 48px 0 0;text-align:right">
             <a-popover placement="bottomLeft" trigger="click">
               <template slot="content" style="text-align:right">
-                <div style="margin-top:12px">
-                  <a-radio-group v-model="tempteamauth" @change="onTeamAuthChange">
-                    <a-radio-button :value="1">可查看</a-radio-button>
+                <div style="margin-top:12px">团队权限设置</div>
+                <div style="margin-top:5px">
+                  <a-radio-group style="margin-bottom:12px" v-model="tempteamauth" @change="onTeamAuthChange">
+                    <a-radio-button :value="1">仅查看</a-radio-button>
                     <a-radio-button :value="3">可讨论</a-radio-button>
                     <a-radio-button :value="7">可编辑</a-radio-button>
                   </a-radio-group>
@@ -50,7 +51,7 @@
                 <div style="margin-top:12px">权限设置</div>
                 <div style="margin-top:5px;text-align:center" v-if="creatorid==$store.state.userid">
                   <a-radio-group v-model="tempauth" @change="onAuthChange">
-                    <a-radio-button :value="1">可查看</a-radio-button>
+                    <a-radio-button :value="1">仅查看</a-radio-button>
                     <a-radio-button :value="3">可讨论</a-radio-button>
                     <a-radio-button :value="7">可编辑</a-radio-button>
                   </a-radio-group>
@@ -95,10 +96,10 @@
 
     <div style="text-align:center">
       <div class="text-editor">
-        <!--InEditor :editor="s1" :value="s2"></InEditor-->
         <mavon-editor
           v-bind:editable="iseditable"
           :subfield="iseditable"
+          :toolbarsFlag="iseditable"
           defaultOpen="preview"
           v-model="content"
           ref="md"
@@ -115,7 +116,7 @@
       <div style="margin:48px">
         <a-list
           class="commentList"
-          :header="`${data.length} replies`"
+          :header="`${data.length}个回复`"
           item-layout="horizontal"
           :data-source="data"
         >
