@@ -46,8 +46,9 @@
               </a-button>
             </a-popover>
             <a-popover placement="bottomLeft" trigger="click">
-              <template slot="content">
-                <div style="margin-top:12px" v-if="creatorid==$store.state.userid">
+              <template slot="content" style="text-align:center">
+                <div style="margin-top:12px">权限设置</div>
+                <div style="margin-top:5px;text-align:center" v-if="creatorid==$store.state.userid">
                   <a-radio-group v-model="tempauth" @change="onAuthChange">
                     <a-radio-button :value="1">可查看</a-radio-button>
                     <a-radio-button :value="3">可讨论</a-radio-button>
@@ -57,7 +58,23 @@
                 <div
                   style="margin-top:12px"
                   v-if="tempauth!=0"
-                >分享链接http://localhost:8080/#/doc/{{docid}}</div>
+                >
+                <div>分享链接</div>
+                <a-input-search
+                  :value="pagePath"
+                  @search="onShareCopy"
+                  style="margin-top:5px;width:220px"
+                  disabled>
+                  <a-button class="tag-read"
+                  v-clipboard:copy="pagePath"
+                  v-clipboard:success="onShareCopy"
+                  v-clipboard:error="onShareCopyError"
+                  @click="onShareCopy"
+                  slot="enterButton">
+                    复制
+                  </a-button>
+                </a-input-search>
+                </div>
                 <div style="text-align:center">
                   <a-button
                     style="margin:24px 10px 10px 0px"
@@ -185,6 +202,7 @@ export default {
   },
   data() {
     return {
+      pagePath: window.location.href,
       tempauth: 0,
       tempteamauth: 1,
       submenuCurrent: "",
@@ -455,6 +473,14 @@ export default {
         }
         this.getCommentList();
       });
+    },
+    onShareCopy(e){
+      this.$message.success("成功复制链接~", 1);
+      console.log(e)
+    },
+    onShareCopyError(e){
+      this.$message.error("复制链接失败！", 1);
+      console.log(e)
     },
     handleChange(e) {
       this.comment = e.target.value;
