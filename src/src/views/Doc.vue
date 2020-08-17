@@ -198,8 +198,9 @@ export default {
       editcount: 0,
       teamauth: 0,
       auth: 0,
-      iseditable: true,
-      iscommentable: true,
+      isTeammember: false,
+      iseditable: false,
+      iscommentable: false,
       isteamauth: false,
       teamid: 0,
       docid: this.$route.params.id,
@@ -243,6 +244,7 @@ export default {
     },
     toWorkshop() {
       this.$router.push({ path: "/" });
+      location.reload();
     },
     saveDoc() {
       console.log("Saving...");
@@ -479,8 +481,19 @@ export default {
       that.creatorid = response.data.contents.creatorid;
       that.istrash = response.data.contents.istrash;
       that.teamid = response.data.contents.teamid;
+      that.isTeammember = response.data.isTeammember;
       that.tempauth = that.auth;
       that.tempteamauth = that.teamauth;
+      if (that.creatorid == that.$store.state.userid) {
+        that.iseditable = true;
+        that.iscommentable = true;
+      }
+      if (that.auth >= 3 || (that.teamauth >= 3 && that.isTeammember)) {
+        that.iscommentable = true;
+      }
+      if (that.auth >= 7 || (that.teamauth >= 7 && that.isTeammember)) {
+        that.iseditable = true;
+      }
       if (that.teamid != 0) {
         if (that.creatorid == that.$store.state.userid) {
           that.isteamauth == true;
@@ -491,6 +504,8 @@ export default {
         }).then(function (res) {
           if (res.data.teamCreator.userid == that.$store.state.userid) {
             that.isteamauth = true;
+            that.iscommentable = true;
+            that.iseditable = true;
           } else {
             that.isteamauth = false;
           }
