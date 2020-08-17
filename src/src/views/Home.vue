@@ -392,7 +392,7 @@
             </a-col>
           </a-row>
           <a-row>
-            <a-col :span="21" style="text-align:left">
+            <a-col :span="18" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:20px;margin-left:24px">
                 <span style>{{current_team.teaminfo}}</span>
                 <transition name="slide-fade">
@@ -415,6 +415,9 @@
                 />
                 <!--这个@search本质上就是click-->
               </div>
+            </a-col>
+            <a-col :span="3">
+              <span style="font-size:20px">团队号：{{current_team.teamid}}</span>
             </a-col>
             <a-col :span="1" style="text-align:right;margin:0 48px 10px 0">
               <div v-if="isleader">
