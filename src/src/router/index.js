@@ -78,10 +78,26 @@ router.beforeResolve((to, from, next) => {
     store.state.userid=window.sessionStorage.getItem('userid');
   }
   console.log(store.state.token);
+  if (to.name=="Document") {
+    var docid = to.params.id;
+    Vue.axios({
+      method: "get",
+      url: "http://39.106.230.20:8090/document/" + docid,
+      headers: {
+        token: store.state.token,
+      },
+    }).then(function (response) {
+      if (response.data.success==false) {
+        next('/doc404');
+      }
+    }).catch(function () {
+      next('/doc404');
+    });
+  }
   if (store.state.token==null&&to.fullPath=="/") {
-    next('/welcome')
+    next('/welcome');
   }else{
-    next()
+    next();
   }
 })
 
