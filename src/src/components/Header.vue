@@ -24,16 +24,17 @@
               <div style="text-align:center;margin:230px 0 229px 0;color:#A0A0A0" v-if="$store.state.message==''">
                 没有新消息哦~
               </div>
+              
               <a-list 
               :pagination="pagination" 
               item-layout="vertical" 
               style="min-height:480px"
               v-if="$store.state.message!=''"
               :data-source="$store.state.message">
-                
-              <!--transition name="slide-fade"-->
-                <a-list-item slot="renderItem" slot-scope="item" v-if="!item.isread">
-                  <a-col>
+              <!--transition-group name="slide-fade"-->
+                <a-list-item slot="renderItem" slot-scope="item" >
+                  <transition name="slide-fade">
+                  <a-col v-if="!item.isread">
                     <a-row>
                     <a-list-item-meta :description="item.content">
                       <a slot="title" v-if="item.type===2">团队邀请</a>
@@ -55,9 +56,9 @@
                       </a-col>
                     </a-row>
                   </a-col>
-                  
+                  </transition>
                 </a-list-item>
-                
+                <!--/transition-group-->
               </a-list>
               
             </a-tab-pane>
