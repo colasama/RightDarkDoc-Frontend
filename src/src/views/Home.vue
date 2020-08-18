@@ -179,6 +179,7 @@
             </span>
             <a-menu-item-group key="team">
               <a-menu-item v-for="item in teams" v-bind:key="'t'+item.teamid">{{item.teamname}}</a-menu-item>
+              <a-button type="link" style="margin-left:32px;color:#999999"><a-icon type="plus"/>添加团队</a-button>
             </a-menu-item-group>
           </a-sub-menu>
           <a-menu-item key="trash" style="margin-top:20px">
@@ -240,24 +241,20 @@
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
                         <a-menu-item key="2">
-                          <a-icon type="edit" />
-                          <span style="margin-left:3px">重命名</span>
-                        </a-menu-item>
-                        <a-menu-item key="3">
                           <a-icon type="control" />
                           <span style="margin-left:3px">权限设置</span>
                         </a-menu-item>
-                        <a-menu-item key="4" @click="delete_doc(item.docid)">
+                        <a-menu-item key="3" @click="delete_doc(item.docid)">
                           <a-icon type="delete" />
                           <span style="margin-left:3px">删除</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="5">
+                        <a-menu-item key="4">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="6" @click="show_doc_info(item)">
+                        <a-menu-item key="5" @click="show_doc_info(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">详细信息</span>
                         </a-menu-item>
@@ -500,24 +497,20 @@
                         <span style="margin-left:3px">打开</span>
                       </a-menu-item>
                       <a-menu-item key="2" v-if="isleader">
-                        <a-icon type="edit" />
-                        <span style="margin-left:3px">重命名</span>
-                      </a-menu-item>
-                      <a-menu-item key="3" v-if="isleader">
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </a-menu-item>
-                      <a-menu-item key="4" v-if="isleader" @click="delete_doc(item.docid)">
+                      <a-menu-item key="3" v-if="isleader" @click="delete_doc(item.docid)">
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="5">
+                      <a-menu-item key="4">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">分享</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="6" @click="show_doc_info(item)">
+                      <a-menu-item key="5" @click="show_doc_info(item)">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">详细信息</span>
                       </a-menu-item>
