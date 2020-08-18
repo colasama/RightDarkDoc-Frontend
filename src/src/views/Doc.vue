@@ -101,62 +101,79 @@
     </div>
 
     <div style="text-align:center">
-      <div class="text-editor">
-        <mavon-editor
-          v-bind:editable="iseditable"
-          :subfield="iseditable"
-          :toolbarsFlag="iseditable"
-          defaultOpen="preview"
-          v-model="content"
-          ref="md"
-          @imgAdd="$imgAdd"
-          @imgDel="$imgDel"
-          @save="saveDoc"
-          @change="textChange"
-          style="min-height:1600px;z-index:0"
-        />
-      </div>
+      <a-row>
+        <a-col :span="4">
+          
+          <a-timeline style="width:200px;margin:48px">
+            <a-button>编辑记录查看</a-button>
+            <a-timeline-item>Create a services site 2015-09-01</a-timeline-item>
+            <a-timeline-item>Solve initial network problems 2015-09-01</a-timeline-item>
+            <a-timeline-item>Technical testing 2015-09-01</a-timeline-item>
+            <a-timeline-item>Network problems being solved 2015-09-01</a-timeline-item>
+          </a-timeline>
+        </a-col>
+        <a-col :span="16">
+          <div class="text-editor">
+            <mavon-editor
+              v-bind:editable="iseditable"
+              :subfield="iseditable"
+              :toolbarsFlag="iseditable"
+              defaultOpen="preview"
+              v-model="content"
+              ref="md"
+              @imgAdd="$imgAdd"
+              @imgDel="$imgDel"
+              @save="saveDoc"
+              @change="textChange"
+              style="min-height:1600px;z-index:0"
+            />
+          </div>
+        </a-col>
+        <a-col :span="4">
+          <div class="commentBox">
+            <div style="margin:48px">
+              <a-list
+                class="commentList"
+                :header="`${data.length}个回复`"
+                item-layout="horizontal"
+                :data-source="data"
+              >
+                <a-list-item slot="renderItem" slot-scope="item">
+                  <a-comment :author="item.username" :avatar="item.avatar">
+                    <p slot="content">{{ item.comment.content }}</p>
+                    <a-tooltip
+                      slot="datetime"
+                      :title="item.comment.commenttime.format('YYYY-MM-DD HH:mm:ss')"
+                    >
+                      <span>{{ item.comment.commenttime.fromNow() }}</span>
+                    </a-tooltip>
+                  </a-comment>
+                  <a-button
+                    v-if="userinfo.userid === item.comment.userid || userinfo.userid === creatorid"
+                    type="primary"
+                    @click="handleDeleteComment(item)"
+                  >删除</a-button>
+                  <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
+                </a-list-item>
+              </a-list>
+              <a-comment class="addComment" v-if="iscommentable">
+                <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
+                <div slot="content">
+                  <a-form-item>
+                    <a-textarea :rows="4" :value="comment" @change="handleChange" />
+                  </a-form-item>
+                  <a-form-item>
+                    <a-button html-type="submit" type="primary" @click="handleSubmitComment">添加评论</a-button>
+                  </a-form-item>
+                </div>
+              </a-comment>
+            </div>
+          </div>
+        </a-col>
+      </a-row>
     </div>
 
-    <div class="commentBox">
-      <div style="margin:48px">
-        <a-list
-          class="commentList"
-          :header="`${data.length}个回复`"
-          item-layout="horizontal"
-          :data-source="data"
-        >
-          <a-list-item slot="renderItem" slot-scope="item">
-            <a-comment :author="item.username" :avatar="item.avatar">
-              <p slot="content">{{ item.comment.content }}</p>
-              <a-tooltip
-                slot="datetime"
-                :title="item.comment.commenttime.format('YYYY-MM-DD HH:mm:ss')"
-              >
-                <span>{{ item.comment.commenttime.fromNow() }}</span>
-              </a-tooltip>
-            </a-comment>
-            <a-button
-              v-if="userinfo.userid === item.comment.userid || userinfo.userid === creatorid"
-              type="primary"
-              @click="handleDeleteComment(item)"
-            >删除</a-button>
-            <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
-          </a-list-item>
-        </a-list>
-        <a-comment class="addComment" v-if="iscommentable">
-          <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
-          <div slot="content">
-            <a-form-item>
-              <a-textarea :rows="4" :value="comment" @change="handleChange" />
-            </a-form-item>
-            <a-form-item>
-              <a-button html-type="submit" type="primary" @click="handleSubmitComment">添加评论</a-button>
-            </a-form-item>
-          </div>
-        </a-comment>
-      </div>
-    </div>
+    
   </div>
 </template>
 <style>
@@ -186,7 +203,7 @@
 }
 
 .commentBox {
-  width: 1200px;
+  width: 300px;
   margin: 24px auto;
   background: #ffffff;
   border: 1px hsl(0, 0%, 92.7%) solid;
