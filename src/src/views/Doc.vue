@@ -35,7 +35,11 @@
               <template slot="content" style="text-align:right">
                 <div style="margin-top:12px">团队权限设置</div>
                 <div style="margin-top:5px">
-                  <a-radio-group style="margin-bottom:12px" v-model="tempteamauth" @change="onTeamAuthChange">
+                  <a-radio-group
+                    style="margin-bottom:12px"
+                    v-model="tempteamauth"
+                    @change="onTeamAuthChange"
+                  >
                     <a-radio-button :value="1">仅查看</a-radio-button>
                     <a-radio-button :value="3">可讨论</a-radio-button>
                     <a-radio-button :value="7">可编辑</a-radio-button>
@@ -56,31 +60,26 @@
                     <a-radio-button :value="7">可编辑</a-radio-button>
                   </a-radio-group>
                 </div>
-                <div
-                  style="margin-top:12px"
-                  v-if="tempauth!=0"
-                >
-                <div>分享链接</div>
-                <a-input-search
-                  :value="pagePath"
-                  @search="onShareCopy"
-                  style="margin-top:5px;width:220px"
-                  disabled>
-                  <a-button class="tag-read"
-                  v-clipboard:copy="pagePath"
-                  v-clipboard:success="onShareCopy"
-                  v-clipboard:error="onShareCopyError"
-                  @click="onShareCopy"
-                  slot="enterButton">
-                    复制
-                  </a-button>
-                </a-input-search>
+                <div style="margin-top:12px" v-if="tempauth!=0">
+                  <div>分享链接</div>
+                  <a-input-search
+                    :value="pagePath"
+                    @search="onShareCopy"
+                    style="margin-top:5px;width:220px"
+                    disabled
+                  >
+                    <a-button
+                      class="tag-read"
+                      v-clipboard:copy="pagePath"
+                      v-clipboard:success="onShareCopy"
+                      v-clipboard:error="onShareCopyError"
+                      @click="onShareCopy"
+                      slot="enterButton"
+                    >复制</a-button>
+                  </a-input-search>
                 </div>
                 <div v-if="tempauth!=0" style="text-align:center;margin:12px;">
-                  <qrcode 
-                  :value="pagePath"
-                  :options="{ size: 120 }">
-                  </qrcode>
+                  <qrcode :value="pagePath" :options="{ size: 120 }"></qrcode>
                 </div>
                 <div style="text-align:center">
                   <a-button
@@ -103,13 +102,11 @@
     <div style="text-align:center">
       <a-row>
         <a-col :span="4">
-          
-          <a-timeline style="width:200px;margin:48px">
-            <a-button>编辑记录查看</a-button>
-            <a-timeline-item>Create a services site 2015-09-01</a-timeline-item>
-            <a-timeline-item>Solve initial network problems 2015-09-01</a-timeline-item>
-            <a-timeline-item>Technical testing 2015-09-01</a-timeline-item>
-            <a-timeline-item>Network problems being solved 2015-09-01</a-timeline-item>
+          <a-timeline style="width:260px;margin:48px">
+            <a-timeline-item
+              v-for="item in editrecord"
+              :key="item.edittime"
+            >{{item.userid}}于{{item.edittimestring}}编辑</a-timeline-item>
           </a-timeline>
         </a-col>
         <a-col :span="16">
@@ -172,8 +169,6 @@
         </a-col>
       </a-row>
     </div>
-
-    
   </div>
 </template>
 <style>
@@ -217,14 +212,14 @@ import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import Vue from "vue";
 import moment from "moment";
-import Qrcode from '@chenfengyuan/vue-qrcode';
+import Qrcode from "@chenfengyuan/vue-qrcode";
 
 export default {
   name: "Doc",
   components: {
     //InEditor,
     mavonEditor,
-    qrcode: Qrcode
+    qrcode: Qrcode,
   },
   data() {
     return {
@@ -250,6 +245,7 @@ export default {
       docid: this.$route.params.id,
       istrash: 0,
       isFav: 1,
+      editrecord: [],
       // data - comment list, userinfo - 当前用户信息, value - 新评论
       data: [],
       userinfo: {},
@@ -282,6 +278,27 @@ export default {
     },
     textChange(value, render) {
       this.html = render;
+    },
+    getRecord(docid) {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: " http://39.106.230.20:8090/document/" + docid + "/editRecord",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        that.editrecord = response.data.docRecord;
+        for (let index = 0; index < that.editrecord.length; index++) {
+          const element = that.editrecord[index];
+          Vue.axios({
+            method: "get",
+            url: " http://39.106.230.20:8090/user/" + element.userid,
+          }).then(function (res) {
+            that.editrecord[index].userid = res.data.user.username;
+          });
+        }
+      });
     },
     test() {
       console.log(this.html);
@@ -500,13 +517,13 @@ export default {
         this.getCommentList();
       });
     },
-    onShareCopy(e){
+    onShareCopy(e) {
       this.$message.success("成功复制链接~", 1);
-      console.log(e)
+      console.log(e);
     },
-    onShareCopyError(e){
+    onShareCopyError(e) {
       this.$message.error("复制链接失败！", 1);
-      console.log(e)
+      console.log(e);
     },
     handleChange(e) {
       this.comment = e.target.value;
@@ -577,6 +594,7 @@ export default {
         that.isFav = 0;
       }
     });
+    this.getRecord(this.$route.params.id);
   },
   mounted() {
     this.getInfo();
