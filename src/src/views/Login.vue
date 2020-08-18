@@ -1,16 +1,16 @@
 <template>
   <div class="welcome">
     <vue-particles
-        color="#c4c4c4"
-        :particleOpacity="0.7"
-        :particlesNumber="60"
+        color="#000"
+        :particleOpacity="0.1"
+        :particlesNumber="40"
         shapeType="circle"
-        :particleSize="4"
-        linesColor="#c4c4c4"
+        :particleSize="6"
+        linesColor="#000"
         :linesWidth="1"
         :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="150"
+        :lineOpacity="0.1"
+        :linesDistance="180"
         :moveSpeed="2"
         :hoverEffect="true"
         hoverMode="grab"

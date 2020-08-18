@@ -20,16 +20,45 @@
 
       <a-popover v-if="$store.state.token!=null" placement="bottom">
         <template slot="content">
-          <a-list item-layout="horizontal" :data-source="$store.state.message">
-            <a-list-item slot="renderItem" slot-scope="item">
-              <a-list-item-meta :description="item.content">
-                <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
-              </a-list-item-meta>
-            </a-list-item>
-          </a-list>
+          <a-tabs default-active-key="1" @change="callback" size="small" style="width:320px">
+            <a-tab-pane key="1" tab="未读消息">
+              <a-list item-layout="horizontal" :data-source="$store.state.message">
+                <a-list-item slot="renderItem" slot-scope="item" v-if="!item.isread">
+                  <a-col>
+                    <a-row>
+                    <a-list-item-meta :description="item.content">
+                      <a slot="title" v-if="item.type===2">团队邀请</a>
+                      <a slot="title" v-if="item.type===1">团队申请</a>
+                      <a slot="title" v-if="item.type===0">系统通知</a>
+                      <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
+                    </a-list-item-meta>
+                    </a-row>
+                    <a-row style="text-align:right;margin-right:-5px">
+                      <a-col :span="14" style="text-align:left;margin:8px 0 0 0;font-size:12px;color:#bdbdbd">
+                        {{item.messagetimestring}}
+                      </a-col>
+                      <a-col :span="10">
+                        <a-button v-if="item.type===0" type="link" @click="readMessage(item.messageid)">已读</a-button>
+                        <a-button v-if="item.type===1" type="link" @click="confirmApply(item.messageid,false)">拒绝</a-button>
+                        <a-button v-if="item.type===1" type="link" @click="confirmApply(item.messageid,true)">通过</a-button>
+                        <a-button v-if="item.type===2" type="link" @click="confirmInvite(item.messageid,false)">拒绝</a-button>
+                        <a-button v-if="item.type===2" type="link" @click="confirmInvite(item.messageid,true)">确认</a-button>
+                      </a-col>
+                    </a-row>
+                  </a-col>
+                  
+                  
+                </a-list-item>
+              </a-list>
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="全部消息" force-render>
+              Content of Tab Pane 2
+            </a-tab-pane>
+          </a-tabs>
+          
         </template>
         <a-button type="link" @click="tomessage">
-          <a-badge dot v-bind:count="$store.state.message.length">
+          <a-badge dot v-bind:count="$store.state.message.length" >
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
         </a-button>
@@ -88,6 +117,8 @@
 
 
 <script>
+import Vue from "vue";
+
 export default {
   components: {},
   data() {
@@ -115,7 +146,7 @@ export default {
     tomessage() {
       this.$router.push({ path: "/message" });
     },
-    typetoIcon(type) {
+    typetoIcon(type){
       var str = "info";
       switch (type) {
         case 0:
@@ -126,7 +157,7 @@ export default {
           break;
         case 2:
           str = "team";
-          break;
+          break;  
       }
       return str;
     },
@@ -136,6 +167,74 @@ export default {
       this.$store.state.userid = "";
       window.sessionStorage.clear();
       this.$router.push({ path: "/welcome" });
+    },
+    confirmInvite(messageid, value) {
+      var str = "";
+      var msg = "";
+      var that = this;
+      if (value == true) {
+        str = "agree";
+        msg = "接受"
+      } else {
+        str = "reject";
+        msg ="拒绝"
+      }
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/message/invite/"+messageid+"/"+str,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then((response) => {
+        if (response.data.success == true) {
+          that.$message.success("已"+msg+"邀请", 1)
+        } else {
+          that.$message.error("操作失败", 1);
+        }
+      });
+      this.readMessage(messageid)
+    },
+    confirmApply(messageid,value) {
+      var str = "";
+      var msg = "";
+      var that = this;
+      if (value == true) {
+        str = "agree";
+        msg = "接受"
+      } else {
+        str = "reject";
+        msg ="拒绝"
+      }
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/message/apply/"+messageid+"/"+str,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then((response) => {
+        if (response.data.success == true) {
+          that.$message.success("已"+msg+"申请", 1)
+        } else {
+          that.$message.error("操作失败", 1);
+        }
+      });
+      this.readMessage(messageid)
+    },
+    readMessage(messageid) {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/message/"+messageid,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then((response) => {
+        if (response.data.success == true) {
+          that.$message.success("操作成功", 1)
+        } else {
+          that.$message.error("操作失败", 1);
+        }
+      });
     },
   },
 };
