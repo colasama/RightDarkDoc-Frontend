@@ -166,6 +166,7 @@
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }"
                 :data-source="templates"
                 style="text-align:center;margin:24px"
+                :pagination="paginationMuban"
               >
                 <a-list-item
                   slot="renderItem"
@@ -284,6 +285,7 @@
                   :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                   :data-source="docs"
                   style="text-align:center;margin:15px auto"
+                  :pagination="pagination"
                 >
                   <a-list-item
                     slot="renderItem"
@@ -347,6 +349,7 @@
                   :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                   :data-source="docs"
                   style="text-align:center;margin:15px auto"
+                  :pagination="pagination"
                 >
                   <a-list-item
                     slot="renderItem"
@@ -401,6 +404,7 @@
                   :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                   :data-source="docs"
                   style="text-align:center;margin:15px auto"
+                  :pagination="pagination"
                 >
                   <a-list-item
                     slot="renderItem"
@@ -543,6 +547,7 @@
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                 :data-source="docs"
                 style="text-align:center;margin:15px"
+                :pagination="pagination"
               >
                 <a-list-item
                   slot="renderItem"
@@ -722,6 +727,7 @@
               :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
               :data-source="docs"
               style="text-align:center;margin:15px"
+              :pagination="pagination"
             >
               <a-list-item slot="renderItem" slot-scope="item" style="text-align:center">
                 <a-dropdown :trigger="['contextmenu']">
@@ -816,6 +822,18 @@ export default {
       doc_info_visible: false,
       auth_visible: false,
       share_visible: false,
+      pagination: {
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 18,
+      },
+      paginationMuban: {
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 8,
+      },
     };
   },
   watch: {
