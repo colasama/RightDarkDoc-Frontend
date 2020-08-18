@@ -137,25 +137,26 @@
       okText="确认"
       cancelText="取消"
     >
-      <a-form
+      <a-form-model
         style="margin:24px 24px 24px 48px"
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
-        :form="temp"
+        :model="temp"
+        :rules="rules"
       >
-        <a-form-item label="手机号">
+        <a-form-model-item has-feedback label="手机号" prop="phone">
           <a-input style="width:240px" v-model="temp.phone" />
-        </a-form-item>
-        <a-form-item label="生日">
+        </a-form-model-item>
+        <a-form-model-item label="生日">
           <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 240px" />
-        </a-form-item>
-        <a-form-item label="邮箱">
+        </a-form-model-item>
+        <a-form-model-item has-feedback label="邮箱" prop="email">
           <a-input style="width:240px" v-model="temp.email" />
-        </a-form-item>
-        <a-form-item label="个人描述">
+        </a-form-model-item>
+        <a-form-model-item label="个人描述">
           <a-input style="width:240px" v-model="temp.description" />
-        </a-form-item>
-      </a-form>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
     <a-modal
       width="480px"
@@ -166,14 +167,20 @@
       cancelTest="取消"
       okText="确认"
     >
-      <a-form style="margin:24px" :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
-        <a-form-item label="旧密码">
+      <a-form-model 
+        style="margin:24px" 
+        :label-col="labelCol" 
+        :wrapper-col="wrapperCol" 
+        :model="temp"
+        :rules="rules"
+        >
+        <a-form-model-item label="旧密码">
           <a-input style="width:270px" v-model="temp.old_password" />
-        </a-form-item>
-        <a-form-item label="新密码">
+        </a-form-model-item>
+        <a-form-model-item has-feedback label="新密码" prop="new_password">
           <a-input style="width:270px" v-model="temp.new_password" />
-        </a-form-item>
-      </a-form>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
   </div>
 </template>
@@ -221,10 +228,39 @@ export default {
     Avatar,
   },
   data() {
+    const regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    const regPhone = /^[0-9]{11}$/;
+    const validatePhone = (rules, value, callback) => {
+      if (!regPhone.test(value)) {
+        callback(new Error('请输入正确格式的邮箱'));
+      } else {
+        callback();
+      }
+    };
+    const validateEmail = (rules, value, callback) => {
+      if (!regEmail.test(value)) {
+        callback(new Error('请输入正确格式的手机号'));
+      } else {
+        callback();
+      }
+    };
+    const validatePassword = (rules, value, callback) => {
+      if (value != this.temp.old_password) {
+        callback(new Error('密码不一致'));
+      } else {
+        callback();
+      }
+    };
+
     return {
       openKeys: [],
       data: {},
       temp: {},
+      rules: {
+        phone: [{ validator: validatePhone, trigger: 'change' }],
+        email: [{ validator: validateEmail, trigger: 'change' }],
+        new_password: [{ validator: validatePassword, trigger: 'change' }],
+      },
       sider_status: 1,
       updateInfoModalVisible: false,
       updatePasswordModalVisible: false,
@@ -330,11 +366,15 @@ export default {
         },
         data: this.temp,
       }).then((response) => {
-        console.log(response.data);
-        this.getInfo();
-        this.$message.success("修改成功", 1.5);
+        const { success, message } = response.data;
+        if (success == true ) {
+          this.getInfo();
+          this.$message.success(message, 1.5);
+          this.updateInfoModalVisible = false;
+        } else {
+          this.$message.error(message, 1.5);
+        }
       });
-      this.updateInfoModalVisible = false;
     },
     handleUpdatePassword() {
       this.temp = {
@@ -352,11 +392,15 @@ export default {
         },
         data: this.temp,
       }).then((response) => {
-        console.log(response.data);
-        this.getInfo();
-        this.$message.success("修改成功", 1.5);
+        const { success, message } = response.data;
+        if (success == true) {
+          this.getInfo();
+          this.$message.success(message, 1.5);
+          this.updatePasswordModalVisible = false;
+        } else {
+          this.$message.error(message, 1.5);
+        }
       });
-      this.updatePasswordModalVisible = false;
     },
     handleClick(e) {
       console.log("click", e);
