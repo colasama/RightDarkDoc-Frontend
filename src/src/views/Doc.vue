@@ -127,7 +127,7 @@
           </div>
         </a-col>
         <a-col :span="5">
-          <div >
+          <div>
             <div style="margin:48px">
               <a-list
                 class="commentList"
@@ -136,7 +136,13 @@
                 :data-source="data"
               >
                 <a-list-item slot="renderItem" slot-scope="item">
-                  <a-comment :author="item.username" :avatar="item.avatar">
+                  <a-comment>
+                    <p slot="author" @click="toUserInfo(item.comment.userid)">{{item.username}}</p>
+                    <a-avatar
+                      slot="avatar"
+                      :src="item.avatar"
+                      @click="toUserInfo(item.comment.userid)"
+                    />
                     <p slot="content">{{ item.comment.content }}</p>
                     <a-tooltip
                       slot="datetime"
@@ -162,26 +168,22 @@
                 </a-col>
                 <a-col :span="20" style="text-align:left;margin-bottom:-12px">
                   <div>
-                    <a style="margin:12px 0 0 0px;font-size:16px;padding-top:10px" href="#/profile">{{userinfo.username}}</a>
+                    <a
+                      style="margin:12px 0 0 0px;font-size:16px;padding-top:10px"
+                      href="#/profile"
+                    >{{userinfo.username}}</a>
                   </div>
-                  <div style="font-size:12px;margin-left:0px">
-                    {{userinfo.description}}
-                  </div>
+                  <div style="font-size:12px;margin-left:0px">{{userinfo.description}}</div>
                 </a-col>
               </a-row>
-              
+
               <a-comment class="addComment" v-if="iscommentable">
                 <div slot="content">
                   <a-form-item>
                     <a-textarea :rows="4" :value="comment" @change="handleChange" />
                   </a-form-item>
                   <a-form-item style="text-align:right">
-                    <a-button
-                    html-type="submit"
-                    type="primary"
-                    @click="handleSubmitComment"
-                    >评论
-                    </a-button>
+                    <a-button html-type="submit" type="primary" @click="handleSubmitComment">评论</a-button>
                   </a-form-item>
                 </div>
               </a-comment>
@@ -336,7 +338,7 @@ export default {
         if (that.auth >= 7 || (that.teamauth >= 7 && that.isTeammember)) {
           that.iseditable = true;
         }
-        if(that.$store.state.userid==null){
+        if (that.$store.state.userid == null) {
           that.iscommentable = false;
           that.iseditable = false;
         }
@@ -436,7 +438,10 @@ export default {
             }
           });
         } else {
-          that.$message.error("云端版本已更新，保存失败，请刷新页面再试（请注意保存当前的编辑）", 5);
+          that.$message.error(
+            "云端版本已更新，保存失败，请刷新页面再试（请注意保存当前的编辑）",
+            5
+          );
         }
       });
     },
@@ -564,6 +569,9 @@ export default {
       }).then((response) => {
         this.userinfo = response.data;
       });
+    },
+    toUserInfo(userid) {
+      this.$router.push({ path: "/userinfo/" + userid });
     },
     getCommentList() {
       Vue.axios({

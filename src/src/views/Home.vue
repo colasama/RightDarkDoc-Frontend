@@ -643,7 +643,7 @@
                   :data-source="team_members"
                   :locale="{emptyText: '暂无其他成员'}"
                 >
-                  <div slot="header">
+                  <div slot="header" @click="toUserInfo(team_creator.userid)">
                     <a-avatar
                       :size="36"
                       v-if="team_creator.avatar!=null"
@@ -660,7 +660,7 @@
                       <a-icon type="crown" style="font-size:16px;color:#E85A4F" />
                     </span>
                   </div>
-                  <a-list-item slot="renderItem" slot-scope="item">
+                  <a-list-item slot="renderItem" slot-scope="item" @click="toUserInfo(item.userid)">
                     <div style="text-align:left">
                       <a-avatar :size="36" v-if="item.avatar!=null" :src="item.avatar"></a-avatar>
                       <avatar
@@ -1395,6 +1395,9 @@ export default {
           that.$message.error("申请失败", 1);
         }
       });
+    },
+    toUserInfo(userid) {
+      this.$router.push({ path: "/userinfo/" + userid });
     },
     dismissTeam() {
       var that = this;
