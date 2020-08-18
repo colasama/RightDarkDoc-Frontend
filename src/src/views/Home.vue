@@ -96,7 +96,26 @@
               >从模板创建团队文档</a-menu-item>
             </a-menu>
           </a-dropdown>
-
+          <a-modal v-model="applyVisible" title="搜索团队" :footer="null">
+            <a-input allowClear v-model="teamName" placeholder="请输入查询关键词" @change="changeTeamName"></a-input>
+            <a-list item-layout="horizontal" :data-source="teamData">
+              <a-list-item slot="renderItem" slot-scope="item" v-if="check_teamid(item.teamid)">
+                <a-row style="margin:12px 48px 12px 8px;width:100%">
+                  <a-col :span="22">
+                    {{ item.teamname }}
+                    <span>（团队号：{{item.teamid}}）</span>
+                  </a-col>
+                  <a-col :span="2" style="text-align:right">
+                    <a-button
+                      type="primary"
+                      @click="apply_member(item.teamid)"
+                      :disabled="false"
+                    >申请加入</a-button>
+                  </a-col>
+                </a-row>
+              </a-list-item>
+            </a-list>
+          </a-modal>
           <!--从模板新建文档的对话框-->
           <a-modal
             width="1020px"
@@ -146,7 +165,6 @@
           >
             <a-icon type="team" />创建团队
           </a-button>
-
           <!--创建团队的对话框-->
           <a-modal
             width="520px"
@@ -179,7 +197,9 @@
             </span>
             <a-menu-item-group key="team">
               <a-menu-item v-for="item in teams" v-bind:key="'t'+item.teamid">{{item.teamname}}</a-menu-item>
-              <a-button type="link" style="margin-left:32px;color:#999999"><a-icon type="plus"/>添加团队</a-button>
+              <a-button type="link" style="margin-left:32px;color:#999999" @click="showApplyModal">
+                <a-icon type="plus" />添加团队
+              </a-button>
             </a-menu-item-group>
           </a-sub-menu>
           <a-menu-item key="trash" style="margin-top:20px">
@@ -699,7 +719,9 @@ export default {
   data() {
     return {
       memberName: "",
+      teamName: "",
       inviteVisible: false,
+      applyVisible: false,
       createFromTempleteVisible: false,
       createTeamVisible: false,
       openKeys: ["sub1"],
@@ -721,6 +743,7 @@ export default {
       current_doc: {},
       current_tempid: 0,
       memberData: [],
+      teamData: [],
       doc_info_visible: false,
     };
   },
@@ -1071,10 +1094,13 @@ export default {
         if (response.data.success == true) {
           that.$message.success("创建文档成功", 1).then(() => {
             if (that.current_team == null) {
-              that.$router.push({ path: "/doc/" + response.data.contents.docid });
-            }
-            else{
-              that.$router.push({ path: "/doc/" + response.data.teamDocument.docid });
+              that.$router.push({
+                path: "/doc/" + response.data.contents.docid,
+              });
+            } else {
+              that.$router.push({
+                path: "/doc/" + response.data.teamDocument.docid,
+              });
             }
           });
         } else {
@@ -1129,6 +1155,30 @@ export default {
         this.memberData = [];
       }
     },
+    changeTeamName() {
+      if (this.teamName != "") {
+        var that = this;
+        Vue.axios({
+          method: "get",
+          url: "http://39.106.230.20:8090/team/search",
+          params: {
+            searchContent: this.teamName,
+          },
+        }).then(function (response) {
+          that.teamData = response.data.teams;
+        });
+      } else {
+        this.teamData = [];
+      }
+    },
+    check_teamid(teamid) {
+      for (const team of this.teams) {
+        if (team.teamid == teamid) {
+          return false;
+        }
+      }
+      return true;
+    },
     check_member(userid) {
       if (userid == this.$store.state.userid) {
         return false;
@@ -1160,7 +1210,22 @@ export default {
         } else {
           that.$message.error("邀请失败", 1);
         }
-        that.load_team_info();
+      });
+    },
+    apply_member(teamid) {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/team/" + teamid + "/apply",
+        headers: {
+          token: that.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("申请已发送", 1);
+        } else {
+          that.$message.error("申请失败", 1);
+        }
       });
     },
     dismissTeam() {
@@ -1258,6 +1323,9 @@ export default {
     },
     showInviteModal() {
       this.inviteVisible = true;
+    },
+    showApplyModal() {
+      this.applyVisible = true;
     },
   },
 };
