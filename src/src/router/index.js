@@ -80,6 +80,7 @@ router.beforeResolve((to, from, next) => {
   console.log(store.state.token);
   if (to.name=="Document") {
     var docid = to.params.id;
+    //拦截非法访问文档
     Vue.axios({
       method: "get",
       url: "http://39.106.230.20:8090/document/" + docid,
@@ -94,6 +95,7 @@ router.beforeResolve((to, from, next) => {
       next('/doc404');
     });
   }
+  //更新消息
   if (store.state.token!=null) {
     Vue.axios({
       method: "get",

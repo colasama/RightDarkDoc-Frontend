@@ -18,21 +18,18 @@
         v-if="$store.state.token==null"
       >登录</a-button>
 
-      <a-popover v-if="$store.state.token!=''" placement="bottom">
+      <a-popover v-if="$store.state.token!=null" placement="bottom">
         <template slot="content">
           <a-list item-layout="horizontal" :data-source="$store.state.message">
             <a-list-item slot="renderItem" slot-scope="item">
               <a-list-item-meta :description="item.content">
-                <a-avatar
-                  slot="avatar"
-                  v-bind:icon="typetoIcon(item.type)"
-                />
+                <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
               </a-list-item-meta>
             </a-list-item>
           </a-list>
         </template>
         <a-button type="link" @click="tomessage">
-          <a-badge dot v-bind:count="$store.state.message.length" >
+          <a-badge dot v-bind:count="$store.state.message.length">
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
         </a-button>
@@ -118,7 +115,7 @@ export default {
     tomessage() {
       this.$router.push({ path: "/message" });
     },
-    typetoIcon(type){
+    typetoIcon(type) {
       var str = "info";
       switch (type) {
         case 0:
@@ -129,7 +126,7 @@ export default {
           break;
         case 2:
           str = "team";
-          break;  
+          break;
       }
       return str;
     },

@@ -131,7 +131,7 @@
             <div style="margin:48px">
               <a-list
                 class="commentList"
-                :header="`${data.length}个回复`"
+                :header="`${data.length}个评论`"
                 item-layout="horizontal"
                 :data-source="data"
               >
@@ -314,6 +314,10 @@ export default {
         }
         if (that.auth >= 7 || (that.teamauth >= 7 && that.isTeammember)) {
           that.iseditable = true;
+        }
+        if(that.$store.state.userid==null){
+          that.iscommentable = false;
+          that.iseditable = false;
         }
         if (that.teamid != 0) {
           if (that.creatorid == that.$store.state.userid) {
