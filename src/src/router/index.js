@@ -77,6 +77,7 @@ router.beforeResolve((to, from, next) => {
     store.state.token=window.sessionStorage.getItem('token');
     store.state.username=window.sessionStorage.getItem('username');
     store.state.userid=window.sessionStorage.getItem('userid');
+    store.state.useravatar=window.sessionStorage.getItem('useravatar');
   }
   if (to.name=="Document") {
     var docid = to.params.id;

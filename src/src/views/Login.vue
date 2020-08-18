@@ -123,11 +123,14 @@ export default {
           })
             .then((response) => {
               console.log(response.data);
+              console.log(response.data.avatar)
               that.$store.state.username = response.data.username;
               that.$store.state.userid = response.data.userid;
+              that.$store.state.useravatar = response.data.avatar;
               window.sessionStorage.setItem('token',that.$store.state.token)
               window.sessionStorage.setItem('username',that.$store.state.username)
               window.sessionStorage.setItem('userid',that.$store.state.userid)
+              window.sessionStorage.setItem('useravatar',that.$store.state.useravatar)
             })
             .catch(function (response) {
               console.log(response);

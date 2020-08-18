@@ -8,6 +8,7 @@ const state = {
     token: null,
     username: '',
     userid: '',
+    useravatar:'',
     message: [],
     messageRead:[],
 };

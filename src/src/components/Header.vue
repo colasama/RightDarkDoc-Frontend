@@ -108,6 +108,8 @@
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
         <a-button type="link" @click="toUserindex">
+         
+          <a-avatar :src="$store.state.useravatar" />
           欢迎回来，{{$store.state.username}}。
           <a-icon type="down" />
         </a-button>
@@ -181,12 +183,25 @@ export default {
         },
         pageSize: 3,
       },
+      userinfo:{},
     };
   },
   created: function () {},
   computed: {},
   watch: {},
   methods: {
+    getInfo() {
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/user/info",
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then((response) => {
+        this.userinfo = response.data;
+        console.log(response.data)
+      });
+    },
     toRegister() {
       this.$router.push({ path: "/register" });
     },
