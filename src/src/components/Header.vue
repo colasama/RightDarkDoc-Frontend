@@ -183,25 +183,12 @@ export default {
         },
         pageSize: 3,
       },
-      userinfo:{},
     };
   },
   created: function () {},
   computed: {},
   watch: {},
   methods: {
-    getInfo() {
-      Vue.axios({
-        method: "get",
-        url: "http://39.106.230.20:8090/user/info",
-        headers: {
-          token: this.$store.state.token,
-        },
-      }).then((response) => {
-        this.userinfo = response.data;
-        console.log(response.data)
-      });
-    },
     toRegister() {
       this.$router.push({ path: "/register" });
     },
@@ -237,6 +224,7 @@ export default {
       this.$store.state.token = null;
       this.$store.state.username = "";
       this.$store.state.userid = "";
+      this.$store.state.useravatar = "";
       window.sessionStorage.clear();
       this.$router.push({ path: "/welcome" });
     },

@@ -272,10 +272,15 @@ export default {
           },
           data: this.data,
         }).then((response) => {
-          console.log(response.data);
-          this.getInfo();
-          this.$message.success("头像上传成功", 1.5);
-          this.loading = false;
+          if (response.data.success == true) {
+            this.getInfo();
+            this.$message.success("头像上传成功", 1.5);
+            this.loading = false;
+            this.$store.state.useravatar = this.imageUrl;
+            window.sessionStorage.setItem('useravatar',this.imageUrl);
+          } else {
+            this.$message.error("头像上传失败", 1.5);
+          }
         });
       }
     },

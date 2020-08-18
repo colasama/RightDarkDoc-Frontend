@@ -122,8 +122,6 @@ export default {
             },
           })
             .then((response) => {
-              console.log(response.data);
-              console.log(response.data.avatar)
               that.$store.state.username = response.data.username;
               that.$store.state.userid = response.data.userid;
               that.$store.state.useravatar = response.data.avatar;
