@@ -62,7 +62,7 @@
               </a-list>
               
             </a-tab-pane>
-            <a-tab-pane key="2" tab="全部消息" force-render>
+            <a-tab-pane key="2" tab="已读消息" force-render>
               <div style="text-align:center;margin-top:240px;color:#A0A0A0" v-if="$store.state.messageRead==''">
                 您还没有收到过消息哦~
               </div>
