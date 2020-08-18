@@ -230,6 +230,7 @@ export default {
       groupAuthValue: 0,
       personAuthValue: 0,
       content: "", //输入的Markdown
+      old_content: "",
       html: "", //渲染的html文件
       title: "Untitled",
       lastetidtimeString: "",
@@ -279,6 +280,73 @@ export default {
     textChange(value, render) {
       this.html = render;
     },
+    getDoc() {
+      var that = this;
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/document/" + this.$route.params.id,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        that.title = response.data.contents.title;
+        that.content = response.data.contents.content;
+        that.old_content = response.data.contents.content;
+        that.lastetidtimeString = response.data.contents.lastetidtimeString;
+        that.editcount = response.data.contents.editcount;
+        that.auth = response.data.contents.auth;
+        that.teamauth = response.data.contents.teamauth;
+        that.createtime = response.data.contents.createtime;
+        that.docid = response.data.contents.docid;
+        that.creatorid = response.data.contents.creatorid;
+        that.istrash = response.data.contents.istrash;
+        that.teamid = response.data.contents.teamid;
+        that.isTeammember = response.data.isTeammember;
+        that.tempauth = that.auth;
+        that.tempteamauth = that.teamauth;
+        if (that.creatorid == that.$store.state.userid) {
+          that.iseditable = true;
+          that.iscommentable = true;
+        }
+        if (that.auth >= 3 || (that.teamauth >= 3 && that.isTeammember)) {
+          that.iscommentable = true;
+        }
+        if (that.auth >= 7 || (that.teamauth >= 7 && that.isTeammember)) {
+          that.iseditable = true;
+        }
+        if (that.teamid != 0) {
+          if (that.creatorid == that.$store.state.userid) {
+            that.isteamauth == true;
+          }
+          Vue.axios({
+            method: "get",
+            url: "http://39.106.230.20:8090/team/" + that.teamid + "/view",
+          }).then(function (res) {
+            if (res.data.teamCreator.userid == that.$store.state.userid) {
+              that.isteamauth = true;
+              that.iscommentable = true;
+              that.iseditable = true;
+            } else {
+              that.isteamauth = false;
+            }
+          });
+        }
+      });
+      Vue.axios({
+        method: "get",
+        url: "http://39.106.230.20:8090/document/fav/" + this.$route.params.id,
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        if (response.data.isFav == true) {
+          that.isFav = 1;
+        } else {
+          that.isFav = 0;
+        }
+      });
+    },
     getRecord(docid) {
       var that = this;
       Vue.axios({
@@ -308,29 +376,42 @@ export default {
       location.reload();
     },
     saveDoc() {
-      console.log("Saving...");
       var that = this;
+      //检测云端版本
       Vue.axios({
-        method: "put",
-        url: "http://39.106.230.20:8090/document/",
+        method: "get",
+        url: "http://39.106.230.20:8090/document/" + this.$route.params.id,
         headers: {
           token: this.$store.state.token,
         },
-        data: {
-          docid: this.docid,
-          title: this.title,
-          content: this.content,
-          lastedituserid: this.$store.state.userid,
-          auth: this.auth,
-          teamauth: this.teamauth,
-          istrash: this.istrash,
-        },
-      }).then(function (response) {
-        console.log(response.data);
-        if (response.data.success == true) {
-          that.$message.success("保存成功！", 1.5);
+      }).then(function (res) {
+        if (that.old_content == res.data.contents.content) {
+          Vue.axios({
+            method: "put",
+            url: "http://39.106.230.20:8090/document/",
+            headers: {
+              token: that.$store.state.token,
+            },
+            data: {
+              docid: that.docid,
+              title: that.title,
+              content: that.content,
+              lastedituserid: that.$store.state.userid,
+              auth: that.auth,
+              teamauth: that.teamauth,
+              istrash: that.istrash,
+            },
+          }).then(function (response) {
+            console.log(response.data);
+            if (response.data.success == true) {
+              that.$message.success("保存成功！", 1.5);
+              that.old_content = that.content;
+            } else {
+              that.$message.error("保存失败！", 1.5);
+            }
+          });
         } else {
-          that.$message.error("保存失败！", 1.5);
+          that.$message.error("云端版本已更新，保存失败，请刷新页面再试（请注意保存当前的编辑）", 5);
         }
       });
     },
@@ -530,70 +611,7 @@ export default {
     },
   },
   created: function () {
-    var that = this;
-    Vue.axios({
-      method: "get",
-      url: "http://39.106.230.20:8090/document/" + this.$route.params.id,
-      headers: {
-        token: this.$store.state.token,
-      },
-    }).then(function (response) {
-      console.log(response.data);
-      that.title = response.data.contents.title;
-      that.content = response.data.contents.content;
-      that.lastetidtimeString = response.data.contents.lastetidtimeString;
-      that.editcount = response.data.contents.editcount;
-      that.auth = response.data.contents.auth;
-      that.teamauth = response.data.contents.teamauth;
-      that.createtime = response.data.contents.createtime;
-      that.docid = response.data.contents.docid;
-      that.creatorid = response.data.contents.creatorid;
-      that.istrash = response.data.contents.istrash;
-      that.teamid = response.data.contents.teamid;
-      that.isTeammember = response.data.isTeammember;
-      that.tempauth = that.auth;
-      that.tempteamauth = that.teamauth;
-      if (that.creatorid == that.$store.state.userid) {
-        that.iseditable = true;
-        that.iscommentable = true;
-      }
-      if (that.auth >= 3 || (that.teamauth >= 3 && that.isTeammember)) {
-        that.iscommentable = true;
-      }
-      if (that.auth >= 7 || (that.teamauth >= 7 && that.isTeammember)) {
-        that.iseditable = true;
-      }
-      if (that.teamid != 0) {
-        if (that.creatorid == that.$store.state.userid) {
-          that.isteamauth == true;
-        }
-        Vue.axios({
-          method: "get",
-          url: "http://39.106.230.20:8090/team/" + that.teamid + "/view",
-        }).then(function (res) {
-          if (res.data.teamCreator.userid == that.$store.state.userid) {
-            that.isteamauth = true;
-            that.iscommentable = true;
-            that.iseditable = true;
-          } else {
-            that.isteamauth = false;
-          }
-        });
-      }
-    });
-    Vue.axios({
-      method: "get",
-      url: "http://39.106.230.20:8090/document/fav/" + this.$route.params.id,
-      headers: {
-        token: this.$store.state.token,
-      },
-    }).then(function (response) {
-      if (response.data.isFav == true) {
-        that.isFav = 1;
-      } else {
-        that.isFav = 0;
-      }
-    });
+    this.getDoc();
     this.getRecord(this.$route.params.id);
   },
   mounted() {
