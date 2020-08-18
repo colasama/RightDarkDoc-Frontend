@@ -857,7 +857,6 @@ export default {
           token: this.$store.state.token,
         },
       }).then(function (response) {
-        console.log(response.data);
         that.teams = response.data.myAttendTeams;
       });
     },
@@ -933,8 +932,11 @@ export default {
       this.current_tempid = tempid;
     },
     handleClick(e) {
-      this.docs = [];
       this.stopmanage();
+      if(e.key==null){
+        return;
+      }
+      this.docs = [];
       if (e.key == "doc") {
         this.sider_status = 1;
         this.load_doc();

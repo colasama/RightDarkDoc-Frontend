@@ -19,7 +19,7 @@
       >登录</a-button>
       <a-popover v-if="$store.state.token!=null" placement="bottom">
         <template slot="content">
-          <a-tabs default-active-key="1" @change="callback" size="small" style="width:320px">
+          <a-tabs default-active-key="1" size="small" style="width:320px">
             <a-tab-pane key="1" tab="未读消息">
               <div style="text-align:center;margin:230px 0 229px 0;color:#A0A0A0" v-if="$store.state.message==''">
                 没有新消息哦~

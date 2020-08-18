@@ -78,7 +78,6 @@ router.beforeResolve((to, from, next) => {
     store.state.username=window.sessionStorage.getItem('username');
     store.state.userid=window.sessionStorage.getItem('userid');
   }
-  console.log(store.state.token);
   if (to.name=="Document") {
     var docid = to.params.id;
     //拦截非法访问文档
@@ -107,7 +106,6 @@ router.beforeResolve((to, from, next) => {
     }).then(function (response) {
       store.state.message=response.data.unReadMessages;
       store.state.messageRead=response.data.readMessages;
-      console.log(store.state.messageRead)
     }).catch(function (res) {
       console.log(res);
     });
