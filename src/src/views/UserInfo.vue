@@ -1,32 +1,14 @@
 <template>
   <div class="profile">
-    <a-breadcrumb style="margin:100px 0 -100px -600px;">
-      <a-breadcrumb-item>右墨文档</a-breadcrumb-item>
-      <a-breadcrumb-item>
-        <a href="/">工作台</a>
-      </a-breadcrumb-item>
-      <a-breadcrumb-item>账户</a-breadcrumb-item>
-    </a-breadcrumb>
     <a-layout class="profileBox">
       <a-layout-sider style="text-align:center;background:#F3F3F3">
-        <a-upload
-          style="margin:0 auto"
-          name="image"
-          :show-upload-list="false"
-          action="http://182.92.57.178:5000/pictures/add"
-          :before-upload="beforeUpload"
-          @change="handleChange"
-        >
-          <a-avatar :size="64" class="avatarStyle" v-if="data.avatar!=null" :src="data.avatar" />
-
-          <avatar
-            :size="64"
-            class="avatarStyle"
-            v-if="data.avatar==null"
-            :username="`${data.username}`"
-          ></avatar>
-        </a-upload>
-
+        <a-avatar :size="64" class="avatarStyle" v-if="data.avatar!=null" :src="data.avatar" />
+        <avatar
+          :size="64"
+          class="avatarStyle"
+          v-if="data.avatar==null"
+          :username="`${data.username}`"
+        ></avatar>
         <a-menu
           style="background:#F3F3F3;margin-top:50px"
           :default-selected-keys="['1']"
@@ -98,10 +80,6 @@
               <a-button type="link" style="margin-top:-5px">修改</a-button>
             </a-col>-->
           </a-row>
-          <a-row style="margin:30px 64px 0 0;">
-            <a-button type="primary" @click="handleUpdateInfo">修改个人信息</a-button>
-            <a-button type="primary" @click="handleUpdatePassword" style="margin-left: 16px;">修改密码</a-button>
-          </a-row>
         </div>
       </a-layout-content>
       <!--a-layout-content
@@ -128,53 +106,6 @@
         </div>
       </a-layout-content-->
     </a-layout>
-    <a-modal
-      width="480px"
-      v-model="updateInfoModalVisible"
-      title="修改个人信息"
-      centered
-      @ok="updateInfo"
-      okText="确认"
-      cancelText="取消"
-    >
-      <a-form
-        style="margin:24px 24px 24px 48px"
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        :form="temp"
-      >
-        <a-form-item label="手机号">
-          <a-input style="width:240px" v-model="temp.phone" />
-        </a-form-item>
-        <a-form-item label="生日">
-          <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 240px" />
-        </a-form-item>
-        <a-form-item label="邮箱">
-          <a-input style="width:240px" v-model="temp.email" />
-        </a-form-item>
-        <a-form-item label="个人描述">
-          <a-input style="width:240px" v-model="temp.description" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-    <a-modal
-      width="480px"
-      v-model="updatePasswordModalVisible"
-      title="修改密码"
-      centered
-      @ok="updatePassword"
-      cancelTest="取消"
-      okText="确认"
-    >
-      <a-form style="margin:24px" :label-col="labelCol" :wrapper-col="wrapperCol" :form="temp">
-        <a-form-item label="旧密码">
-          <a-input style="width:270px" v-model="temp.old_password" />
-        </a-form-item>
-        <a-form-item label="新密码">
-          <a-input style="width:270px" v-model="temp.new_password" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
   </div>
 </template>
 <style>
@@ -255,103 +186,13 @@ export default {
     this.getInfo();
   },
   methods: {
-    handleChange(info) {
-      if (info.file.status === "uploading") {
-        this.loading = true;
-        return;
-      }
-      if (info.file.status === "done") {
-        // Get this url from response in real world.
-        this.imageUrl = info.file.response.url;
-        this.data.avatar = this.imageUrl;
-        Vue.axios({
-          method: "put",
-          url: "http://39.106.230.20:8090/user/mod_info",
-          headers: {
-            token: this.$store.state.token,
-          },
-          data: this.data,
-        }).then((response) => {
-          console.log(response.data);
-          this.getInfo();
-          this.$message.success("头像上传成功", 1.5);
-          this.loading = false;
-        });
-      }
-    },
-    beforeUpload(file) {
-      const isJpgOrPng =
-        file.type === "image/jpeg" || file.type === "image/png";
-      if (!isJpgOrPng) {
-        this.$message.error("You can only upload JPG file!");
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error("Image must smaller than 2MB!");
-      }
-      return isJpgOrPng && isLt2M;
-    },
     getInfo() {
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/user/info",
-        headers: {
-          token: this.$store.state.token,
-        },
+        url: "http://39.106.230.20:8090/user/"+this.$route.params.id,
       }).then((response) => {
-        this.data = response.data;
-        console.log(response.data.avatar);
-        this.imageUrl == response.data.avatar;
-        console.log(this.imageUrl);
+        this.data = response.data.user;
       });
-    },
-    handleUpdateInfo() {
-      const { phone, birthday, email, description } = this.data;
-      (this.temp = {
-        phone,
-        birthday,
-        email,
-        description,
-      }),
-        (this.updateInfoModalVisible = true);
-    },
-    updateInfo() {
-      this.temp.avatar = this.data.avatar;
-      Vue.axios({
-        method: "put",
-        url: "http://39.106.230.20:8090/user/mod_info",
-        headers: {
-          token: this.$store.state.token,
-        },
-        data: this.temp,
-      }).then((response) => {
-        console.log(response.data);
-        this.getInfo();
-        this.$message.success("修改成功", 1.5);
-      });
-      this.updateInfoModalVisible = false;
-    },
-    handleUpdatePassword() {
-      this.temp = {
-        old_password: "",
-        new_password: "",
-      };
-      this.updatePasswordModalVisible = true;
-    },
-    updatePassword() {
-      Vue.axios({
-        method: "put",
-        url: "http://39.106.230.20:8090/user/mod_password",
-        headers: {
-          token: this.$store.state.token,
-        },
-        data: this.temp,
-      }).then((response) => {
-        console.log(response.data);
-        this.getInfo();
-        this.$message.success("修改成功", 1.5);
-      });
-      this.updatePasswordModalVisible = false;
     },
     handleClick(e) {
       console.log("click", e);

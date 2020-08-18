@@ -54,6 +54,12 @@ Vue.use(VueRouter)
     component: () => import('../views/Profile.vue')
   },
   {
+    path: '/userinfo/:id',
+    name: 'Userinfo',
+    meta: {title:'个人信息 - 右墨文档',},
+    component: () => import('../views/UserInfo.vue')
+  },
+  {
     path: '/doc404',
     name: 'Doc404',
     meta: {title:'404 - 右墨文档',},
