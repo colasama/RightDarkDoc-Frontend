@@ -247,6 +247,29 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content style="background:#fff">
+        <a-modal v-model="share_visible" title="分享文档" :footer="null">
+          <div style="text-align:center;margin-top:12px">
+            <div>分享链接</div>
+            <a-input-search
+              :value="pagePath"
+              @search="onShareCopy"
+              style="margin-top:5px;width:220px"
+              disabled
+            >
+              <a-button
+                class="tag-read"
+                v-clipboard:copy="pagePath"
+                v-clipboard:success="onShareCopy"
+                v-clipboard:error="onShareCopyError"
+                @click="onShareCopy"
+                slot="enterButton"
+              >复制</a-button>
+            </a-input-search>
+          </div>
+          <div style="text-align:center;margin:12px;">
+            <qrcode :value="pagePath" :options="{ size: 120 }"></qrcode>
+          </div>
+        </a-modal>
         <div v-if="sider_status==1">
           <!--我的文档页面部分-->
           <div class="card-container">
@@ -305,7 +328,7 @@
                           <span style="margin-left:3px">删除</span>
                         </a-menu-item>
                         <a-menu-divider />
-                        <a-menu-item key="4">
+                        <a-menu-item key="4" @click="show_share(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
@@ -359,7 +382,7 @@
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
-                        <a-menu-item key="2">
+                        <a-menu-item key="2" @click="show_share(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
@@ -413,7 +436,7 @@
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
-                        <a-menu-item key="2">
+                        <a-menu-item key="2" @click="show_share(item)">
                           <a-icon type="share-alt" />
                           <span style="margin-left:3px">分享</span>
                         </a-menu-item>
@@ -561,7 +584,7 @@
                         <span style="margin-left:3px">删除</span>
                       </a-menu-item>
                       <a-menu-divider />
-                      <a-menu-item key="4">
+                      <a-menu-item key="4" @click="show_share(item)">
                         <a-icon type="share-alt" />
                         <span style="margin-left:3px">分享</span>
                       </a-menu-item>
@@ -610,7 +633,11 @@
 
               <div style="font-size:20px">团队成员</div>
               <div>
-                <a-list item-layout="horizontal" :data-source="team_members">
+                <a-list
+                  item-layout="horizontal"
+                  :data-source="team_members"
+                  :locale="{emptyText: '暂无其他成员'}"
+                >
                   <div slot="header">
                     <a-avatar
                       :size="36"
@@ -745,12 +772,15 @@
 import Vue from "vue";
 import Avatar from "vue-avatar";
 import TeamFileIcon from "../components/TeamFileIcon.vue";
+import Qrcode from "@chenfengyuan/vue-qrcode";
+
 // @ is an alias to /src
 export default {
   name: "Home",
   components: {
     Avatar,
     TeamFileIcon,
+    qrcode: Qrcode,
   },
   data() {
     return {
@@ -782,8 +812,10 @@ export default {
       current_tempid: 0,
       memberData: [],
       teamData: [],
+      pagePath: "",
       doc_info_visible: false,
       auth_visible: false,
+      share_visible: false,
     };
   },
   watch: {
@@ -883,7 +915,7 @@ export default {
       this.current_tempid = tempid;
     },
     handleClick(e) {
-      console.log("click", e);
+      this.docs = [];
       this.stopmanage();
       if (e.key == "doc") {
         this.sider_status = 1;
@@ -908,6 +940,7 @@ export default {
     },
     tabchange(activeKey) {
       this.activeKey = activeKey;
+      this.docs = [];
       this.load_doc();
     },
     startmanage() {
@@ -1051,8 +1084,12 @@ export default {
       });
       this.doc_info_visible = true;
     },
+    show_share(doc) {
+      this.current_doc = doc;
+      this.pagePath=window.location.href+"doc/"+doc.docid;
+      this.share_visible = true;
+    },
     show_auth(doc) {
-      console.log(doc);
       this.current_doc = doc;
       this.tempauth = doc.auth;
       this.tempteamauth = doc.teamauth;
@@ -1438,6 +1475,14 @@ export default {
     showApplyModal() {
       this.applyVisible = true;
     },
+    onShareCopy(e) {
+      this.$message.success("成功复制链接~", 1);
+      console.log(e);
+    },
+    onShareCopyError(e) {
+      this.$message.error("复制链接失败！", 1);
+      console.log(e);
+    },
   },
 };
 </script>
@@ -1452,5 +1497,14 @@ export default {
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to
+/* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
