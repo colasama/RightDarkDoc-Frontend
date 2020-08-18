@@ -32,7 +32,7 @@ Vue.use(VueRouter)
   {
     path: '/doc/:id',
     name:'Document',
-    meta: {tittle:'文档 - 右墨文档',},
+    meta: {title:'文档编辑 - 右墨文档',},
     component: () => import('../views/Doc.vue')
   },
   {

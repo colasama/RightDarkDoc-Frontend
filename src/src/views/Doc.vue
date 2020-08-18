@@ -101,15 +101,15 @@
 
     <div style="text-align:center">
       <a-row>
-        <a-col :span="4">
-          <a-timeline style="width:260px;margin:48px">
+        <a-col :span="5">
+          <a-timeline style="width:260px;margin:64px">
             <a-timeline-item
               v-for="item in editrecord"
               :key="item.edittime"
             >{{item.userid}}于{{item.edittimestring}}编辑</a-timeline-item>
           </a-timeline>
         </a-col>
-        <a-col :span="16">
+        <a-col :span="14">
           <div class="text-editor">
             <mavon-editor
               v-bind:editable="iseditable"
@@ -122,12 +122,12 @@
               @imgDel="$imgDel"
               @save="saveDoc"
               @change="textChange"
-              style="min-height:1600px;z-index:0"
+              style="min-height:1000px;z-index:0"
             />
           </div>
         </a-col>
-        <a-col :span="4">
-          <div class="commentBox">
+        <a-col :span="5">
+          <div >
             <div style="margin:48px">
               <a-list
                 class="commentList"
@@ -148,19 +148,40 @@
                   <a-button
                     v-if="userinfo.userid === item.comment.userid || userinfo.userid === creatorid"
                     type="primary"
+                    size="small"
                     @click="handleDeleteComment(item)"
                   >删除</a-button>
                   <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
                 </a-list-item>
               </a-list>
+              <a-row>
+                <a-col :span="4">
+                  <div style="text-align:left">
+                    <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
+                  </div>
+                </a-col>
+                <a-col :span="20" style="text-align:left;margin-bottom:-12px">
+                  <div>
+                    <a style="margin:12px 0 0 3px;font-size:16px;padding-top:10px" href="#/profile">{{userinfo.username}}</a>
+                  </div>
+                  <div style="font-size:12px;margin-left:3px">
+                    {{userinfo.description}}
+                  </div>
+                </a-col>
+              </a-row>
+              
               <a-comment class="addComment" v-if="iscommentable">
-                <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
                 <div slot="content">
                   <a-form-item>
                     <a-textarea :rows="4" :value="comment" @change="handleChange" />
                   </a-form-item>
-                  <a-form-item>
-                    <a-button html-type="submit" type="primary" @click="handleSubmitComment">添加评论</a-button>
+                  <a-form-item style="text-align:right">
+                    <a-button
+                    html-type="submit"
+                    type="primary"
+                    @click="handleSubmitComment"
+                    >添加评论
+                    </a-button>
                   </a-form-item>
                 </div>
               </a-comment>
@@ -173,7 +194,7 @@
 </template>
 <style>
 .text-editor {
-  width: 1200px;
+  width: 1100px;
   background: #ffffff;
   margin: 24px auto;
 }
