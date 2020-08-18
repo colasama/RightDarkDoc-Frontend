@@ -154,7 +154,7 @@
                   <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
                 </a-list-item>
               </a-list>
-              <a-row>
+              <a-row v-if="iscommentable">
                 <a-col :span="4">
                   <div style="text-align:left">
                     <a-avatar slot="avatar" :src="userinfo.avatar" :alt="userinfo.username" />
@@ -162,9 +162,9 @@
                 </a-col>
                 <a-col :span="20" style="text-align:left;margin-bottom:-12px">
                   <div>
-                    <a style="margin:12px 0 0 3px;font-size:16px;padding-top:10px" href="#/profile">{{userinfo.username}}</a>
+                    <a style="margin:12px 0 0 0px;font-size:16px;padding-top:10px" href="#/profile">{{userinfo.username}}</a>
                   </div>
-                  <div style="font-size:12px;margin-left:3px">
+                  <div style="font-size:12px;margin-left:0px">
                     {{userinfo.description}}
                   </div>
                 </a-col>
@@ -180,7 +180,7 @@
                     html-type="submit"
                     type="primary"
                     @click="handleSubmitComment"
-                    >添加评论
+                    >评论
                     </a-button>
                   </a-form-item>
                 </div>
