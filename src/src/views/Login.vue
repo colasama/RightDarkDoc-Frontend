@@ -1,5 +1,25 @@
 <template>
   <div class="welcome">
+    <vue-particles
+        color="#c4c4c4"
+        :particleOpacity="0.7"
+        :particlesNumber="60"
+        shapeType="circle"
+        :particleSize="4"
+        linesColor="#c4c4c4"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="150"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+        class="lizi"
+        style="z-index:-10"
+      >
+      </vue-particles>
     <a-row>
       <a-col :span="12">
         <a-card style="width:400px;margin:220px auto;text-align:center">
@@ -52,6 +72,12 @@
   height: 40px;
   float: center;
   background: url("../assets/logo1.png");
+}
+
+#particles-js{
+  width: 100%;
+  height: calc(100% - 100px);
+  position: absolute;    
 }
 </style>
 

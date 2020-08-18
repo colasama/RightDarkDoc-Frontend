@@ -1,7 +1,28 @@
 
 <template>
   <div class="welcome">
-    <a-row>
+
+    <vue-particles
+        color="#000"
+        :particleOpacity="0.1"
+        :particlesNumber="40"
+        shapeType="circle"
+        :particleSize="6"
+        linesColor="#000"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.1"
+        :linesDistance="180"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+        class="lizi"
+        style="z-index:-10"
+      >
+      </vue-particles>
+    <a-row >
       <a-col :span="12">
         <a-card style="width:400px;margin:120px auto;text-align:center">
           <h1 style="margin-top:20px;margin-left:5px;font-size:38px;float:left">
@@ -59,6 +80,12 @@
 
 .welcome {
   background: url("../assets/cover.png");
+}
+
+#particles-js{
+  width: 100%;
+  height: calc(100% - 100px);
+  position: absolute;    
 }
 </style>
 

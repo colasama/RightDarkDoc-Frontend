@@ -32,7 +32,7 @@
           </a-list>
         </template>
         <a-button type="link" @click="tomessage">
-          <a-badge v-bind:count="$store.state.message.length" >
+          <a-badge dot number-style="min-width:100px" v-bind:count="$store.state.message.length" >
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
         </a-button>

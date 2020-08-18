@@ -11,7 +11,9 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueClipboard from 'vue-clipboard2'
+import VueParticles from 'vue-particles'
 
+Vue.use(VueParticles)
 Vue.use(VueAxios, axios)
 
 //在store/index.js里已经引入vuex
