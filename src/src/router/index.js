@@ -105,9 +105,12 @@ router.beforeResolve((to, from, next) => {
       },
     }).then(function (response) {
       store.state.message=response.data.unReadMessages;
+      store.state.messageRead=response.data.readMessages;
+      console.log(store.state.messageRead)
     }).catch(function (res) {
       console.log(res);
     });
+
   }
   if (store.state.token==null&&(to.name=="Home"||to.name=="Profile")) {
     next('/welcome');
