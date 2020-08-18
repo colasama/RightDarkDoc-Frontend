@@ -76,9 +76,15 @@
                   </a-button>
                 </a-input-search>
                 </div>
+                <div v-if="tempauth!=0" style="text-align:center;margin:12px;">
+                  <qrcode 
+                  :value="pagePath"
+                  :options="{ size: 120 }">
+                  </qrcode>
+                </div>
                 <div style="text-align:center">
                   <a-button
-                    style="margin:24px 10px 10px 0px"
+                    style="margin:0px 10px 10px 0px"
                     @click="stopShare"
                     v-if="creatorid==$store.state.userid"
                   >停止分享</a-button>
@@ -194,12 +200,14 @@ import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import Vue from "vue";
 import moment from "moment";
+import Qrcode from '@chenfengyuan/vue-qrcode';
 
 export default {
   name: "Doc",
   components: {
     //InEditor,
     mavonEditor,
+    qrcode: Qrcode
   },
   data() {
     return {
