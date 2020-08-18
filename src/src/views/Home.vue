@@ -68,6 +68,42 @@
           </a-row>
         </div>
       </a-drawer>
+      <a-drawer
+        title="权限信息"
+        placement="right"
+        maskClosable
+        width="300"
+        :closable="true"
+        :visible="auth_visible"
+        @close="on_auth_Close"
+      >
+        <div style="margin-top:12px">权限设置</div>
+        <div style="margin-top:5px;text-align:center">
+          <a-radio-group v-model="tempauth" @change="onAuthChange">
+            <a-radio-button :value="1">仅查看</a-radio-button>
+            <a-radio-button :value="3">可讨论</a-radio-button>
+            <a-radio-button :value="7">可编辑</a-radio-button>
+          </a-radio-group>
+        </div>
+        <div style="text-align:center">
+          <a-button style="margin-top:20px" @click="stopShare">停止分享</a-button>
+        </div>
+        <div v-if="current_doc.teamid!=0">
+          <a-divider />
+          <div style="margin-top:12px">团队权限设置</div>
+          <div style="margin-top:5px">
+            <a-radio-group
+              style="margin-bottom:12px"
+              v-model="tempteamauth"
+              @change="onTeamAuthChange"
+            >
+              <a-radio-button :value="1">仅查看</a-radio-button>
+              <a-radio-button :value="3">可讨论</a-radio-button>
+              <a-radio-button :value="7">可编辑</a-radio-button>
+            </a-radio-group>
+          </div>
+        </div>
+      </a-drawer>
       <a-layout-sider style="min-width: 256px;height:100%;text-align:left;">
         <a-menu
           style="width: 256px;height:100%;text-align:left;"
@@ -260,7 +296,7 @@
                           <a-icon type="folder-open" />
                           <span style="margin-left:3px">打开</span>
                         </a-menu-item>
-                        <a-menu-item key="2">
+                        <a-menu-item key="2" @click="show_auth(item)">
                           <a-icon type="control" />
                           <span style="margin-left:3px">权限设置</span>
                         </a-menu-item>
@@ -516,7 +552,7 @@
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
                       </a-menu-item>
-                      <a-menu-item key="2" v-if="isleader">
+                      <a-menu-item key="2" v-if="isleader" @click="show_auth(item)">
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </a-menu-item>
@@ -741,10 +777,13 @@ export default {
       isedit_info: false,
       current_docid: 0,
       current_doc: {},
+      tempauth: 0,
+      tempteamauth: 1,
       current_tempid: 0,
       memberData: [],
       teamData: [],
       doc_info_visible: false,
+      auth_visible: false,
     };
   },
   watch: {
@@ -1012,8 +1051,80 @@ export default {
       });
       this.doc_info_visible = true;
     },
+    show_auth(doc) {
+      console.log(doc);
+      this.current_doc = doc;
+      this.tempauth = doc.auth;
+      this.tempteamauth = doc.teamauth;
+      this.auth_visible = true;
+    },
+    onAuthChange() {
+      var that = this;
+      Vue.axios({
+        method: "put",
+        url: "http://39.106.230.20:8090/document/mod_auth",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
+          docid: this.current_doc.docid,
+          auth: this.tempauth,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("权限更改成功！", 1);
+        } else {
+          that.$message.error("权限更改失败！", 1);
+        }
+      });
+    },
+    onTeamAuthChange() {
+      var that = this;
+      Vue.axios({
+        method: "put",
+        url: "http://39.106.230.20:8090/document/mod_teamauth",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
+          docid: this.current_doc.docid,
+          teamauth: this.tempteamauth,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("权限更改成功！", 1);
+        } else {
+          that.$message.error("权限更改失败！", 1);
+        }
+      });
+    },
+    stopShare() {
+      this.tempauth = 0;
+      var that = this;
+      Vue.axios({
+        method: "put",
+        url: "http://39.106.230.20:8090/document/mod_auth",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
+          docid: this.current_doc.docid,
+          auth: 0,
+        },
+      }).then(function (response) {
+        if (response.data.success == true) {
+          that.$message.success("已停止共享！", 1);
+        } else {
+          that.$message.error("权限更改失败！", 1);
+        }
+      });
+    },
     on_info_Close() {
       this.doc_info_visible = false;
+    },
+    on_auth_Close() {
+      this.auth_visible = false;
+      this.load_doc();
     },
     createDocBTN() {
       var that = this;

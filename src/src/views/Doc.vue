@@ -500,7 +500,7 @@ export default {
       }).then(function (response) {
         if (response.data.success == true) {
           that.$message.success("权限更改成功！", 1);
-          that.auth = that.tempauth;
+          that.teamauth = that.tempteamauth;
         } else {
           that.$message.error("权限更改失败！", 1);
         }
