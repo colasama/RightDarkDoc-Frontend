@@ -143,7 +143,7 @@
                       :src="item.avatar"
                       @click="toUserInfo(item.comment.userid)"
                     />
-                    <p slot="content">{{ item.comment.content }}</p>
+                    <p slot="content" style="text-align:left">{{ item.comment.content }}</p>
                     <a-tooltip
                       slot="datetime"
                       :title="item.comment.commenttime.format('YYYY-MM-DD HH:mm:ss')"
@@ -153,8 +153,9 @@
                   </a-comment>
                   <a-button
                     v-if="userinfo.userid === item.comment.userid || userinfo.userid === creatorid"
-                    type="primary"
+                    type="link"
                     size="small"
+                    style="margin-top:-45px"
                     @click="handleDeleteComment(item)"
                   >删除</a-button>
                   <!-- 如果item的评论者或者该文档的所有者的userid 等于 当前userid，则该评论可删除 -->
