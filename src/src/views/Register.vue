@@ -110,7 +110,7 @@ export default {
       phone: "",
       repassword: "",
       token: "",
-      authcode:"",
+      authcode: "",
       timer: null,
       count: 0,
       errorLogin: false,
@@ -144,6 +144,7 @@ export default {
           password: this.password,
           email: this.email,
           phone: this.phone,
+          code: this.authcode,
         },
       }).then(function (response) {
         console.log(response.data);
@@ -157,15 +158,31 @@ export default {
       });
     },
     sendMail() {
-      this.count = 60;
-      this.timer = setInterval(this.startTimer, 1000);
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/code",
+        data: {
+          username: this.username,
+          email: this.email,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        if (response.data.success == true) {
+          that.$message.success("验证码已发送");
+          that.count = 60;
+          that.timer = setInterval(this.startTimer, 1000);
+        } else {
+          that.$message.error(response.data.message);
+        }
+      });
     },
     startTimer() {
-      this.count-=1;
-      if (this.count==0) {
+      this.count -= 1;
+      if (this.count == 0) {
         clearInterval(this.timer);
       }
-    }
+    },
   },
   created() {
     this.$store.state.showNav = false;
