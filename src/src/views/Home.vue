@@ -467,7 +467,6 @@
             <a-col style="text-align:left">
               <span v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>{{current_team.teamname}}</b>
-                <a-tag style="margin-left:12px">团队号: {{current_team.teamid}}</a-tag>
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -477,6 +476,8 @@
                     style="margin-left:5px;font-size:24px;"
                   />
                 </transition>
+                <a-tag style="margin-left:12px">团队号: {{current_team.teamid}}</a-tag>
+                
               </span>
               <div v-if="isedit_name" style="font-size:40px">
                 <a-input-search
