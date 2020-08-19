@@ -48,17 +48,19 @@
           >
             <a-icon slot="prefix" type="info-circle" />
           </a-input-password>
-          <a-input
+          <a-input size="large" placeholder="手机号" v-model="phone" style="margin-top:30px">
+            <a-icon slot="prefix" type="phone" />
+          </a-input>
+          <a-input-search
+            style="margin-top:30px;margin-bottom:15px"
+            placeholder="邮箱验证码"
             size="large"
-            placeholder="手机号"
+            @search="sendMail"
             v-model="authcode"
-            style="margin-top:30px"
-          ></a-input>
-          <a-input-search style="margin-top:30px;margin-bottom:15px" placeholder="邮箱验证码" size="large" @search="sendMail">
+          >
             <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
             <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
           </a-input-search>
-          <a-icon slot="prefix" type="phone" />
           <div v-if="errorLogin" style="color:red">用户名或密码错误！</div>
           <a href="#/login">已有账号？点击这里登录</a>
           <a-button
@@ -171,7 +173,7 @@ export default {
         if (response.data.success == true) {
           that.$message.success("验证码已发送");
           that.count = 60;
-          that.timer = setInterval(this.startTimer, 1000);
+          that.timer = setInterval(that.startTimer, 1000);
         } else {
           that.$message.error(response.data.message);
         }
