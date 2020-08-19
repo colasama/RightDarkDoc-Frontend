@@ -50,14 +50,15 @@
           >
             <a-icon slot="prefix" type="info-circle" />
           </a-input-password>
-          <a-input size="large" placeholder="手机号" v-model="phone" style="margin-top:30px">
+          <a-input size="large" placeholder="手机号" v-model="phone" style="margin-top:30px;margin-bottom:15px">
             <a-icon slot="prefix" type="phone" />
           </a-input>
           <div v-if="errorLogin" style="color:red">用户名或密码错误！</div>
+          <a href="#/login" >已有账号？点击这里登录</a>
           <a-button
             size="large"
             type="primary"
-            style="margin-top:30px;margin-bottom:30px"
+            style="margin-top:15px;margin-bottom:30px"
             block
             @click="register"
           >注册</a-button>
