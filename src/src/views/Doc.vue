@@ -383,7 +383,7 @@ export default {
           token: this.$store.state.token,
         },
       }).then(function (response) {
-        that.editrecord = response.data.docRecord;
+        that.editrecord = response.data.docRecord.slice(0,10);
         for (let index = 0; index < that.editrecord.length; index++) {
           const element = that.editrecord[index];
           Vue.axios({
