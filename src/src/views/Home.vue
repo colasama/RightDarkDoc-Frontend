@@ -773,9 +773,6 @@
   </div>
 </template>
 <style>
-.home1{
-}
-
 .card-container {
   background: #fff;
   overflow: hidden;

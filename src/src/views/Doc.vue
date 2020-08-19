@@ -137,7 +137,7 @@
               >
                 <a-list-item slot="renderItem" slot-scope="item">
                   <a-comment>
-                    <p slot="author" @click="toUserInfo(item.comment.userid)">{{item.username}}</p>
+                    <p style="cursor:pointer" slot="author" @click="toUserInfo(item.comment.userid)">{{item.username}}</p>
                     <a-avatar
                       slot="avatar"
                       :src="item.avatar"
