@@ -643,25 +643,32 @@
                   :data-source="team_members"
                   :locale="{emptyText: '暂无其他成员'}"
                 >
-                  <div slot="header" @click="toUserInfo(team_creator.userid)">
+                  <div slot="header">
                     <a-avatar
                       :size="36"
                       v-if="team_creator.avatar!=null"
                       :src="team_creator.avatar"
+                      @click="toUserInfo(team_creator.userid)"
+                      style="cursor:pointer"
                     ></a-avatar>
                     <avatar
                       :size="36"
                       inline
                       v-if="team_creator.avatar==null"
                       :username="`${team_creator.username}`"
+                      @click="toUserInfo(team_creator.userid)"
+                      style="cursor:pointer"
                     ></avatar>
-                    {{team_creator.username}}
+                    <span
+                      @click="toUserInfo(team_creator.userid)"
+                      style="cursor:pointer"
+                      > {{team_creator.username}}</span>
                     <span>
                       <a-icon type="crown" style="font-size:16px;color:#E85A4F" />
                     </span>
                   </div>
-                  <a-list-item slot="renderItem" slot-scope="item" @click="toUserInfo(item.userid)">
-                    <div style="text-align:left">
+                  <a-list-item slot="renderItem" slot-scope="item" >
+                    <div style="text-align:left;cursor:pointer" @click="toUserInfo(item.userid)">
                       <a-avatar :size="36" v-if="item.avatar!=null" :src="item.avatar"></a-avatar>
                       <avatar
                         :size="36"
