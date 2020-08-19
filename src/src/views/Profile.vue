@@ -101,6 +101,7 @@
           <a-row style="margin:30px 64px 0 0;">
             <a-button type="primary" @click="handleUpdateInfo">修改个人信息</a-button>
             <a-button type="primary" @click="handleUpdatePassword" style="margin-left: 16px;">修改密码</a-button>
+            <a-button type="primary" @click="handleUpdateEmail" style="margin-left: 16px;">修改邮箱</a-button>
           </a-row>
         </div>
       </a-layout-content>
@@ -150,9 +151,6 @@
         <a-form-model-item label="生日">
           <a-date-picker v-model="temp.birthday" format="YYYY/MM/DD" style="width: 240px" />
         </a-form-model-item>
-        <a-form-model-item has-feedback label="邮箱" prop="email">
-          <a-input style="width:240px" v-model="temp.email" />
-        </a-form-model-item>
         <a-form-model-item label="个人描述">
           <a-input style="width:240px" v-model="temp.description" />
         </a-form-model-item>
@@ -164,21 +162,48 @@
       title="修改密码"
       centered
       @ok="updatePassword"
-      cancelTest="取消"
+      cancelText="取消"
       okText="确认"
     >
-      <a-form-model 
-        style="margin:24px" 
-        :label-col="labelCol" 
-        :wrapper-col="wrapperCol" 
+      <a-form-model
+        style="margin:24px"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
         :model="temp"
         :rules="rules"
-        >
+      >
         <a-form-model-item label="旧密码">
           <a-input style="width:270px" v-model="temp.oldpassword" />
         </a-form-model-item>
         <a-form-model-item has-feedback label="新密码" prop="new_password">
           <a-input style="width:270px" v-model="temp.newpassword" />
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
+    <a-modal
+      width="480px"
+      v-model="updateEmailModalVisible"
+      title="修改邮箱"
+      centered
+      @ok="updateEmail"
+      cancelText="取消"
+      okText="确认"
+    >
+      <a-form-model
+        style="margin:24px"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+        :model="temp"
+        :rules="rules"
+      >
+        <a-form-model-item has-feedback label="邮箱" prop="email">
+          <a-input style="width:240px" v-model="temp.email" />
+        </a-form-model-item>
+        <a-form-model-item label="验证码">
+          <a-input-search @search="sendMail">
+            <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
+            <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
+          </a-input-search>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -232,14 +257,14 @@ export default {
     const regPhone = /^[0-9]{11}$/;
     const validatePhone = (rules, value, callback) => {
       if (!regPhone.test(value)) {
-        callback(new Error('请输入正确格式的邮箱'));
+        callback(new Error("请输入正确格式的手机号"));
       } else {
         callback();
       }
     };
     const validateEmail = (rules, value, callback) => {
       if (!regEmail.test(value)) {
-        callback(new Error('请输入正确格式的手机号'));
+        callback(new Error("请输入正确格式的邮箱"));
       } else {
         callback();
       }
@@ -250,12 +275,15 @@ export default {
       data: {},
       temp: {},
       rules: {
-        phone: [{ validator: validatePhone, trigger: 'change' }],
-        email: [{ validator: validateEmail, trigger: 'change' }],
+        phone: [{ validator: validatePhone, trigger: "change" }],
+        email: [{ validator: validateEmail, trigger: "change" }],
       },
+      count: 0,
+      authcode: "",
       sider_status: 1,
       updateInfoModalVisible: false,
       updatePasswordModalVisible: false,
+      updateEmailModalVisible: false,
       loading: false,
       imageUrl: "",
       labelCol: {
@@ -305,7 +333,7 @@ export default {
             this.$message.success("头像上传成功", 1.5);
             this.loading = false;
             this.$store.state.useravatar = this.imageUrl;
-            window.sessionStorage.setItem('useravatar',this.imageUrl);
+            window.sessionStorage.setItem("useravatar", this.imageUrl);
           } else {
             this.$message.error("头像上传失败", 1.5);
           }
@@ -333,9 +361,7 @@ export default {
         },
       }).then((response) => {
         this.data = response.data;
-        console.log(response.data.avatar);
         this.imageUrl == response.data.avatar;
-        console.log(this.imageUrl);
       });
     },
     handleUpdateInfo() {
@@ -359,7 +385,7 @@ export default {
         data: this.temp,
       }).then((response) => {
         const { success, message } = response.data;
-        if (success == true ) {
+        if (success == true) {
           this.getInfo();
           this.$message.success(message, 1.5);
           this.updateInfoModalVisible = false;
@@ -393,6 +419,22 @@ export default {
           this.$message.error(message, 1.5);
         }
       });
+    },
+    updateEmail() {
+      
+    },
+    sendMail() {
+      this.count = 60;
+      this.timer = setInterval(this.startTimer, 1000);
+    },
+    startTimer() {
+      this.count -= 1;
+      if (this.count == 0) {
+        clearInterval(this.timer);
+      }
+    },
+    handleUpdateEmail() {
+      this.updateEmailModalVisible = true;
     },
     handleClick(e) {
       console.log("click", e);

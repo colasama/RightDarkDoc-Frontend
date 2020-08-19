@@ -1,28 +1,26 @@
 
 <template>
   <div class="welcome">
-
     <vue-particles
-        color="#000"
-        :particleOpacity="0.1"
-        :particlesNumber="40"
-        shapeType="circle"
-        :particleSize="6"
-        linesColor="#000"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="0.1"
-        :linesDistance="180"
-        :moveSpeed="2"
-        :hoverEffect="true"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push"
-        class="lizi"
-        style="z-index:-10"
-      >
-      </vue-particles>
-    <a-row >
+      color="#000"
+      :particleOpacity="0.1"
+      :particlesNumber="40"
+      shapeType="circle"
+      :particleSize="6"
+      linesColor="#000"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.1"
+      :linesDistance="180"
+      :moveSpeed="2"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+      class="lizi"
+      style="z-index:-10"
+    ></vue-particles>
+    <a-row>
       <a-col :span="12">
         <a-card style="width:400px;margin:120px auto;text-align:center">
           <h1 style="margin-top:20px;margin-left:5px;font-size:38px;float:left">
@@ -50,11 +48,19 @@
           >
             <a-icon slot="prefix" type="info-circle" />
           </a-input-password>
-          <a-input size="large" placeholder="手机号" v-model="phone" style="margin-top:30px;margin-bottom:15px">
-            <a-icon slot="prefix" type="phone" />
-          </a-input>
+          <a-input
+            size="large"
+            placeholder="手机号"
+            v-model="authcode"
+            style="margin-top:30px;margin-bottom:15px"
+          ></a-input>
+          <a-input-search placeholder="邮箱验证码" size="large" @search="sendMail">
+            <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
+            <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
+          </a-input-search>
+          <a-icon slot="prefix" type="phone" />
           <div v-if="errorLogin" style="color:red">用户名或密码错误！</div>
-          <a href="#/login" >已有账号？点击这里登录</a>
+          <a href="#/login">已有账号？点击这里登录</a>
           <a-button
             size="large"
             type="primary"
@@ -62,7 +68,6 @@
             block
             @click="register"
           >注册</a-button>
-
           <a-avatar style="opacity:0.8" src="https://i.loli.net/2020/08/10/Q1G3yKVZDa8In7q.png" />
           <div style="text-align:center" />
         </a-card>
@@ -83,10 +88,10 @@
   background: url("../assets/cover.png");
 }
 
-#particles-js{
+#particles-js {
   width: 100%;
   height: calc(100% - 100px);
-  position: absolute;    
+  position: absolute;
 }
 </style>
 
@@ -105,7 +110,9 @@ export default {
       phone: "",
       repassword: "",
       token: "",
-      count: "",
+      authcode:"",
+      timer: null,
+      count: 0,
       errorLogin: false,
     };
   },
@@ -114,15 +121,15 @@ export default {
       var that = this;
       var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       var regPhone = /^[0-9]{11}$/;
-      var errorTip='';
+      var errorTip = "";
       if (this.username == "") errorTip = "请输入您的用户名";
       else if (this.password == "" || this.repassword == "")
         errorTip = "请输入您的密码";
       else if (this.email == "") errorTip = "请输入您的邮箱";
       else if (this.phone == "") errorTip = "请输入您的手机号码";
+      else if (this.authcode == "") errorTip = "请输入邮箱验证码";
       else if (!regEmail.test(this.email)) errorTip = "请输入正确的邮箱";
-      else if (!regPhone.test(this.phone))
-        errorTip = "请输入正确的手机号码";
+      else if (!regPhone.test(this.phone)) errorTip = "请输入正确的手机号码";
       else if (this.password != this.repassword)
         errorTip = "两次输入的密码不同";
       if (errorTip != "") {
@@ -140,13 +147,25 @@ export default {
         },
       }).then(function (response) {
         console.log(response.data);
-        if (response.data.success==true) {
-          that.$message.success('注册成功，即将跳转登录页面').then(() => that.$router.push({ path: "/login" }));
-        }else{
+        if (response.data.success == true) {
+          that.$message
+            .success("注册成功，即将跳转登录页面")
+            .then(() => that.$router.push({ path: "/login" }));
+        } else {
           that.$message.error(response.data.message);
         }
       });
     },
+    sendMail() {
+      this.count = 60;
+      this.timer = setInterval(this.startTimer, 1000);
+    },
+    startTimer() {
+      this.count-=1;
+      if (this.count==0) {
+        clearInterval(this.timer);
+      }
+    }
   },
   created() {
     this.$store.state.showNav = false;
