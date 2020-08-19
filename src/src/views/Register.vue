@@ -22,7 +22,7 @@
     ></vue-particles>
     <a-row>
       <a-col :span="12">
-        <a-card style="width:400px;margin:120px auto;text-align:center">
+        <a-card style="width:400px;margin:100px auto;text-align:center">
           <h1 style="margin-top:20px;margin-left:5px;font-size:38px;float:left">
             <b>注册账户</b>
           </h1>
@@ -52,9 +52,9 @@
             size="large"
             placeholder="手机号"
             v-model="authcode"
-            style="margin-top:30px;margin-bottom:15px"
+            style="margin-top:30px"
           ></a-input>
-          <a-input-search placeholder="邮箱验证码" size="large" @search="sendMail">
+          <a-input-search style="margin-top:30px;margin-bottom:15px" placeholder="邮箱验证码" size="large" @search="sendMail">
             <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
             <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
           </a-input-search>
