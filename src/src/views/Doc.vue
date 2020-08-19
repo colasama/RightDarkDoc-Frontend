@@ -137,7 +137,7 @@
               >
                 <a-list-item slot="renderItem" slot-scope="item">
                   <a-comment>
-                    <p slot="author" @click="toUserInfo(item.comment.userid)">{{item.username}}</p>
+                    <p style="cursor:pointer" slot="author" @click="toUserInfo(item.comment.userid)">{{item.username}}</p>
                     <a-avatar
                       slot="avatar"
                       :src="item.avatar"
@@ -384,7 +384,7 @@ export default {
           token: this.$store.state.token,
         },
       }).then(function (response) {
-        that.editrecord = response.data.docRecord;
+        that.editrecord = response.data.docRecord.slice(0,10);
         for (let index = 0; index < that.editrecord.length; index++) {
           const element = that.editrecord[index];
           Vue.axios({
