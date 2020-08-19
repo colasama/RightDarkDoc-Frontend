@@ -1,5 +1,12 @@
 <template>
   <div class="profile">
+    <a-breadcrumb style="margin:100px 0 -100px -600px;">
+      <a-breadcrumb-item>右墨文档</a-breadcrumb-item>
+      <a-breadcrumb-item>
+        <a href="/">工作台</a>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>账户信息</a-breadcrumb-item>
+    </a-breadcrumb>
     <a-layout class="profileBox">
       <a-layout-sider style="text-align:center;background:#F3F3F3">
         <a-avatar :size="64" class="avatarStyle" v-if="data.avatar!=null" :src="data.avatar" />
