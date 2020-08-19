@@ -17,7 +17,7 @@
         style="margin-left:15px;margin-right:48px"
         v-if="$store.state.token==null"
       >登录</a-button>
-      <a-popover v-if="$store.state.token!=null" placement="bottom">
+      <a-popover v-if="$store.state.token!=null" placement="bottomRight">
         <template slot="content">
           <a-tabs default-active-key="1" size="small" style="width:320px">
             <a-tab-pane key="1" tab="未读消息">
@@ -96,7 +96,8 @@
           </a-tabs>
           
         </template>
-        <a-button type="link" @click="tomessage">
+        <!--a-button type="link" @click="tomessage" -->
+        <a-button type="link" style="margin">
           <a-badge dot v-bind:count="$store.state.message.length" >
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
@@ -107,11 +108,11 @@
           <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
-        <a-button type="link" @click="toUserindex">
-         
-          <a-avatar :src="$store.state.useravatar" />
-          欢迎回来，{{$store.state.username}}。
-          <a-icon type="down" />
+        <a-button type="link" @click="toUserindex" style="margin-right:12px">
+
+          <a-avatar :src="$store.state.useravatar" style="margin-right:6px" />
+          {{$store.state.username}}
+          <a-icon type="down"/>
         </a-button>
       </a-dropdown>
       <!--a-sub-menu key="topic" v-if="showExit">

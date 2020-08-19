@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <a-layout style="height:100%">
+  <div >
+    <a-layout style="height:100%" class="home">
       <a-drawer
         title="详细信息"
         placement="right"
@@ -106,7 +106,7 @@
       </a-drawer>
       <a-layout-sider style="min-width: 256px;height:100%;text-align:left;">
         <a-menu
-          style="width: 256px;height:100%;text-align:left;"
+          style="width: 256px;height:100%;text-align:left;background:#FAFAFA"
           :default-selected-keys="['1']"
           :open-keys.sync="openKeys"
           mode="inline"
@@ -232,7 +232,7 @@
               <a-icon type="mail" />
               <span>我的团队</span>
             </span>
-            <a-menu-item-group key="team">
+            <a-menu-item-group key="team" style="background:#FAFAFA">
               <a-menu-item v-for="item in teams" v-bind:key="'t'+item.teamid">{{item.teamname}}</a-menu-item>
               <a-button type="link" style="margin-left:32px;color:#999999" @click="showApplyModal">
                 <a-icon type="plus" />添加团队
@@ -273,7 +273,7 @@
         </a-modal>
         <div v-if="sider_status==1">
           <!--我的文档页面部分-->
-          <div class="card-container">
+          <div class="card-container" style="background:#fff">
             <a-tabs
               default-active-key="1"
               style="text-align:left;margin:24px"
@@ -296,7 +296,7 @@
                       <a-card
                         :bordered="false"
                         :hoverable="true"
-                        style="min-width:240px;max-width:240px;text-align:center"
+                        style="min-width:240px;max-width:240px;text-align:center;background:#fff"
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
@@ -360,7 +360,7 @@
                       <a-card
                         :bordered="false"
                         :hoverable="true"
-                        style="min-width:240px;max-width:240px;text-align:center"
+                        style="min-width:240px;max-width:240px;text-align:center;background:#fff"
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
@@ -415,7 +415,7 @@
                       <a-card
                         :bordered="false"
                         :hoverable="true"
-                        style="min-width:240px;max-width:240px;text-align:center"
+                        style="min-width:240px;max-width:240px;text-align:center;background:#fff"
                         :docid="item.docid"
                         @click="open_doc(item.docid)"
                       >
@@ -558,7 +558,7 @@
                     <a-card
                       :bordered="false"
                       :hoverable="true"
-                      style="min-width:240px;max-width:240px;text-align:center"
+                      style="min-width:240px;max-width:240px;text-align:center;background:#fff"
                       :docid="item.docid"
                       @click="open_doc(item.docid)"
                     >
@@ -734,7 +734,7 @@
                   <a-card
                     :bordered="false"
                     :hoverable="true"
-                    style="min-width:240px;max-width:240px;text-align:center"
+                    style="min-width:240px;max-width:240px;text-align:center;background:#fff"
                     :docid="item.docid"
                   >
                     <div>
@@ -766,6 +766,9 @@
   </div>
 </template>
 <style>
+.home1{
+}
+
 .card-container {
   background: #fff;
   overflow: hidden;
