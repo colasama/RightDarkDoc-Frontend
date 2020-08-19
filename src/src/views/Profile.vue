@@ -173,10 +173,13 @@
         :rules="rules"
       >
         <a-form-model-item label="旧密码">
-          <a-input style="width:270px" v-model="temp.oldpassword" />
+          <a-input-password style="width:270px" v-model="temp.oldpassword" />
         </a-form-model-item>
-        <a-form-model-item has-feedback label="新密码" prop="new_password">
-          <a-input style="width:270px" v-model="temp.newpassword" />
+        <a-form-model-item has-feedback label="新密码" >
+          <a-input-password style="width:270px" v-model="temp.newpassword" />
+        </a-form-model-item>
+        <a-form-model-item has-feedback label="重复密码" >
+          <a-input-password style="width:270px" v-model="repeat_password" />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -200,7 +203,7 @@
           <a-input style="width:240px" v-model="temp.email" />
         </a-form-model-item>
         <a-form-model-item label="验证码">
-          <a-input-search v-model="authcode" @search="sendMail">
+          <a-input-search style="width:240px" v-model="authcode" @search="sendMail">
             <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
             <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
           </a-input-search>
@@ -278,6 +281,7 @@ export default {
         phone: [{ validator: validatePhone, trigger: "change" }],
         email: [{ validator: validateEmail, trigger: "change" }],
       },
+      repeat_password: "",
       count: 0,
       authcode: "",
       sider_status: 1,
@@ -402,6 +406,10 @@ export default {
       this.updatePasswordModalVisible = true;
     },
     updatePassword() {
+      if (this.temp.newpassword!=this.repeat_password) {
+         this.$message.error("两次密码需保持一致", 1.5);
+         return;
+      }
       Vue.axios({
         method: "put",
         url: "http://39.106.230.20:8090/user/mod_password",
