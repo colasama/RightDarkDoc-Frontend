@@ -21,84 +21,107 @@
         <template slot="content">
           <a-tabs default-active-key="1" size="small" style="width:320px">
             <a-tab-pane key="1" tab="未读消息">
-              <div style="text-align:center;margin:230px 0 229px 0;color:#A0A0A0" v-if="$store.state.message==''">
-                没有新消息哦~
-              </div>
-              
-              <a-list 
-              :pagination="pagination" 
-              item-layout="vertical" 
-              style="min-height:480px"
-              v-if="$store.state.message!=''"
-              :data-source="$store.state.message">
-              <!--transition-group name="slide-fade"-->
-                <a-list-item slot="renderItem" slot-scope="item" >
+              <div
+                style="text-align:center;margin:230px 0 229px 0;color:#A0A0A0"
+                v-if="$store.state.message==''"
+              >没有新消息哦~</div>
+
+              <a-list
+                :pagination="pagination"
+                item-layout="vertical"
+                style="min-height:480px"
+                v-if="$store.state.message!=''"
+                :data-source="$store.state.message"
+              >
+                <!--transition-group name="slide-fade"-->
+                <a-list-item slot="renderItem" slot-scope="item">
                   <transition name="slide-fade">
-                  <a-col v-if="!item.isread">
-                    <a-row>
-                    <a-list-item-meta :description="item.content">
-                      <a slot="title" v-if="item.type===2">团队邀请</a>
-                      <a slot="title" v-if="item.type===1">团队申请</a>
-                      <a slot="title" v-if="item.type===0">系统通知</a>
-                      <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
-                    </a-list-item-meta>
-                    </a-row>
-                    <a-row style="text-align:right;margin-right:-5px">
-                      <a-col :span="14" style="text-align:left;margin:0px 0 0 0;font-size:12px;color:#bdbdbd">
-                        {{item.messagetimestring}}
-                      </a-col>
-                      <a-col :span="10" style="margin-top:-8px">
-                        <a-button v-if="item.type===0" type="link" @click="readMessage(item,item.messageid)">已读</a-button>
-                        <a-button v-if="item.type===1" type="link" @click="confirmApply(item,item.messageid,false)">拒绝</a-button>
-                        <a-button v-if="item.type===1" type="link" @click="confirmApply(item,item.messageid,true)">通过</a-button>
-                        <a-button v-if="item.type===2" type="link" @click="confirmInvite(item,item.messageid,false)">拒绝</a-button>
-                        <a-button v-if="item.type===2" type="link" @click="confirmInvite(item,item.messageid,true)">确认</a-button>
-                      </a-col>
-                    </a-row>
-                  </a-col>
+                    <a-col v-if="!item.isread">
+                      <a-row>
+                        <a-list-item-meta :description="item.content">
+                          <a slot="title" v-if="item.type===2">团队邀请</a>
+                          <a slot="title" v-if="item.type===1">团队申请</a>
+                          <a slot="title" v-if="item.type===0">系统通知</a>
+                          <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
+                        </a-list-item-meta>
+                      </a-row>
+                      <a-row style="text-align:right;margin-right:-5px">
+                        <a-col
+                          :span="14"
+                          style="text-align:left;margin:0px 0 0 0;font-size:12px;color:#bdbdbd"
+                        >{{item.messagetimestring}}</a-col>
+                        <a-col :span="10" style="margin-top:-8px">
+                          <a-button
+                            v-if="item.type===0"
+                            type="link"
+                            @click="readMessage(item,item.messageid)"
+                          >已读</a-button>
+                          <a-button
+                            v-if="item.type===1"
+                            type="link"
+                            @click="confirmApply(item,item.messageid,false)"
+                          >拒绝</a-button>
+                          <a-button
+                            v-if="item.type===1"
+                            type="link"
+                            @click="confirmApply(item,item.messageid,true)"
+                          >通过</a-button>
+                          <a-button
+                            v-if="item.type===2"
+                            type="link"
+                            @click="confirmInvite(item,item.messageid,false)"
+                          >拒绝</a-button>
+                          <a-button
+                            v-if="item.type===2"
+                            type="link"
+                            @click="confirmInvite(item,item.messageid,true)"
+                          >确认</a-button>
+                        </a-col>
+                      </a-row>
+                    </a-col>
                   </transition>
                 </a-list-item>
                 <!--/transition-group-->
               </a-list>
-              
             </a-tab-pane>
             <a-tab-pane key="2" tab="已读消息" force-render>
-              <div style="text-align:center;margin-top:240px;color:#A0A0A0" v-if="$store.state.messageRead==''">
-                您还没有收到过消息哦~
-              </div>
-              <a-list 
-              :pagination="pagination" 
-              item-layout="vertical" 
-              style="min-height:480px"
-              v-if="$store.state.messageRead!=''"
-              :data-source="$store.state.messageRead">
+              <div
+                style="text-align:center;margin-top:240px;color:#A0A0A0"
+                v-if="$store.state.messageRead==''"
+              >您还没有收到过消息哦~</div>
+              <a-list
+                :pagination="pagination"
+                item-layout="vertical"
+                style="min-height:480px"
+                v-if="$store.state.messageRead!=''"
+                :data-source="$store.state.messageRead"
+              >
                 <a-list-item slot="renderItem" slot-scope="item">
                   <a-col>
                     <a-row>
-                    <a-list-item-meta :description="item.content">
-                      <a slot="title" v-if="item.type===2">团队邀请</a>
-                      <a slot="title" v-if="item.type===1">团队申请</a>
-                      <a slot="title" v-if="item.type===0">系统通知</a>
-                      <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
-                    </a-list-item-meta>
+                      <a-list-item-meta :description="item.content">
+                        <a slot="title" v-if="item.type===2">团队邀请</a>
+                        <a slot="title" v-if="item.type===1">团队申请</a>
+                        <a slot="title" v-if="item.type===0">系统通知</a>
+                        <a-avatar slot="avatar" v-bind:icon="typetoIcon(item.type)" />
+                      </a-list-item-meta>
                     </a-row>
                     <a-row style="text-align:right;margin-right:-5px">
-                      <a-col :span="14" style="text-align:left;margin:0px 0 0 0;font-size:12px;color:#bdbdbd">
-                        {{item.messagetimestring}}
-                      </a-col>
-                      <a-col :span="10" style="margin-top:-8px">
-                      </a-col>
+                      <a-col
+                        :span="14"
+                        style="text-align:left;margin:0px 0 0 0;font-size:12px;color:#bdbdbd"
+                      >{{item.messagetimestring}}</a-col>
+                      <a-col :span="10" style="margin-top:-8px"></a-col>
                     </a-row>
                   </a-col>
                 </a-list-item>
               </a-list>
             </a-tab-pane>
           </a-tabs>
-          
         </template>
         <!--a-button type="link" @click="tomessage" -->
         <a-button type="link" style="margin">
-          <a-badge dot v-bind:count="$store.state.message.length" >
+          <a-badge dot v-bind:count="$store.state.message.length">
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
         </a-button>
@@ -109,10 +132,20 @@
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
         <a-button type="link" @click="toUserindex" style="margin-right:12px">
-
-          <a-avatar :src="$store.state.useravatar" style="margin-right:6px" />
+          <avatar
+            :size="32"
+            inline
+            style="margin-right:6px"
+            v-if="$store.state.useravatar==null||$store.state.useravatar=='null'"
+            :username="`${$store.state.username}`"
+          ></avatar>
+          <a-avatar
+            v-else
+            :src="$store.state.useravatar"
+            style="margin-right:6px"
+          />
           {{$store.state.username}}
-          <a-icon type="down"/>
+          <a-icon type="down" />
         </a-button>
       </a-dropdown>
       <!--a-sub-menu key="topic" v-if="showExit">
@@ -172,14 +205,17 @@
 
 <script>
 import Vue from "vue";
+import Avatar from "vue-avatar";
 
 export default {
-  components: {},
+  components: {
+    Avatar,
+  },
   data() {
     return {
       showLogin: true,
       pagination: {
-        onChange: page => {
+        onChange: (page) => {
           console.log(page);
         },
         pageSize: 3,
@@ -206,7 +242,7 @@ export default {
     tomessage() {
       this.$router.push({ path: "/message" });
     },
-    typetoIcon(type){
+    typetoIcon(type) {
       var str = "info";
       switch (type) {
         case 0:
@@ -217,7 +253,7 @@ export default {
           break;
         case 2:
           str = "team";
-          break;  
+          break;
       }
       return str;
     },
@@ -229,71 +265,72 @@ export default {
       window.sessionStorage.clear();
       this.$router.push({ path: "/welcome" });
     },
-    confirmInvite(item,messageid, value) {
+    confirmInvite(item, messageid, value) {
       var str = "";
       var msg = "";
       var that = this;
       if (value == true) {
         str = "agree";
-        msg = "接受"
+        msg = "接受";
       } else {
         str = "reject";
-        msg ="拒绝"
+        msg = "拒绝";
       }
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/message/invite/"+messageid+"/"+str,
+        url:
+          "http://39.106.230.20:8090/message/invite/" + messageid + "/" + str,
         headers: {
           token: this.$store.state.token,
         },
       }).then((response) => {
         if (response.data.success == true) {
-          that.$message.success("已"+msg+"邀请", 1)
+          that.$message.success("已" + msg + "邀请", 1);
         } else {
           that.$message.error("操作失败", 1);
         }
       });
-      this.readMessage(item,messageid)
+      this.readMessage(item, messageid);
     },
-    confirmApply(item,messageid,value) {
+    confirmApply(item, messageid, value) {
       var str = "";
       var msg = "";
       var that = this;
       if (value == true) {
         str = "agree";
-        msg = "接受"
+        msg = "接受";
       } else {
         str = "reject";
-        msg ="拒绝"
+        msg = "拒绝";
       }
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/message/apply/"+messageid+"/"+str,
+        url: "http://39.106.230.20:8090/message/apply/" + messageid + "/" + str,
         headers: {
           token: this.$store.state.token,
         },
       }).then((response) => {
         if (response.data.success == true) {
-          that.$message.success("已"+msg+"申请", 1)
+          that.$message.success("已" + msg + "申请", 1);
         } else {
           that.$message.error("操作失败", 1);
         }
       });
-      this.readMessage(item,messageid)
+      this.readMessage(item, messageid);
     },
-    readMessage(item,messageid){
-      item.isread = 1
+    readMessage(item, messageid) {
+      item.isread = 1;
       var that = this;
       Vue.axios({
         method: "get",
-        url: "http://39.106.230.20:8090/message/"+messageid,
+        url: "http://39.106.230.20:8090/message/" + messageid,
         headers: {
           token: this.$store.state.token,
         },
       }).then((response) => {
         if (response.data.success == true) {
           //that.$message.success("操作成功", 1)
-          console.log("readed"+response)
+          console.log("readed" + response);
 
           Vue.axios({
             method: "get",
@@ -301,21 +338,19 @@ export default {
             headers: {
               token: that.$store.state.token,
             },
-          }).then(function (response) {
-            that.$store.state.message=response.data.unReadMessages;
-            that.$store.state.messageRead=response.data.readMessages;
-          }).catch(function (res) {
-            console.log(res);
-          });
-
+          })
+            .then(function (response) {
+              that.$store.state.message = response.data.unReadMessages;
+              that.$store.state.messageRead = response.data.readMessages;
+            })
+            .catch(function (res) {
+              console.log(res);
+            });
         } else {
           //that.$message.error("操作失败", 1);
-          console.log("fail to read")
+          console.log("fail to read");
         }
       });
-
-      
-
     },
   },
 };
