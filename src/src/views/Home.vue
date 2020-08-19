@@ -543,7 +543,7 @@
             </a-col>
           </a-row>
           <a-row style="margin-top:5px">
-            <a-col style="background:#c2c2c2;height:1px;margin:10px 24px 0 24px"></a-col>
+            <!--a-col style="background:#c2c2c2;height:1px;margin:10px 24px 0 24px"></a-col-->
           </a-row>
           <a-row style="margin-top:20px">
             <a-col :span="21" style="text-align:left">
@@ -552,7 +552,7 @@
                 :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 6 }"
                 :data-source="docs"
                 style="text-align:center;margin:15px"
-                :pagination="pagination"
+                :pagination="paginationTeam"
               >
                 <a-list-item
                   slot="renderItem"
@@ -839,6 +839,13 @@ export default {
           console.log(page);
         },
         pageSize: 18,
+        hideOnSinglePage:true,
+      },
+      paginationTeam: {
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 10,
         hideOnSinglePage:true,
       },
       paginationMuban: {
