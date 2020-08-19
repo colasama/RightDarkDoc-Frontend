@@ -26,7 +26,7 @@
             :username="`${data.username}`"
           ></avatar>
         </a-upload>
-
+        <div style="margin-top:20px">点击上传头像</div>
         <a-menu
           style="background:#F3F3F3;margin-top:50px"
           :default-selected-keys="['1']"
@@ -200,7 +200,7 @@
           <a-input style="width:240px" v-model="temp.email" />
         </a-form-model-item>
         <a-form-model-item label="验证码">
-          <a-input-search @search="sendMail">
+          <a-input-search v-model="authcode" @search="sendMail">
             <a-button v-if="count==0" slot="enterButton">获取验证码</a-button>
             <a-button v-else disabled slot="enterButton">{{count}}秒后重试</a-button>
           </a-input-search>
@@ -421,11 +421,49 @@ export default {
       });
     },
     updateEmail() {
-      
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/user/updateEmail",
+        headers: {
+          token: this.$store.state.token,
+        },
+        data: {
+          email: this.temp.email,
+          code: this.authcode,
+        },
+      }).then((response) => {
+        const { success, message } = response.data;
+        if (success == true) {
+          that.getInfo();
+          that.$message.success(message, 1.5);
+          that.updateEmailModalVisible = false;
+        } else {
+          that.$message.error(message, 1.5);
+        }
+      });
     },
     sendMail() {
-      this.count = 60;
-      this.timer = setInterval(this.startTimer, 1000);
+      var that = this;
+      Vue.axios({
+        method: "post",
+        url: "http://39.106.230.20:8090/changeEmail/code",
+        data: {
+          email: this.temp.email,
+        },
+        headers: {
+          token: this.$store.state.token,
+        },
+      }).then(function (response) {
+        console.log(response.data);
+        if (response.data.success == true) {
+          that.$message.success("验证码已发送");
+          that.count = 60;
+          that.timer = setInterval(that.startTimer, 1000);
+        } else {
+          that.$message.error(response.data.message);
+        }
+      });
     },
     startTimer() {
       this.count -= 1;
