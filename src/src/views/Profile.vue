@@ -175,10 +175,10 @@
         :rules="rules"
         >
         <a-form-model-item label="旧密码">
-          <a-input style="width:270px" v-model="temp.old_password" />
+          <a-input style="width:270px" v-model="temp.oldpassword" />
         </a-form-model-item>
         <a-form-model-item has-feedback label="新密码" prop="new_password">
-          <a-input style="width:270px" v-model="temp.new_password" />
+          <a-input style="width:270px" v-model="temp.newpassword" />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -244,13 +244,6 @@ export default {
         callback();
       }
     };
-    const validatePassword = (rules, value, callback) => {
-      if (value != this.temp.old_password) {
-        callback(new Error('密码不一致'));
-      } else {
-        callback();
-      }
-    };
 
     return {
       openKeys: [],
@@ -259,7 +252,6 @@ export default {
       rules: {
         phone: [{ validator: validatePhone, trigger: 'change' }],
         email: [{ validator: validateEmail, trigger: 'change' }],
-        new_password: [{ validator: validatePassword, trigger: 'change' }],
       },
       sider_status: 1,
       updateInfoModalVisible: false,
@@ -378,8 +370,8 @@ export default {
     },
     handleUpdatePassword() {
       this.temp = {
-        old_password: "",
-        new_password: "",
+        oldpassword: "",
+        newpassword: "",
       };
       this.updatePasswordModalVisible = true;
     },

@@ -52,7 +52,7 @@
             </a-popover>
             <a-popover placement="bottomLeft" trigger="click">
               <template slot="content" style="text-align:center">
-                <div style="margin-top:12px">权限设置</div>
+                <div style="margin-top:12px" v-if="creatorid==$store.state.userid">权限设置</div>
                 <div style="margin-top:5px;text-align:center" v-if="creatorid==$store.state.userid">
                   <a-radio-group v-model="tempauth" @change="onAuthChange">
                     <a-radio-button :value="1">仅查看</a-radio-button>
@@ -81,6 +81,7 @@
                 <div v-if="tempauth!=0" style="text-align:center;margin:12px;">
                   <qrcode :value="pagePath" :options="{ size: 120 }"></qrcode>
                 </div>
+                <div style="text-align:center;margin-top:10px;margin-bottom:10px" v-if="tempauth==0">文档未公开</div>
                 <div style="text-align:center">
                   <a-button
                     style="margin:0px 10px 10px 0px"
