@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <a-layout style="height:100%" class="home">
       <a-drawer
         title="详细信息"
@@ -312,6 +312,7 @@
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                         <div style="font-size:12px;color:#9c9c9c">
+                          <a-icon type="share-alt" v-if="item.auth>=1" style="color:#457AD3" />
                           {{item.lastetidtimeString}}
                           <!--a-icon key="ellipsis" type="ellipsis" /-->
                         </div>
@@ -376,6 +377,7 @@
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                         <div style="font-size:12px;color:#9c9c9c">
+                          <a-icon type="share-alt" v-if="item.auth>=1" style="color:#457AD3" />
                           {{item.lastetidtimeString}}
                           <!--a-icon key="ellipsis" type="ellipsis" /-->
                         </div>
@@ -431,6 +433,7 @@
                         </div>
                         <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
                         <div style="font-size:12px;color:#9c9c9c">
+                          <a-icon type="share-alt" v-if="item.auth>=1" style="color:#457AD3" />
                           {{item.lastetidtimeString}}
                           <!--a-icon key="ellipsis" type="ellipsis" /-->
                         </div>
@@ -464,9 +467,7 @@
             <a-col style="text-align:left">
               <span v-if="!isedit_name" style="font-size:40px;margin-left:24px">
                 <b>{{current_team.teamname}}</b>
-                  <a-tag style="margin-left:12px">
-                    团队号: {{current_team.teamid}}
-                  </a-tag>
+                <a-tag style="margin-left:12px">团队号: {{current_team.teamid}}</a-tag>
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -491,9 +492,8 @@
           <a-row>
             <a-col :span="18" style="text-align:left">
               <div v-if="!isedit_info" style="font-size:18px;margin-left:24px">
-                
                 <span style>{{current_team.teaminfo}}</span>
-               
+
                 <transition name="slide-fade">
                   <a-button
                     v-if="ismanage"
@@ -515,9 +515,7 @@
                 <!--这个@search本质上就是click-->
               </div>
             </a-col>
-            <a-col :span="3">
-              
-            </a-col>
+            <a-col :span="3"></a-col>
             <a-col :span="1" style="text-align:right;margin:0 48px 10px 0">
               <div v-if="isleader">
                 <a-button v-if="!ismanage" type="primary" @click="startmanage">
@@ -530,7 +528,7 @@
               <div v-if="!isleader">
                 <a-popconfirm
                   placement="bottomRight"
-                  title="确定要退出团队吗?"
+                  title="确定要退出团队吗?（退出后你创建的文档将从团队移除）"
                   ok-text="确认"
                   cancel-text="算了"
                   @confirm="exitTeam"
@@ -574,8 +572,12 @@
                           style="margin-bottom:-10px;margin-top:-3px"
                         />
                       </div>
-                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">{{item.title}}</div>
+                      <div style="font-size:15px;margin:10px 0 3px 0;color:black">
+                        <a-icon type="user" v-if="item.creatorid==$store.state.userid" />
+                        {{item.title}}
+                      </div>
                       <div style="font-size:12px;color:#9c9c9c">
+                        <a-icon type="share-alt" v-if="item.auth>=1" style="color:#457AD3" />
                         {{item.lastetidtimeString}}
                         <!--a-icon key="ellipsis" type="ellipsis" /-->
                       </div>
@@ -585,11 +587,19 @@
                         <a-icon type="folder-open" />
                         <span style="margin-left:3px">打开</span>
                       </a-menu-item>
-                      <a-menu-item key="2" v-if="isleader" @click="show_auth(item)">
+                      <a-menu-item
+                        key="2"
+                        v-if="isleader||item.creatorid==$store.state.userid"
+                        @click="show_auth(item)"
+                      >
                         <a-icon type="control" />
                         <span style="margin-left:3px">权限设置</span>
                       </a-menu-item>
-                      <a-menu-item key="3" v-if="isleader" @click="delete_doc(item.docid)">
+                      <a-menu-item
+                        key="3"
+                        v-if="isleader||item.creatorid==$store.state.userid"
+                        @click="delete_doc(item.docid)"
+                      >
                         <a-icon type="delete" />
                         <span style="margin-left:3px">删除</span>
                       </a-menu-item>
@@ -667,12 +677,12 @@
                     <span
                       @click="toUserInfo(team_creator.userid)"
                       style="cursor:pointer"
-                      > {{team_creator.username}}</span>
+                    >{{team_creator.username}}</span>
                     <span>
                       <a-icon type="crown" style="font-size:16px;color:#E85A4F" />
                     </span>
                   </div>
-                  <a-list-item slot="renderItem" slot-scope="item" >
+                  <a-list-item slot="renderItem" slot-scope="item">
                     <div style="text-align:left;cursor:pointer" @click="toUserInfo(item.userid)">
                       <a-avatar :size="36" v-if="item.avatar!=null" :src="item.avatar"></a-avatar>
                       <avatar
@@ -835,25 +845,25 @@ export default {
       auth_visible: false,
       share_visible: false,
       pagination: {
-        onChange: page => {
+        onChange: (page) => {
           console.log(page);
         },
         pageSize: 18,
-        hideOnSinglePage:true,
+        hideOnSinglePage: true,
       },
       paginationTeam: {
-        onChange: page => {
+        onChange: (page) => {
           console.log(page);
         },
         pageSize: 10,
-        hideOnSinglePage:true,
+        hideOnSinglePage: true,
       },
       paginationMuban: {
-        onChange: page => {
+        onChange: (page) => {
           console.log(page);
         },
         pageSize: 8,
-        hideOnSinglePage:true,
+        hideOnSinglePage: true,
       },
     };
   },
@@ -954,7 +964,7 @@ export default {
     },
     handleClick(e) {
       this.stopmanage();
-      if(e.key==null){
+      if (e.key == null) {
         return;
       }
       this.docs = [];
@@ -1127,7 +1137,7 @@ export default {
     },
     show_share(doc) {
       this.current_doc = doc;
-      this.pagePath=window.location.href+"doc/"+doc.docid;
+      this.pagePath = window.location.href + "doc/" + doc.docid;
       this.share_visible = true;
     },
     show_auth(doc) {

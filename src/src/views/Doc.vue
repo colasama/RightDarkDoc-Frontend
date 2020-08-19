@@ -346,7 +346,7 @@ export default {
         }
         if (that.teamid != 0) {
           if (that.creatorid == that.$store.state.userid) {
-            that.isteamauth == true;
+            that.isteamauth = true;
           }
           Vue.axios({
             method: "get",
@@ -356,8 +356,6 @@ export default {
               that.isteamauth = true;
               that.iscommentable = true;
               that.iseditable = true;
-            } else {
-              that.isteamauth = false;
             }
           });
         }
