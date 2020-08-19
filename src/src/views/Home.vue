@@ -839,12 +839,14 @@ export default {
           console.log(page);
         },
         pageSize: 18,
+        hideOnSinglePage:true,
       },
       paginationMuban: {
         onChange: page => {
           console.log(page);
         },
         pageSize: 8,
+        hideOnSinglePage:true,
       },
     };
   },

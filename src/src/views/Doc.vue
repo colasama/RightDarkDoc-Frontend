@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align:center;background:#FAFAFA">
+  <div style="text-align:center;background:#FAFAFA;min-width:1900px">
     <div class="subNavi">
       <a-row>
         <a-col :span="15">

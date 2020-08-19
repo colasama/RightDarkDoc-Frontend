@@ -120,7 +120,7 @@
           </a-tabs>
         </template>
         <!--a-button type="link" @click="tomessage" -->
-        <a-button type="link" style="margin">
+        <a-button type="link" style="top:3px">
           <a-badge dot v-bind:count="$store.state.message.length">
             <a-icon type="bell" style="color:#313131;font-size:20px" />
           </a-badge>
@@ -131,7 +131,7 @@
           <a-menu-item key="1" @click="toUserindex">账户信息</a-menu-item>
           <a-menu-item key="3" @click="exit">退出</a-menu-item>
         </a-menu>
-        <a-button type="link" @click="toUserindex" style="margin-right:12px">
+        <a-button type="link" @click="toUserindex" style="margin-right:12px;">
           <avatar
             :size="32"
             inline
