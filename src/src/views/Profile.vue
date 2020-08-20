@@ -388,7 +388,7 @@ export default {
         },
         data: this.temp,
       }).then((response) => {
-        const { success, message } = response.data;
+        const { success } = response.data;
         if (success == true) {
           this.getInfo();
           this.$message.success("信息修改成功", 1.5);
@@ -418,7 +418,7 @@ export default {
         },
         data: this.temp,
       }).then((response) => {
-        const { success, message } = response.data;
+        const { success } = response.data;
         if (success == true) {
           this.getInfo();
           this.$message.success("密码更新成功", 1.5);
@@ -441,7 +441,7 @@ export default {
           code: this.authcode,
         },
       }).then((response) => {
-        const { success, message } = response.data;
+        const { success } = response.data;
         if (success == true) {
           that.getInfo();
           that.$message.success("邮箱更新成功", 1.5);
