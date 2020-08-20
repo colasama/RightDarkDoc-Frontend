@@ -391,10 +391,10 @@ export default {
         const { success, message } = response.data;
         if (success == true) {
           this.getInfo();
-          this.$message.success(message, 1.5);
+          this.$message.success("信息修改成功", 1.5);
           this.updateInfoModalVisible = false;
         } else {
-          this.$message.error(message, 1.5);
+          this.$message.error("信息修改失败", 1.5);
         }
       });
     },
@@ -421,10 +421,10 @@ export default {
         const { success, message } = response.data;
         if (success == true) {
           this.getInfo();
-          this.$message.success(message, 1.5);
+          this.$message.success("密码更新成功", 1.5);
           this.updatePasswordModalVisible = false;
         } else {
-          this.$message.error(message, 1.5);
+          this.$message.error("密码更新失败", 1.5);
         }
       });
     },
@@ -444,10 +444,10 @@ export default {
         const { success, message } = response.data;
         if (success == true) {
           that.getInfo();
-          that.$message.success(message, 1.5);
+          that.$message.success("邮箱更新成功", 1.5);
           that.updateEmailModalVisible = false;
         } else {
-          that.$message.error(message, 1.5);
+          that.$message.error("邮箱更新失败", 1.5);
         }
       });
     },
@@ -469,7 +469,7 @@ export default {
           that.count = 60;
           that.timer = setInterval(that.startTimer, 1000);
         } else {
-          that.$message.error(response.data.message);
+          that.$message.error("验证码发送失败");
         }
       });
     },
